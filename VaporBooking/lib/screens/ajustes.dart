@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '/services/databasehelper.dart';
+
+import '/screens/bienvenida.dart';
 import '../services/preferenciasservice.dart';
 
 class PantallaAjustes extends StatefulWidget {
   //recibimos el preferenciasService.
   final PreferenciasService preferenciasService;
+  final Databasehelper databasehelper;
 
-  const PantallaAjustes({super.key, required this.preferenciasService});
+  const PantallaAjustes({
+    super.key,
+    required this.preferenciasService,
+    required this.databasehelper,
+  });
 
   @override
   State<PantallaAjustes> createState() => _PantallaAjustesState(); //creo el estado de la pantalla.
@@ -270,7 +278,16 @@ class _PantallaAjustesState extends State<PantallaAjustes> {
                       await widget.preferenciasService.borrarTodosLosDatos();
 
                       //se vuelve a la bienvenida y elimina las otras pantallas.
-
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Bienvenida(
+                            preferenciasService: widget.preferenciasService,
+                            databasehelper: widget.databasehelper,
+                          ),
+                        ),
+                        (route) => false,
+                      );
                     },
                     child: Text('Borrar todos los datos'),
                   ),

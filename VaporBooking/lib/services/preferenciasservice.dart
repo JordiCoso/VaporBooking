@@ -2,7 +2,6 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
-import '../models/usuario.dart';
 
 class PreferenciasService {
   /// Instancia de preferencias para uso interno.
@@ -30,47 +29,25 @@ class PreferenciasService {
     return inicializando;
   }
 
-  bool? getPrimerInicio() {
-    return _preferencias.getBool("primerInicio");
-  }
-
-  void setPrimerInicio(bool valor) {
-    _preferencias.setBool("primerInicio", valor);
-  }
-
-  void guardarUsuario(Usuario usuario) {
-    _preferencias.setString("usuario", usuario.nombre);
-    _preferencias.setInt("numeroHabitos", usuario.numeroHabitos);
-  }
-
-  Usuario cargarUsuario() {
-    String nombre = _preferencias.getString("usuario") ?? '';
-    int numeroHabitos = _preferencias.getInt("numeroHabitos") ?? 0;
-    Usuario usuario = Usuario(nombre: nombre, numeroHabitos: numeroHabitos);
-
-    return usuario;
-  }
-
-  /// Identificador de fecha guardada.
-  static const String nombreDatoFecha = 'ultimaApertura';
+  static const String claveDatoFecha = 'ultimaApertura';
+  static const String claveDatoAperturas = 'numeroAperturas';
+  static const String claveDatoTema = 'temaOscuro';
+  static const String claveDatoTamanoLetra = 'tamanoLetra';
 
   void guardarUltimaApertura(String fecha) {
-    _preferencias.setString(nombreDatoFecha, fecha);
+    _preferencias.setString(claveDatoFecha, fecha);
   }
 
   String? obtenerUltimaApertura() {
-    return _preferencias.getString(nombreDatoFecha);
+    return _preferencias.getString(claveDatoFecha);
   }
 
-  /// Identificador de numero de aperturas.
-  static const String nombreDatoAperturas = 'numeroAperturas';
-
   void guardarNumeroAperturas(int numero) {
-    _preferencias.setInt(nombreDatoAperturas, numero);
+    _preferencias.setInt(claveDatoAperturas, numero);
   }
 
   int obtenerNumeroAperturas() {
-    return _preferencias.getInt(nombreDatoAperturas) ?? 0;
+    return _preferencias.getInt(claveDatoAperturas) ?? 0;
   }
 
   void aumentarNumeroAperturar() {
@@ -91,43 +68,26 @@ class PreferenciasService {
     guardarUltimaApertura(fecha);
   }
 
-  /// Identificador de tema oscuro.
-  static const String nombreDatoTema = 'temaOscuro';
-
   void guardarTemaOscuro(bool nuevoTema) {
-    _preferencias.setBool(nombreDatoTema, nuevoTema);
+    _preferencias.setBool(claveDatoTema, nuevoTema);
 
     // Se avisa a las pantallas de que se ha cambiado el tema.
     temaOscuro.value = nuevoTema;
   }
 
   bool obtenerTemaOscuro() {
-    return _preferencias.getBool(nombreDatoTema) ?? false;
+    return _preferencias.getBool(claveDatoTema) ?? false;
   }
 
-  /// Identificador de tamaño de letra.
-  static const String nombreDatoTamanoLetra = 'tamanoLetra';
-
   void guardarTamanoLetra(double nuevoTamano) {
-    _preferencias.setDouble(nombreDatoTamanoLetra, nuevoTamano);
+    _preferencias.setDouble(claveDatoTamanoLetra, nuevoTamano);
 
     // Se avisa a la app que se ha cambiado el tamaño.
     tamanoLetra.value = nuevoTamano;
   }
 
   double obtenerTamanoLetra() {
-    return _preferencias.getDouble(nombreDatoTamanoLetra) ?? 14;
-  }
-
-  /// Identificador de ocultar hábitos.
-  static const String nombreDatoOcultar = 'ocultarCompletados';
-
-  void guardarOcultarCompletados(bool ocultar) {
-    _preferencias.setBool(nombreDatoOcultar, ocultar);
-  }
-
-  bool obtenerOcultarCompletados() {
-    return _preferencias.getBool(nombreDatoOcultar) ?? false;
+    return _preferencias.getDouble(claveDatoTamanoLetra) ?? 14;
   }
 
   Future<void> borrarTodosLosDatos() async {
