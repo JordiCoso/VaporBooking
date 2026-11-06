@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/models/colores.dart';
 
 import '/services/databasehelper.dart';
 import 'screens/login_page.dart';
@@ -20,7 +22,7 @@ Future<void> main() async {
   runApp(
     MyApp(
       preferenciasService: preferenciasService,
-      databasehelper: databasehelper,
+        databasehelper: databasehelper,
     ),
   );
 }
@@ -28,12 +30,13 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   //servicio que utilizamos para recuperar las preferencias.
   final PreferenciasService _preferenciasService;
-  final Databasehelper _databasehelper;
+
+  // final Databasehelper _databasehelper;
 
   const MyApp({
     super.key,
     required this._preferenciasService,
-    required this._databasehelper,
+     required this._databasehelper,
   });
 
   @override
@@ -54,39 +57,32 @@ class _MyAppState extends State<MyApp> {
           builder: (context, tamanoLetra, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              title: 'HabitosApp',
+              title: 'VaporBooking',
 
               //colores de la aplicación en modo claro.
               theme: ThemeData(
-                scaffoldBackgroundColor: Color(0xFFF5F7F2),
+                scaffoldBackgroundColor:
+                    modoClaroListaColores[NombreColores.fondo],
 
                 colorScheme: ColorScheme.light(
-                  primary: Color(0xFF72917C),
-                  secondary: Color(0xFFA2BBA8),
-                  surface: Color(0xFFFFFFFF),
-                ),
-
-                //colores de la barra superior.
-                appBarTheme: AppBarTheme(
-                  backgroundColor: Color(0xFFF5F7F2),
-                  foregroundColor: Color(0xFF263D32),
+                  primary: modoClaroListaColores[NombreColores.textoPrincipal]!,
+                  secondary:
+                      modoClaroListaColores[NombreColores.textoSecundario]!,
+                  surface: modoClaroListaColores[NombreColores.superficie]!,
                 ),
               ),
 
               //colores de la aplicación en modo oscuro.
               darkTheme: ThemeData(
-                scaffoldBackgroundColor: Color(0xFF171F1B),
+                scaffoldBackgroundColor:
+                    modoOscuroListaColores[NombreColores.fondo],
 
                 colorScheme: ColorScheme.dark(
-                  primary: Color(0xFFA2BBA8),
-                  secondary: Color(0xFF72917C),
-                  surface: Color(0xFF28352E),
-                ),
-
-                //colores de la barra superior en modo oscuro.
-                appBarTheme: AppBarTheme(
-                  backgroundColor: Color(0xFF171F1B),
-                  foregroundColor: Color(0xFFE9F1EA),
+                  primary:
+                      modoOscuroListaColores[NombreColores.textoPrincipal]!,
+                  secondary:
+                      modoOscuroListaColores[NombreColores.verdeSecundario]!,
+                  surface: modoOscuroListaColores[NombreColores.superficie]!,
                 ),
               ),
 

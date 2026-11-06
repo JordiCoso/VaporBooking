@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '/screens/habitos_page.dart';
 import '/screens/registro_page.dart';
 import '/services/databasehelper.dart';
 import '/services/preferenciasservice.dart';
@@ -11,6 +10,7 @@ import '../models/usuario.dart';
 
 class LoginPage extends StatefulWidget {
   final PreferenciasService _preferenciasService;
+
   final Databasehelper _databasehelper;
 
   const LoginPage({
