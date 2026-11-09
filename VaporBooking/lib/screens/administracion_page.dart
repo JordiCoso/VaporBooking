@@ -135,11 +135,15 @@ class _AdministracionPageState extends State<AdministracionPage> {
               itemCount: listaUsuarios.length,
               itemBuilder: (context, index) {
                 String usuario =
-                    listaUsuarios[index][Databasehelper.columnaUsuariosUsuario]
+                    listaUsuarios[index][widget
+                            ._databasehelper
+                            .columnaUsuariosUsuario]
                         .toString();
 
                 String rol =
-                    listaUsuarios[index][Databasehelper.columnaUsuariosRol]
+                    listaUsuarios[index][widget
+                            ._databasehelper
+                            .columnaUsuariosRol]
                         .toString();
 
                 return Column(
@@ -167,47 +171,6 @@ class _AdministracionPageState extends State<AdministracionPage> {
                       ),
 
                     const SizedBox(height: 16),
-                  ],
-                );
-              },
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          Text(
-            'Hábitos registrados',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-
-          const SizedBox(height: 16),
-
-          Text(
-            'Estadísticas registradas',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-
-          Expanded(
-            child: ListView.builder(
-              itemCount: listaEstadisticas.length,
-              itemBuilder: (context, index) {
-                final estadistica = listaEstadisticas[index];
-
-                return Column(
-                  children: [
-                    Text(
-                      'Usuario: ${estadistica[Databasehelper.columnaEstadisticasUsuarioFK]}',
-                    ),
-                    Text(
-                      'Hábito ID: ${estadistica[Databasehelper.columnaEstadisticasHabitoidFK]}',
-                    ),
-                    Text(
-                      'Racha: ${estadistica[Databasehelper.columnaEstadisticasRachaactual]}',
-                    ),
-                    Text(
-                      'Días completados: ${estadistica[Databasehelper.columnaEstadisticasDiascompletados]}',
-                    ),
-                    const SizedBox(height: 12),
                   ],
                 );
               },
