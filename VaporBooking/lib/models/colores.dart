@@ -5,7 +5,6 @@ class NombreColores {
 
   static const String verdePrincipal = 'VerdePrincipal';
   static const String verdeSecundario = 'VerdeSecundario';
-  static const String acento = 'Acento';
   static const String bordes = 'Bordes';
   static const String fondo = 'Fondo';
   static const String superficie = 'Superficie';
@@ -21,7 +20,6 @@ class NombreColores {
 const Map<String, Color> modoClaroListaColores = {
   NombreColores.verdePrincipal: Color(0xFF6B8F72), // Verde principal
   NombreColores.verdeSecundario: Color(0xFFA7C4AB), // Verde secundario
-  NombreColores.acento: Color(0xFFD4A373), // Acento
   NombreColores.bordes: Color(0xFFDCE3DB), // Bordes
   NombreColores.fondo: Color(0xFFF8F6F2), // Fondo
   NombreColores.superficie: Color(0xFFFFFFFF), // Superficie
@@ -37,7 +35,6 @@ const Map<String, Color> modoClaroListaColores = {
 const Map<String, Color> modoOscuroListaColores = {
   NombreColores.verdePrincipal: Color(0xFF8FB69A), // Verde principal
   NombreColores.verdeSecundario: Color(0xFF668B73), // Verde secundario
-  NombreColores.acento: Color(0xFFD4A373), // Acento
   NombreColores.bordes: Color(0xFF405248), // Bordes
   NombreColores.fondo: Color(0xFF032D1E), // Fondo
   NombreColores.superficie: Color(0xFF26382E), // Superficie
