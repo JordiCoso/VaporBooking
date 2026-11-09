@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/colores.dart';
 
@@ -9,20 +8,16 @@ import 'services/preferenciasservice.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //creamos el servicio de preferencias.
-  PreferenciasService preferenciasService = await PreferenciasService.crear();
-  //aumentamos el número de veces que se abre la aplicación.
-  preferenciasService.aumentarNumeroAperturar();
+  final PreferenciasService preferenciasService =
+      await PreferenciasService.crear();
 
-  //guardamos la fecha y hora de la última apertura.
-  preferenciasService.registrarApertura();
-
-  Databasehelper databasehelper = await Databasehelper.crear();
+  final Databasehelper databasehelper = await Databasehelper.crear();
 
   //iniciamos la aplicación con el servicio de preferencias.
   runApp(
     MyApp(
       preferenciasService: preferenciasService,
-        databasehelper: databasehelper,
+      databasehelper: databasehelper,
     ),
   );
 }
@@ -31,12 +26,12 @@ class MyApp extends StatefulWidget {
   //servicio que utilizamos para recuperar las preferencias.
   final PreferenciasService _preferenciasService;
 
-  // final Databasehelper _databasehelper;
+  final Databasehelper _databasehelper;
 
   const MyApp({
     super.key,
     required this._preferenciasService,
-     required this._databasehelper,
+    required this._databasehelper,
   });
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/screens/pantalla_principal.dart';
 
 import '/screens/registro_page.dart';
 import '/services/databasehelper.dart';
@@ -75,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
 
     //cogemos el nombre y rol desde sqflite
     Usuario usuario = Usuario(
-      nombre: datosUsuario[Databasehelper.columnaUsuariosUsuario] as String,
+      nombre: datosUsuario[Databasehelper.columnaUsuariosEmail] as String,
       numeroHabitos: 1,
       rol: datosUsuario[Databasehelper.columnaUsuariosRol] as String,
     );
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => Principal(
+        builder: (context) => PantallaPrincipal(
           preferenciasService: widget._preferenciasService,
           databasehelper: widget._databasehelper,
           usuario: usuario,
@@ -103,31 +104,34 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             CampoTextoApp(etiqueta: 'Usuario', controller: usuarioController),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             CampoTextoApp(
               etiqueta: 'Contraseña',
               controller: contrasenaController,
               ocultarTexto: true,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             //mostramos mensaje error por si hay alguno
             if (mensajeError.isNotEmpty)
               Text(mensajeError, style: TextStyle(color: Colors.red)),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             BotonPrincipal(texto: 'Iniciar sesión', pulsar: iniciarSesion),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             //si el usuario no tiene cuent, le damos la opcion de reigstrarse
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RegistroPage()),
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        RegistroPage(databasehelper: widget._databasehelper),
+                  ),
                 );
               },
               child: Text('Regístrate si no tienes cuenta'),

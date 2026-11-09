@@ -114,10 +114,9 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
 
     //guardamos los cambios ne la bbdd
     await widget.databasehelper.actualizarUsuario(
-      usuario,
+      emailController.text.trim(),
       nombreController.text.trim(),
       apellidoController.text.trim(),
-      emailController.text.trim(),
       rolGuardar,
     );
 
@@ -140,22 +139,22 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
             //mostramos q usuario estamos editando
             Text('Usuario: $usuario'),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             CampoTextoApp(etiqueta: 'Nombre', controller: nombreController),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             CampoTextoApp(
               etiqueta: 'Apellidos',
               controller: apellidoController,
             ),
 
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
 
             CampoTextoApp(etiqueta: 'Email', controller: emailController),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             //así solo se pueden modificar otros roles, no el suyo propio
             if (usuario != widget.usuarioActual)
@@ -163,7 +162,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                 children: [
                   Text('Rol seleccionado: $rol'),
 
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
 
                   ElevatedButton(
                     onPressed: () {
@@ -174,7 +173,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                     child: Text('Usuario'),
                   ),
 
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
 
                   ElevatedButton(
                     onPressed: () {
@@ -189,13 +188,13 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
 
             if (usuario == widget.usuarioActual) Text('Rol: Administrador'),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             //por si hay error
             if (mensajeError.isNotEmpty)
               Text(mensajeError, style: TextStyle(color: Colors.red)),
 
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
 
             BotonPrincipal(texto: 'Guardar cambios', pulsar: guardarCambios),
           ],
