@@ -1,7 +1,5 @@
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
-
 
 class PreferenciasService {
   /// Instancia de preferencias para uso interno.
@@ -18,7 +16,7 @@ class PreferenciasService {
   /// Hay que hacer esto porque el constructor normal no puede ser async.
 
   static Future<PreferenciasService> crear() async {
-    var inicializando = PreferenciasService._crear();
+    final inicializando = PreferenciasService._crear();
 
     inicializando._preferencias = await SharedPreferences.getInstance();
 
@@ -29,44 +27,8 @@ class PreferenciasService {
     return inicializando;
   }
 
-  static const String claveDatoFecha = 'ultimaApertura';
-  static const String claveDatoAperturas = 'numeroAperturas';
   static const String claveDatoTema = 'temaOscuro';
   static const String claveDatoTamanoLetra = 'tamanoLetra';
-
-  void guardarUltimaApertura(String fecha) {
-    _preferencias.setString(claveDatoFecha, fecha);
-  }
-
-  String? obtenerUltimaApertura() {
-    return _preferencias.getString(claveDatoFecha);
-  }
-
-  void guardarNumeroAperturas(int numero) {
-    _preferencias.setInt(claveDatoAperturas, numero);
-  }
-
-  int obtenerNumeroAperturas() {
-    return _preferencias.getInt(claveDatoAperturas) ?? 0;
-  }
-
-  void aumentarNumeroAperturar() {
-    int aperturas = obtenerNumeroAperturas();
-
-    aperturas += 1;
-
-    guardarNumeroAperturas(aperturas);
-  }
-
-  void registrarApertura() {
-    DateTime ahora = DateTime.now();
-
-    DateFormat formato = DateFormat('dd-MM-yyyy HH:mm:ss');
-
-    String fecha = formato.format(ahora);
-
-    guardarUltimaApertura(fecha);
-  }
 
   void guardarTemaOscuro(bool nuevoTema) {
     _preferencias.setBool(claveDatoTema, nuevoTema);

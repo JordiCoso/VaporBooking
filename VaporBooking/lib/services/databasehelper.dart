@@ -8,7 +8,7 @@ class Databasehelper {
   static Databasehelper? _databasehelper;
 
   /// La base de datos unica para uso interno.
-  late Database _baseDeDatos;
+  late final Database _baseDeDatos;
 
   /// Constructor privado para evitar que se pueda llamar a new.
   Databasehelper._crear();
@@ -19,7 +19,7 @@ class Databasehelper {
       return await Future.value(_databasehelper);
     }
 
-    var inicializando = Databasehelper._crear();
+    final inicializando = Databasehelper._crear();
 
     inicializando._baseDeDatos = await inicializando._getInstanciaBD;
 
@@ -29,12 +29,12 @@ class Databasehelper {
   }
 
   /// NO llamar, solo usa para hacer el singleton.
-  Database? _comprobacionInstanciaBD;
+  late final Database? _comprobacionInstanciaBD;
 
   /// NO llamar, solo se usa en el constructor [crear].
   Future<Database> get _getInstanciaBD async {
     if (_comprobacionInstanciaBD != null) {
-      return _comprobacionInstanciaBD!;
+      return _comprobacionInstanciaBD;
     }
 
     _comprobacionInstanciaBD = await _generarBase();
@@ -46,7 +46,7 @@ class Databasehelper {
   Future<Database> _generarBase() async {
     final ruta = join(await getDatabasesPath(), 'habitos.db');
 
-    var baseCreada = await openDatabase(
+    final baseCreada = await openDatabase(
       ruta,
       version: 1,
       onConfigure: (db) async {
@@ -60,61 +60,85 @@ class Databasehelper {
 
   // Claves en variables para juntarlas y evitar errores
 
-  static const tablaHabitos = 'habitos';
-
-  static const columnaHabitosId = 'hid';
-  static const columnaHabitosNombre = 'nombre';
-  static const columnaHabitosColor = 'color';
-  static const columnaHabitosCompletado = 'completado';
-  static const columnaHabitosIcono = 'icono';
-  static const columnaHabitosUsuarioFK = 'usuario_fk';
-
   static const tablaUsuarios = 'usuarios';
 
-  static const columnaUsuariosUsuario = 'usuario';
+  static const columnaUsuariosEmail = 'email';
   static const columnaUsuariosNombre = 'nombre';
   static const columnaUsuariosApellidos = 'apellidos';
-  static const columnaUsuariosEmail = 'email';
   static const columnaUsuariosContrasena = 'contrasena';
   static const columnaUsuariosFechacreacion = 'fecha_creacion';
   static const columnaUsuariosRol = 'rol';
+  static const columnaUsuariosPuntos = 'puntos';
 
-  static const tablaEstadisticas = 'estadisticas';
+  static const tablaServicios = 'servicios';
 
-  static const columnaEstadisticasId = 'eid';
-  static const columnaEstadisticasFechacompletado = 'fecha_completado';
-  static const columnaEstadisticasRachaactual = 'racha_actual';
-  static const columnaEstadisticasDiascompletados = 'dias_completados';
-  static const columnaEstadisticasHabitoidFK = 'habito_id_fk';
-  static const columnaEstadisticasUsuarioFK = 'usuario_fk';
+  static const columnaServiciosId = 'id';
+  static const columnaServiciosNombre = 'nombre';
+  static const columnaServiciosDescripcion = 'descripcion';
+  static const columnaServiciosPrecio = 'precio';
+  static const columnaServiciosDuracion = 'duracion';
+  static const columnaServiciosValoracionPuntos = 'valoracionpuntos';
+
+  static const tablaTiquets = 'tiquets';
+
+  static const columnaTiquetsId = 'id';
+  static const columnaTiquetsFecha = 'fecha';
+  static const columnaTiquetsTotalPrecio = 'totalprecio';
+  static const columnaTiquetsEstado = 'estado';
+  static const columnaTiquetsUsuariosNombreFK = 'nombre_fk';
+
+  static const tablaTiquetsservicios = 'tiquets_servicios';
+
+  static const columnaTiquetsserviciosCantidad = 'cantidad';
+  static const columnaTiquetsserviciosTiquetsIdFK = 'tiquets_id_fk';
+  static const columnaTiquetsserviciosServiciosIdFK = 'servicio_id_fk';
 
   Future<void> creacionBaseDatos(Database db, int version) async {
-    await db.execute(
+    final Batch packDeInstrucciones = _baseDeDatos.batch();
+
+    packDeInstrucciones.execute(
       'CREATE TABLE $tablaUsuarios ('
-      '$columnaUsuariosUsuario TEXT PRIMARY KEY, '
+      '$columnaUsuariosEmail TEXT NOT NULL PRIMARY KEY, '
       '$columnaUsuariosNombre TEXT NOT NULL, '
       '$columnaUsuariosApellidos TEXT NOT NULL, '
-      '$columnaUsuariosEmail TEXT NOT NULL UNIQUE, ' // Lo pongo unique para q no se pueda registrar dos usuarios con el mismo correo.
       '$columnaUsuariosContrasena TEXT NOT NULL, '
       '$columnaUsuariosFechacreacion TEXT NOT NULL, '
-      '$columnaUsuariosRol TEXT NOT NULL)',
+      '$columnaUsuariosRol TEXT NOT NULL,'
+      '$columnaUsuariosPuntos INTEGER NOT NULL)',
     );
 
-    await db.execute(
-      'CREATE TABLE $tablaEstadisticas ('
-      '$columnaEstadisticasId INTEGER PRIMARY KEY AUTOINCREMENT, '
-      '$columnaEstadisticasFechacompletado TEXT, '
-      '$columnaEstadisticasRachaactual INTEGER NOT NULL, '
-      '$columnaEstadisticasDiascompletados INTEGER NOT NULL, '
-      '$columnaEstadisticasUsuarioFK TEXT NOT NULL, '
-      '$columnaEstadisticasHabitoidFK INTEGER NOT NULL UNIQUE, '
-      'FOREIGN KEY ($columnaEstadisticasUsuarioFK) REFERENCES $tablaUsuarios($columnaUsuariosUsuario) ON DELETE CASCADE, '
-      'FOREIGN KEY ($columnaEstadisticasHabitoidFK) REFERENCES $tablaHabitos($columnaHabitosId) ON DELETE CASCADE)',
+    packDeInstrucciones.execute(
+      'CREATE TABLE $tablaServicios ('
+      '$columnaServiciosId INTEGER NOT NULL PRIMARY KEY, '
+      '$columnaServiciosNombre TEXT NOT NULL, '
+      '$columnaServiciosDescripcion TEXT NOT NULL, '
+      '$columnaServiciosPrecio INTEGER NOT NULL, '
+      '$columnaServiciosDuracion INTEGER NOT NULL, '
+      '$columnaServiciosValoracionPuntos INTEGER NOT NULL)',
+    );
+
+    packDeInstrucciones.execute(
+      'CREATE TABLE $tablaTiquets ('
+      '$columnaTiquetsId INTEGER NOT NULL PRIMARY KEY, '
+      '$columnaTiquetsFecha TEXT NOT NULL, '
+      '$columnaTiquetsTotalPrecio INTEGER NOT NULL, '
+      '$columnaTiquetsEstado TEXT NOT NULL, '
+      '$columnaTiquetsUsuariosNombreFK TEXT NOT NULL, '
+      'FOREIGN KEY ($columnaTiquetsUsuariosNombreFK) REFERENCES $tablaUsuarios($columnaUsuariosNombre))',
+    );
+
+    packDeInstrucciones.execute(
+      'CREATE TABLE $tablaTiquetsservicios ('
+      '$columnaTiquetsserviciosCantidad INTEGER NOT NULL, '
+      '$columnaTiquetsserviciosTiquetsIdFK INTEGER NOT NULL, '
+      '$columnaTiquetsserviciosServiciosIdFK INTEGER NOT NULL, '
+      'PRIMARY KEY ($columnaTiquetsserviciosTiquetsIdFK, $columnaTiquetsserviciosServiciosIdFK), '
+      'FOREIGN KEY ($columnaTiquetsserviciosTiquetsIdFK) REFERENCES $tablaTiquets($columnaTiquetsId), '
+      'FOREIGN KEY ($columnaTiquetsserviciosServiciosIdFK) REFERENCES $tablaServicios($columnaServiciosId))',
     );
 
     //creamos el admin de prueba
-    await db.insert(tablaUsuarios, {
-      columnaUsuariosUsuario: 'admin',
+    packDeInstrucciones.insert(tablaUsuarios, {
       columnaUsuariosNombre: 'Administrador',
       columnaUsuariosApellidos: 'Prueba',
       columnaUsuariosEmail: 'admin@gmail.com',
@@ -122,41 +146,29 @@ class Databasehelper {
       columnaUsuariosFechacreacion: DateTime.now().toString(),
       columnaUsuariosRol: 'admin',
     });
+
+    await packDeInstrucciones.commit();
   }
 
   //creamos la funcion para insertar el usuario
   Future<int> insertarUsuario(
-    String usuario,
+    String email,
     String nombre,
     String apellidos,
-    String email,
     String contrasena,
     String fechaCreacion,
     String rol,
   ) async {
-    int resultado = await _baseDeDatos.insert(tablaUsuarios, {
-      columnaUsuariosUsuario: usuario,
+    final int resultado = await _baseDeDatos.insert(tablaUsuarios, {
+      columnaUsuariosEmail: email,
       columnaUsuariosNombre: nombre,
       columnaUsuariosApellidos: apellidos,
-      columnaUsuariosEmail: email,
       columnaUsuariosContrasena: contrasena,
       columnaUsuariosFechacreacion: fechaCreacion,
       columnaUsuariosRol: rol,
     });
 
     return resultado;
-  }
-
-  //vamos a comprobar si el usuario existe
-  Future<bool> existeUsuario(String usuario) async {
-    final resultado = await _baseDeDatos.query(
-      tablaUsuarios, //usamos el query para buscar un usuario
-      where: '$columnaUsuariosUsuario = ?',
-      //con el ? es el valor q estamos buscando
-      whereArgs: [usuario],
-    ); //el whereArgs sustituye el ? por el usuario buscado
-
-    return resultado.isNotEmpty;
   }
 
   //comprobamos si existe el correo o no
@@ -178,47 +190,46 @@ class Databasehelper {
   }
 
   //eliminamos un usuario de la bbdd, para q el admin pueda eliminarlos bien
-  Future<int> eliminarUsuario(String usuario) async {
+  Future<int> eliminarUsuario(String email) async {
     final resultado = await _baseDeDatos.delete(
       tablaUsuarios,
-      where: '$columnaUsuariosUsuario = ?',
-      whereArgs: [usuario],
+      where: '$columnaUsuariosEmail = ?',
+      whereArgs: [email],
     );
     return resultado;
   }
 
   //se actualizan los datos cuando un admin modifica el usuario
   Future<int> actualizarUsuario(
-    String usuario,
+    String email,
     String nombre,
     String apellidos,
-    String email,
     String rol,
   ) async {
     final resultado = await _baseDeDatos.update(
       tablaUsuarios,
       {
+        columnaUsuariosEmail: email,
         columnaUsuariosNombre: nombre,
         columnaUsuariosApellidos: apellidos,
-        columnaUsuariosEmail: email,
         columnaUsuariosRol: rol,
       },
-      where: '$columnaUsuariosUsuario = ?',
-      whereArgs: [usuario],
+      where: '$columnaUsuariosEmail = ?',
+      whereArgs: [email],
     );
 
     return resultado;
   }
 
-  //comrprobamos si el usuario y la contrtaseña son correctos
+  //comrprobamos si el email y la contrtaseña son correctos
   Future<Map<String, Object?>?> iniciarSesion(
-    String usuario,
+    String email,
     String contrasena,
   ) async {
     final resultado = await _baseDeDatos.query(
       tablaUsuarios,
-      where: '$columnaUsuariosUsuario = ? AND $columnaUsuariosContrasena = ?',
-      whereArgs: [usuario, contrasena],
+      where: '$columnaUsuariosEmail = ? AND $columnaUsuariosContrasena = ?',
+      whereArgs: [email, contrasena],
     );
 
     for (Map<String, Object?> fila in resultado) {
@@ -226,59 +237,5 @@ class Databasehelper {
     }
 
     return null;
-  }
-
-  //guardamos las estadisticas
-  Future<int> insertarEstadisticas(
-    String? fechaCompletado,
-    int rachaActual,
-    int diasCompletados,
-    int habitoId,
-    String nombreUsuario,
-  ) async {
-    int resultado = await _baseDeDatos.insert(tablaEstadisticas, {
-      columnaEstadisticasFechacompletado: fechaCompletado,
-      columnaEstadisticasRachaactual: rachaActual,
-      columnaEstadisticasDiascompletados: diasCompletados,
-      columnaEstadisticasHabitoidFK: habitoId,
-      columnaEstadisticasUsuarioFK: nombreUsuario,
-    });
-    return resultado;
-  }
-
-  Future<List<Map<String, dynamic>>> obtenerEstadisticas(
-    String usuario,
-    bool esAdmin,
-  ) async {
-    final resultado = await _baseDeDatos.query(
-      tablaEstadisticas,
-      where: esAdmin ? null : '$columnaEstadisticasUsuarioFK = ?',
-      whereArgs: esAdmin ? null : [usuario],
-    );
-
-    return resultado;
-  }
-
-  /*
-  actualizamos la racha, dias completados y la ultima fecha usando
-  update para modificar el registro.
-   */
-  Future<int> actualizarEstadisticas(
-    int habitoId,
-    int rachaActual,
-    int diasCompletados,
-    String? fechaCompletado,
-  ) async {
-    int resultado = await _baseDeDatos.update(
-      tablaEstadisticas,
-      {
-        columnaEstadisticasRachaactual: rachaActual,
-        columnaEstadisticasDiascompletados: diasCompletados,
-        columnaEstadisticasFechacompletado: fechaCompletado,
-      },
-      where: '$columnaEstadisticasHabitoidFK = ?',
-      whereArgs: [habitoId],
-    );
-    return resultado;
   }
 }
