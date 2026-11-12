@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
-class NombreIconos {
-  NombreIconos._nollamar();
+class ListaIconos {
+  ListaIconos._nollamar();
 
   static const inicio = 'Inicio';
   static const personal = 'Personal';
   static const clientes = 'Clientes';
   static const servicios = 'Servicios';
   static const cobros = 'Cobros';
+  static const cartera = 'Cartera';
+  static const flechaPequenaDerecha = 'Flecha';
 }
 
 const Map<String, IconData> opcionesIconos = {
-  NombreIconos.inicio: Icons.cottage_outlined,
-  NombreIconos.personal: Icons.person_outline,
-  NombreIconos.clientes: Icons.badge_outlined,
-  NombreIconos.servicios: Icons.bathtub_outlined,
-  NombreIconos.cobros: Icons.credit_card_outlined,
+  ListaIconos.inicio: Icons.cottage_outlined,
+  ListaIconos.personal: Icons.person_outline,
+  ListaIconos.clientes: Icons.badge_outlined,
+  ListaIconos.servicios: Icons.bathtub_outlined,
+  ListaIconos.cobros: Icons.credit_card_outlined,
+  ListaIconos.cartera: Icons.account_balance_wallet_outlined,
+  ListaIconos.flechaPequenaDerecha: Icons.chevron_right,
 };

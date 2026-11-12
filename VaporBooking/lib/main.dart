@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaporbooking/models/colores.dart';
+import 'package:vaporbooking/screens/admin_personal.dart';
+import 'package:vaporbooking/screens/panel_admin.dart';
 import 'package:vaporbooking/screens/splash_screen.dart';
 
 import '/services/databasehelper.dart';
@@ -154,7 +156,7 @@ class _MyAppState extends State<MyApp> {
                 );
               },
 
-              home: SplashScreen(),
+              home: AdminPersonal(),
             );
           },
         );

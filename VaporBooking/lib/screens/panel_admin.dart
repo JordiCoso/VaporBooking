@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 
+import '../models/iconos.dart';
+
 class PanelAdmin extends StatefulWidget {
   const PanelAdmin({super.key});
 
@@ -15,128 +17,385 @@ class _PanelAdminState extends State<PanelAdmin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('VaporBooking')),
-
       body: SingleChildScrollView(
+        padding: EdgeInsets.all(20),
         child: Column(
           children: [
-            Text(
-              'Panel de administración',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
+            Row(
+              children: [
+                Image(
+                  image: AssetImage('images/logo_VaporBooking_SinFondo.png'),
+                  height: 65,
+                ),
 
-            SizedBox(height: 8),
+                SizedBox(width: 15),
 
-            Text('Resumen de la actividad'),
-
-            SizedBox(height: 24),
-
-            //creamos las tarjetas con los ingresos
-            Container(
-              padding: EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(12),
-              ),
-
-              child: Column(
-                children: [
-                  Text('Ingresos de hoy'),
-
-                  SizedBox(height: 12),
-
-                  Text(
-                    '200,00€',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Text(
+                    'VaporBooking',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
                   ),
+                ),
+              ],
+            ),
 
-                  SizedBox(height: 12),
+            SizedBox(height: 30),
 
-                  Text('Facturación de hoy'),
-                ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Panel de administración',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
             ),
 
-            SizedBox(height: 24),
+            SizedBox(height: 10),
 
-            //apartado del resumen de citas
-            Text(
-              'Resumen de citas',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Resumen de la actividad',
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
+              ),
             ),
 
-            SizedBox(height: 16),
+            SizedBox(height: 25),
 
-            //citas de ejemplo
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
 
-              child: Column(
-                children: [
-                  Text(
-                    'Masaje - 09:30',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Ingresos de hoy',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              opcionesIconos[ListaIconos.cartera],
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 25),
+
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '200,00€',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 25),
+
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Facturación de hoy',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.color,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                ),
+              ],
+            ),
 
-                  SizedBox(height: 12),
+            SizedBox(height: 30),
 
-                  Text('Kade Voronin - 60 min'),
-                ],
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Resumen de citas',
+                style: TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
+                ),
               ),
+            ),
+
+            SizedBox(height: 15),
+
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Masaje',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+
+                            Text(
+                              '09:30',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 22),
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Kade Voronin',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+
+                            Text(
+                              '60 min',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             SizedBox(height: 12),
 
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
 
-              child: Column(
-                children: [
-                  Text(
-                    'Estética - 12:00',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Estética',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+
+                            Text(
+                              '12:00',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 22),
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Nico Ortega',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+
+                            Text(
+                              '45 min',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-
-                  SizedBox(height: 12),
-
-                  Text('Nico Ortega - 45 min'),
-                ],
-              ),
+                ),
+              ],
             ),
 
             SizedBox(height: 12),
 
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(20),
 
-              child: Column(
-                children: [
-                  Text(
-                    'Solárium - 18:00',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Solárium',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+
+                            Text(
+                              '18:00',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        SizedBox(height: 22),
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Nora Serra',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ),
+
+                            Text(
+                              '20 min',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-
-                  SizedBox(height: 12),
-
-                  Text('Nora Serra - 20 min'),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
