@@ -11,9 +11,9 @@ class NombreIconos {
 }
 
 const Map<String, IconData> opcionesIconos = {
-  NombreIconos.inicio: Icons.home_outlined,
+  NombreIconos.inicio: Icons.cottage_outlined,
   NombreIconos.personal: Icons.person_outline,
-  NombreIconos.clientes: Icons.people_outlined,
-  NombreIconos.servicios: Icons.spa_outlined,
+  NombreIconos.clientes: Icons.badge_outlined,
+  NombreIconos.servicios: Icons.bathtub_outlined,
   NombreIconos.cobros: Icons.credit_card_outlined,
 };

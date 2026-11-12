@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 
-class PanelAdmin extends StatelessWidget {
+class PanelAdmin extends StatefulWidget {
   const PanelAdmin({super.key});
+
+  @override
+  State<PanelAdmin> createState() => _PanelAdminState();
+}
+
+class _PanelAdminState extends State<PanelAdmin> {
+  //guardamos la pantalla seleccionada
+  int indiceSeleccionado = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +140,16 @@ class PanelAdmin extends StatelessWidget {
             ),
           ],
         ),
+      ),
+
+      //barra de navegacion inferior
+      bottomNavigationBar: BarraNavegacionAdmin(
+        indiceSeleccionado: indiceSeleccionado,
+        alCambiarPagina: (indice) {
+          setState(() {
+            indiceSeleccionado = indice;
+          });
+        },
       ),
     );
   }
