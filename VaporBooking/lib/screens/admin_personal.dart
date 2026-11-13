@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/screens/admin_detalles_empleado.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 import 'package:vaporbooking/widgets/boton_principal.dart';
 
@@ -18,7 +19,6 @@ class _AdminPersonalState extends State<AdminPersonal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
@@ -134,10 +134,24 @@ class _AdminPersonalState extends State<AdminPersonal> {
 
                             IconButton(
                               onPressed: () {
-                                //TODO pantalla con los detalles del empleado
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AdminDetallesEmpleado(
+                                      nombre: 'Marfil',
+                                      apellidos: 'Cortés',
+                                      iniciales: 'MC',
+                                      puesto: 'Masajista',
+                                      telefono: '695 38 71 02',
+                                      correo: 'mcortes@vaporbooking.com',
+                                      especialidad: 'Masajista',
+                                    ),
+                                  ),
+                                );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos.flechaPequenaDerecha],
+                                opcionesIconos[ListaIconos
+                                    .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
@@ -222,10 +236,24 @@ class _AdminPersonalState extends State<AdminPersonal> {
 
                             IconButton(
                               onPressed: () {
-                                //TODO pantalla con los detalles del empleado
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AdminDetallesEmpleado(
+                                      nombre: 'Sebastián',
+                                      apellidos: 'Moore',
+                                      iniciales: 'SM',
+                                      puesto: 'Responsable de estética',
+                                      telefono: '634 01 02 79',
+                                      correo: 'smoore@vaporbooking.com',
+                                      especialidad: 'Estética',
+                                    ),
+                                  ),
+                                );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos.flechaPequenaDerecha],
+                                opcionesIconos[ListaIconos
+                                    .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
@@ -310,10 +338,24 @@ class _AdminPersonalState extends State<AdminPersonal> {
 
                             IconButton(
                               onPressed: () {
-                                //TODO pantalla con los detalles del empleado
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AdminDetallesEmpleado(
+                                      nombre: 'Hudson',
+                                      apellidos: 'Vega',
+                                      iniciales: 'HV',
+                                      puesto: 'Responsable del solárium',
+                                      telefono: '602 47 65 38',
+                                      correo: 'hvega@vaporbooking.com',
+                                      especialidad: 'Solárium',
+                                    ),
+                                  ),
+                                );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos.flechaPequenaDerecha],
+                                opcionesIconos[ListaIconos
+                                    .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
@@ -398,10 +440,24 @@ class _AdminPersonalState extends State<AdminPersonal> {
 
                             IconButton(
                               onPressed: () {
-                                //TODO pantalla con los detalles del empleado
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AdminDetallesEmpleado(
+                                      nombre: 'Leah',
+                                      apellidos: 'Jones',
+                                      iniciales: 'LJ',
+                                      puesto: 'Recepcionista',
+                                      telefono: '689 54 37 50',
+                                      correo: 'ljones@vaporbooking.com',
+                                      especialidad: 'Recepcionista',
+                                    ),
+                                  ),
+                                );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos.flechaPequenaDerecha],
+                                opcionesIconos[ListaIconos
+                                    .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                             ),
