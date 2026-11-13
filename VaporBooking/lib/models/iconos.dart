@@ -10,6 +10,10 @@ class ListaIconos {
   static const cobros = 'Cobros';
   static const cartera = 'Cartera';
   static const flechaPequenaDerecha = 'Flecha';
+  static const iconoMasaje = 'Icono masaje';
+  static const iconoEstetica = 'Icono estética';
+  static const iconoSolarium = 'Icono solárium';
+  static const reloj = 'Reloj';
 }
 
 const Map<String, IconData> opcionesIconos = {
@@ -20,4 +24,8 @@ const Map<String, IconData> opcionesIconos = {
   ListaIconos.cobros: Icons.credit_card_outlined,
   ListaIconos.cartera: Icons.account_balance_wallet_outlined,
   ListaIconos.flechaPequenaDerecha: Icons.chevron_right,
+  ListaIconos.iconoMasaje: Icons.airline_seat_flat,
+  ListaIconos.iconoEstetica: Icons.face_outlined,
+  ListaIconos.iconoSolarium: Icons.light_mode_outlined,
+  ListaIconos.reloj: Icons.schedule_outlined,
 };

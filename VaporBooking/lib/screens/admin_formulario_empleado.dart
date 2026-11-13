@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vaporbooking/widgets/boton_principal.dart';
-import 'package:vaporbooking/widgets/campo_texto_app.dart';
+
+import '../widgets/boton_principal.dart';
+import '../widgets/campo_texto_app.dart';
 
 class AdminFormularioEmpleado extends StatefulWidget {
   final String? nombre;
