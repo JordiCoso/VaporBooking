@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../models/iconos.dart';
+import '../services/preferenciasservice.dart';
 import '../widgets/barra_navegacion_admin.dart';
 import 'admin_detalles_cliente.dart';
 
 class AdminClientes extends StatefulWidget {
-  const AdminClientes({super.key});
+  final PreferenciasService _preferenciasService;
+  const AdminClientes({super.key, required this._preferenciasService});
 
   @override
   State<AdminClientes> createState() => _AdminClientesState();
@@ -147,6 +149,7 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
+                                      preferenciasService: widget._preferenciasService,
                                       iniciales: 'KV',
                                       nombre: 'Kade',
                                       apellidos: 'Voronin',
@@ -253,6 +256,7 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
+                                      preferenciasService: widget._preferenciasService,
                                       iniciales: 'NO',
                                       nombre: 'Nico',
                                       apellidos: 'Ortega',
@@ -359,6 +363,7 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
+                                      preferenciasService: widget._preferenciasService,
                                       iniciales: 'NS',
                                       nombre: 'Nora',
                                       apellidos: 'Serra',
@@ -465,6 +470,7 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
+                                      preferenciasService: widget._preferenciasService,
                                       iniciales: 'LM',
                                       nombre: 'Laia',
                                       apellidos: 'Martín',

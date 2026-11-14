@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 
 import '../models/colores.dart';
@@ -6,7 +7,8 @@ import '../models/iconos.dart';
 import 'admin_detalles_cita.dart';
 
 class PanelAdmin extends StatefulWidget {
-  const PanelAdmin({super.key});
+  final PreferenciasService _preferenciasService;
+  const PanelAdmin({super.key, required this._preferenciasService});
 
   @override
   State<PanelAdmin> createState() => _PanelAdminState();
@@ -18,9 +20,9 @@ class _PanelAdminState extends State<PanelAdmin> {
 
   @override
   Widget build(BuildContext context) {
-    final bool temaOscuro = false;
-
-    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+    final colores = obtenerEsquemaColoresActual(
+      widget._preferenciasService.obtenerTemaOscuro(),
+    );
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
@@ -182,6 +184,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AdminDetallesCita(
+                            preferenciasService: widget._preferenciasService,
                             servicio: 'Masaje',
                             estado: 'Pendiente',
                             nombre: 'Kade',
@@ -285,6 +288,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AdminDetallesCita(
+                            preferenciasService: widget._preferenciasService,
                             servicio: 'Estética',
                             estado: 'Cancelada',
                             nombre: 'Nico',
@@ -388,6 +392,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => AdminDetallesCita(
+                            preferenciasService: widget._preferenciasService,
                             servicio: 'Solárium',
                             estado: 'Completada',
                             nombre: 'Nora',

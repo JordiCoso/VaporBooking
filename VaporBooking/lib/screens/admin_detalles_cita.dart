@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:vaporbooking/widgets/boton_principal.dart';
 
 import '../models/colores.dart';
+import '../services/preferenciasservice.dart';
 
 class AdminDetallesCita extends StatelessWidget {
+  final PreferenciasService _preferenciasService;
   final String servicio;
   final String estado;
   final String nombre;
@@ -17,6 +19,7 @@ class AdminDetallesCita extends StatelessWidget {
 
   const AdminDetallesCita({
     super.key,
+    required this._preferenciasService,
     required this.servicio,
     required this.estado,
     required this.nombre,
@@ -31,9 +34,9 @@ class AdminDetallesCita extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool temaOscuro = false;
-
-    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+    final colores = obtenerEsquemaColoresActual(
+      _preferenciasService.obtenerTemaOscuro(),
+    );
 
     Color colorEstado;
 
