@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
 
-          home: SplashScreen(preferenciasService: widget._preferenciasService),
+          home: PanelAdmin(preferenciasService: widget._preferenciasService),
         );
       },
     );
