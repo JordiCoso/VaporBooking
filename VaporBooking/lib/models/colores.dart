@@ -17,7 +17,7 @@ class NombreColores {
 }
 
 // La lista de colores el cual usaremos el enum para que se vea cual es.
-const Map<String, Color> modoClaroListaColores = {
+const Map<String, Color> _modoClaroListaColores = {
   NombreColores.verdePrincipal: Color(0xFF6B8F72), // Verde principal
   NombreColores.verdeSecundario: Color(0xFFA7C4AB), // Verde secundario
   NombreColores.bordes: Color(0xFFDCE3DB), // Bordes
@@ -32,7 +32,7 @@ const Map<String, Color> modoClaroListaColores = {
   NombreColores.estadoSeleccion: Color(0xFF47634D), // Seleccion
 };
 
-const Map<String, Color> modoOscuroListaColores = {
+const Map<String, Color> _modoOscuroListaColores = {
   NombreColores.verdePrincipal: Color(0xFF8FB69A), // Verde principal
   NombreColores.verdeSecundario: Color(0xFF668B73), // Verde secundario
   NombreColores.bordes: Color(0xFF405248), // Bordes
@@ -48,5 +48,5 @@ const Map<String, Color> modoOscuroListaColores = {
 };
 
 Map<String, Color> obtenerEsquemaColoresActual(bool temaOscuro) {
-  return temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+  return temaOscuro ? _modoOscuroListaColores : _modoClaroListaColores;
 }
