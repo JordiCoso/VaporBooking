@@ -86,6 +86,15 @@ class _AdminCobrosState extends State<AdminCobros> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.surface
+                              .withValues(alpha: 0.2),
+                          blurRadius: 4,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
 
                     child: Column(
@@ -106,7 +115,7 @@ class _AdminCobrosState extends State<AdminCobros> {
                             ),
 
                             Icon(
-                              opcionesIconos[ListaIconos.cartera],
+                              listaIconos[NombreIconos.cartera],
                               color: Theme.of(context).colorScheme.secondary,
                             ),
                           ],
@@ -221,7 +230,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
@@ -313,7 +322,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
@@ -405,7 +414,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),

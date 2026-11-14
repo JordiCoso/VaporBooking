@@ -138,7 +138,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -244,7 +244,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -350,7 +350,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
@@ -456,7 +456,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),

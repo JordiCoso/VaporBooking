@@ -150,7 +150,7 @@ class _AdminPersonalState extends State<AdminPersonal> {
                                 );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
@@ -252,7 +252,7 @@ class _AdminPersonalState extends State<AdminPersonal> {
                                 );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
@@ -354,7 +354,7 @@ class _AdminPersonalState extends State<AdminPersonal> {
                                 );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
@@ -456,7 +456,7 @@ class _AdminPersonalState extends State<AdminPersonal> {
                                 );
                               },
                               icon: Icon(
-                                opcionesIconos[ListaIconos
+                                listaIconos[NombreIconos
                                     .flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),

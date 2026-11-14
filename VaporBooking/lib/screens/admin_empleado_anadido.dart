@@ -35,7 +35,7 @@ class AdminServicioAnadido extends StatelessWidget {
 
                 child: Center(
                   child: Icon(
-                    opcionesIconos[ListaIconos.check],
+                    listaIconos[NombreIconos.check],
                     size: 45,
                     color: colores[NombreColores.estadoExito],
                   ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ListaIconos {
-  ListaIconos._nollamar();
+class NombreIconos {
+  NombreIconos._nollamar();
 
   static const inicio = 'Inicio';
   static const personal = 'Personal';
@@ -20,20 +20,20 @@ class ListaIconos {
   static const rechazado = 'Rechazado';
 }
 
-const Map<String, IconData> opcionesIconos = {
-  ListaIconos.inicio: Icons.cottage_outlined,
-  ListaIconos.personal: Icons.person_outline,
-  ListaIconos.clientes: Icons.badge_outlined,
-  ListaIconos.servicios: Icons.bathtub_outlined,
-  ListaIconos.cobros: Icons.credit_card_outlined,
-  ListaIconos.cartera: Icons.account_balance_wallet_outlined,
-  ListaIconos.flechaPequenaDerecha: Icons.chevron_right,
-  ListaIconos.iconoMasaje: Icons.airline_seat_flat,
-  ListaIconos.iconoEstetica: Icons.face_outlined,
-  ListaIconos.iconoSolarium: Icons.light_mode_outlined,
-  ListaIconos.reloj: Icons.schedule_outlined,
-  ListaIconos.check: Icons.check,
-  ListaIconos.realizado: Icons.check_circle_outline,
-  ListaIconos.pendiente: Icons.error_outline,
-  ListaIconos.rechazado: Icons.close,
+const Map<String, IconData> listaIconos = {
+  NombreIconos.inicio: Icons.cottage_outlined,
+  NombreIconos.personal: Icons.person_outline,
+  NombreIconos.clientes: Icons.badge_outlined,
+  NombreIconos.servicios: Icons.bathtub_outlined,
+  NombreIconos.cobros: Icons.credit_card_outlined,
+  NombreIconos.cartera: Icons.account_balance_wallet_outlined,
+  NombreIconos.flechaPequenaDerecha: Icons.chevron_right,
+  NombreIconos.iconoMasaje: Icons.airline_seat_flat,
+  NombreIconos.iconoEstetica: Icons.face_outlined,
+  NombreIconos.iconoSolarium: Icons.light_mode_outlined,
+  NombreIconos.reloj: Icons.schedule_outlined,
+  NombreIconos.check: Icons.check,
+  NombreIconos.realizado: Icons.check_circle_outline,
+  NombreIconos.pendiente: Icons.error_outline,
+  NombreIconos.rechazado: Icons.close,
 };

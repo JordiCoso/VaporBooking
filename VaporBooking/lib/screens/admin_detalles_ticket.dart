@@ -40,15 +40,15 @@ class AdminDetallesTicket extends StatelessWidget {
     if (estado == 'realizado') {
       colorEstado = colores[NombreColores.estadoExito]!;
       textoEstado = 'Cobro realizado';
-      iconoEstado = opcionesIconos[ListaIconos.realizado]!;
+      iconoEstado = listaIconos[NombreIconos.realizado]!;
     } else if (estado == 'pendiente') {
       colorEstado = colores[NombreColores.estadoAviso]!;
       textoEstado = 'Pendiente de cobro';
-      iconoEstado = opcionesIconos[ListaIconos.pendiente]!;
+      iconoEstado = listaIconos[NombreIconos.pendiente]!;
     } else {
       colorEstado = colores[NombreColores.estadoError]!;
       textoEstado = 'Cobro rechazado';
-      iconoEstado = opcionesIconos[ListaIconos.rechazado]!;
+      iconoEstado = listaIconos[NombreIconos.rechazado]!;
     }
 
     //color del texto e icono de pendiente pq es el unico diferente respecto a los otros dos
@@ -127,6 +127,15 @@ class AdminDetallesTicket extends StatelessWidget {
                       color: colores[NombreColores.superficie],
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: colores[NombreColores.bordes]!),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: colores[NombreColores.textoPrincipal]!
+                              .withValues(alpha: 0.2),
+                          blurRadius: 4,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
 
                     child: Column(
