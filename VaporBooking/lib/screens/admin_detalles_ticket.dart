@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/colores.dart';
 import 'package:vaporbooking/models/iconos.dart';
 
+import '../services/preferenciasservice.dart';
 import '../widgets/boton_principal.dart';
 
 class AdminDetallesTicket extends StatelessWidget {
+  final PreferenciasService _preferenciasService;
   final String numeroTicket;
   final String fecha;
   final String nombre;
@@ -16,6 +18,7 @@ class AdminDetallesTicket extends StatelessWidget {
 
   const AdminDetallesTicket({
     super.key,
+    required this._preferenciasService,
     required this.numeroTicket,
     required this.fecha,
     required this.nombre,
@@ -28,9 +31,9 @@ class AdminDetallesTicket extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool temaOscuro = false;
-
-    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+    final colores = obtenerEsquemaColoresActual(
+      _preferenciasService.obtenerTemaOscuro(),
+    );
 
     //definivos el color, texto e icono segun el estado del cobro
     Color colorEstado;

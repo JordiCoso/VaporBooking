@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../models/colores.dart';
 import '../models/iconos.dart';
+import '../services/preferenciasservice.dart';
 import '../widgets/boton_principal.dart';
 import 'admin_personal.dart';
 
 class AdminServicioAnadido extends StatelessWidget {
-  const AdminServicioAnadido({super.key});
+  final PreferenciasService _preferenciasService;
+  const AdminServicioAnadido({super.key, required this._preferenciasService});
 
   @override
   Widget build(BuildContext context) {
-    final bool temaOscuro = false;
-    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+    final colores = obtenerEsquemaColoresActual(
+      _preferenciasService.obtenerTemaOscuro(),
+    );
 
     return Scaffold(
       body: Center(

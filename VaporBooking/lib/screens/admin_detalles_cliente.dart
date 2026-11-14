@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../models/colores.dart';
+import '../services/preferenciasservice.dart';
 import '../widgets/boton_principal.dart';
 
 class AdminDetallesCliente extends StatelessWidget {
+  final PreferenciasService _preferenciasService;
   final String iniciales;
   final String nombre;
   final String apellidos;
@@ -13,6 +15,7 @@ class AdminDetallesCliente extends StatelessWidget {
 
   const AdminDetallesCliente({
     super.key,
+    required this._preferenciasService,
     required this.iniciales,
     required this.nombre,
     required this.apellidos,
@@ -23,9 +26,9 @@ class AdminDetallesCliente extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool temaOscuro = false;
-
-    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+    final colores = obtenerEsquemaColoresActual(
+      _preferenciasService.obtenerTemaOscuro(),
+    );
 
     return Scaffold(
       appBar: AppBar(

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/iconos.dart';
 
+import '../models/colores.dart';
+import '../services/preferenciasservice.dart';
 import '../widgets/barra_navegacion_admin.dart';
 import 'admin_detalles_ticket.dart';
 
 class AdminCobros extends StatefulWidget {
-  const AdminCobros({super.key});
+  final PreferenciasService _preferenciasService;
+
+  const AdminCobros({super.key, required this._preferenciasService});
 
   @override
   State<AdminCobros> createState() => _AdminCobrosState();
@@ -16,6 +20,10 @@ class _AdminCobrosState extends State<AdminCobros> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = obtenerEsquemaColoresActual(
+      widget._preferenciasService.obtenerTemaOscuro(),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -89,7 +97,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).colorScheme.surface
+                          color: colores[NombreColores.textoPrincipal]!
                               .withValues(alpha: 0.2),
                           blurRadius: 4,
                           offset: Offset(0, 3),
@@ -230,8 +238,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
@@ -239,6 +246,8 @@ class _AdminCobrosState extends State<AdminCobros> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesTicket(
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       numeroTicket: 'TK - 001',
                                       fecha: '05/11/2026',
                                       nombre: 'Kade',
@@ -322,8 +331,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
@@ -331,6 +339,8 @@ class _AdminCobrosState extends State<AdminCobros> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesTicket(
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       numeroTicket: 'TK - 002',
                                       fecha: '05/11/2026',
                                       nombre: 'Nico',
@@ -414,8 +424,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.secondary,
                               ),
                               onPressed: () {
@@ -423,6 +432,8 @@ class _AdminCobrosState extends State<AdminCobros> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesTicket(
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       numeroTicket: 'TK - 003',
                                       fecha: '05/11/2026',
                                       nombre: 'Nora',
