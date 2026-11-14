@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/screens/admin_clientes.dart';
+import 'package:vaporbooking/screens/admin_cobros.dart';
+import 'package:vaporbooking/screens/admin_personal.dart';
+import 'package:vaporbooking/screens/admin_servicios.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 
@@ -8,6 +12,7 @@ import 'admin_detalles_cita.dart';
 
 class PanelAdmin extends StatefulWidget {
   final PreferenciasService _preferenciasService;
+
   const PanelAdmin({super.key, required this._preferenciasService});
 
   @override
@@ -492,9 +497,38 @@ class _PanelAdminState extends State<PanelAdmin> {
       bottomNavigationBar: BarraNavegacionAdmin(
         indiceSeleccionado: indiceSeleccionado,
         alCambiarPagina: (indice) {
-          setState(() {
-            indiceSeleccionado = indice;
-          });
+          //conectamos la barra inferior con todos las demas pantallas
+          if (indice == 0) {
+            //ya estamos en esta pantalla
+          } else if (indice == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminPersonal()),
+            );
+          } else if (indice == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminClientes(
+                  preferenciasService: widget._preferenciasService,
+                ),
+              ),
+            );
+          } else if (indice == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminServicios()),
+            );
+          } else if (indice == 4) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminCobros(
+                  preferenciasService: widget._preferenciasService,
+                ),
+              ),
+            );
+          }
         },
       ),
     );
