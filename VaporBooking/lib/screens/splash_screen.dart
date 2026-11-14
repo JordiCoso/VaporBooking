@@ -38,11 +38,15 @@ class SplashScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleMedium,
                             textAlign: TextAlign.center,
                           ),
+                          contentPadding: EdgeInsets.all(16),
+
                           content: Text(
                             '¿Quieres el modo claro o el modo oscuro?',
                             style: Theme.of(context).textTheme.bodyMedium,
                             textAlign: TextAlign.center,
                           ),
+                          actionsPadding: EdgeInsets.all(16),
+                          actionsAlignment: MainAxisAlignment.center,
                           actions: [
                             ElevatedButton(
                               onPressed: () => Navigator.pop(context, false),
@@ -54,7 +58,7 @@ class SplashScreen extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                fixedSize: Size(130, 45),
+                                fixedSize: Size(140, 50),
                                 padding: EdgeInsets.all(0),
                               ),
                               child: Text(
@@ -67,6 +71,7 @@ class SplashScreen extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                             ),
+                            Expanded(flex: 1, child: SizedBox()),
                             ElevatedButton(
                               onPressed: () => Navigator.pop(context, true),
                               style: ElevatedButton.styleFrom(
@@ -75,7 +80,7 @@ class SplashScreen extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                fixedSize: Size(130, 45),
+                                fixedSize: Size(140, 50),
                                 padding: EdgeInsets.all(0),
                               ),
                               child: Text(
