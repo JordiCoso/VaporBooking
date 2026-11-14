@@ -54,10 +54,10 @@ class _MyAppState extends State<MyApp> {
       valueListenable: widget._preferenciasService.temaOscuro,
 
       builder: (context, temaOscuro, child) {
-        final Map<String, Color> colores = temaOscuro
-            ? modoOscuroListaColores
-            : modoClaroListaColores;
-
+        final Map<String, Color> colores = obtenerEsquemaColoresActual(
+          widget._preferenciasService.obtenerTemaOscuro(),
+        );
+        
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'VaporBooking',
