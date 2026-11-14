@@ -14,6 +14,10 @@ class ListaIconos {
   static const iconoEstetica = 'Icono estética';
   static const iconoSolarium = 'Icono solárium';
   static const reloj = 'Reloj';
+  static const check = 'Check';
+  static const realizado = 'Check redondo';
+  static const pendiente = 'Pendiente';
+  static const rechazado = 'Rechazado';
 }
 
 const Map<String, IconData> opcionesIconos = {
@@ -28,4 +32,8 @@ const Map<String, IconData> opcionesIconos = {
   ListaIconos.iconoEstetica: Icons.face_outlined,
   ListaIconos.iconoSolarium: Icons.light_mode_outlined,
   ListaIconos.reloj: Icons.schedule_outlined,
+  ListaIconos.check: Icons.check,
+  ListaIconos.realizado: Icons.check_circle_outline,
+  ListaIconos.pendiente: Icons.error_outline,
+  ListaIconos.rechazado: Icons.close,
 };

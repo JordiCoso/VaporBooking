@@ -4,6 +4,7 @@ import '../models/iconos.dart';
 import '../widgets/barra_navegacion_admin.dart';
 import '../widgets/boton_principal.dart';
 import 'admin_detalles_servicio.dart';
+import 'admin_formulario_servicio.dart';
 
 class AdminServicios extends StatefulWidget {
   const AdminServicios({super.key});
@@ -575,7 +576,12 @@ class _AdminServiciosState extends State<AdminServicios> {
             BotonPrincipal(
               texto: '+ Añadir servicio',
               pulsar: () {
-                //TODO hacer el formulario de añadir servicio
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdminFormularioServicio(),
+                  ),
+                );
               },
             ),
 

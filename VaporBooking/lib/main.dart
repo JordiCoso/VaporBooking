@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaporbooking/models/colores.dart';
 import 'package:vaporbooking/screens/admin_clientes.dart';
+import 'package:vaporbooking/screens/admin_cobros.dart';
 import 'package:vaporbooking/screens/admin_personal.dart';
+import 'package:vaporbooking/screens/admin_servicio_anadido.dart';
 import 'package:vaporbooking/screens/admin_servicios.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
 import 'package:vaporbooking/screens/splash_screen.dart';
@@ -158,7 +160,7 @@ class _MyAppState extends State<MyApp> {
                 );
               },
 
-              home: AdminServicios(),
+              home: AdminCobros(),
             );
           },
         );

@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/screens/admin_formulario_servicio.dart';
 
 import '../widgets/boton_principal.dart';
 
@@ -38,9 +38,7 @@ class AdminDetallesServicio extends StatelessWidget {
             Row(
               children: [
                 Image(
-                  image: AssetImage(
-                    'images/logo_VaporBooking_SinFondo.png',
-                  ),
+                  image: AssetImage('images/logo_VaporBooking_SinFondo.png'),
                   height: 65,
                 ),
 
@@ -320,7 +318,18 @@ class AdminDetallesServicio extends StatelessWidget {
             BotonPrincipal(
               texto: 'Editar servicio',
               pulsar: () {
-                //TODO formulario para editar
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdminFormularioServicio(
+                      nombre: nombre,
+                      descripcion: descripcion,
+                      duracion: duracion,
+                      precio: precio,
+                      puntos: puntos,
+                    ),
+                  ),
+                );
               },
             ),
 
