@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 class NombreColores {
-  NombreColores._nollamar();
+  const NombreColores._nollamar();
 
   static const String verdePrincipal = 'VerdePrincipal';
   static const String verdeSecundario = 'VerdeSecundario';
@@ -46,3 +46,7 @@ const Map<String, Color> modoOscuroListaColores = {
   NombreColores.estadoError: Color(0xFFE07E75), // Error
   NombreColores.estadoSeleccion: Color(0xFFA4C9AD), // Seleccion
 };
+
+Map<String, Color> obtenerEsquemaColoresActual(bool temaOscuro) {
+  return temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+}
