@@ -54,115 +54,64 @@ class _MyAppState extends State<MyApp> {
       valueListenable: widget._preferenciasService.temaOscuro,
 
       builder: (context, temaOscuro, child) {
-        return ValueListenableBuilder<double>(
-          valueListenable: widget._preferenciasService.tamanoLetra,
+        final Map<String, Color> colores = temaOscuro
+            ? modoOscuroListaColores
+            : modoClaroListaColores;
 
-          builder: (context, tamanoLetra, child) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'VaporBooking',
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'VaporBooking',
 
-              //colores de la aplicación en modo claro.
-              theme: ThemeData(
-                scaffoldBackgroundColor:
-                    modoClaroListaColores[NombreColores.fondo],
+          theme: ThemeData(
+            scaffoldBackgroundColor: colores[NombreColores.fondo],
 
-                textTheme: TextTheme(
-                  titleLarge: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 30,
-                    color: modoClaroListaColores[NombreColores.textoPrincipal],
-                  ),
-                  labelLarge: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    color: modoClaroListaColores[NombreColores.superficie],
-                  ),
-                ),
-
-                outlinedButtonTheme: OutlinedButtonThemeData(
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      width: 1.5,
-                      color: modoClaroListaColores[NombreColores.bordes]!,
-                    ),
-                    elevation: 10,
-                    minimumSize: Size.square(10),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    iconColor:
-                        modoClaroListaColores[NombreColores.textoSecundario]!,
-                  ),
-                ),
-
-                colorScheme: ColorScheme.light(
-                  primary: modoClaroListaColores[NombreColores.verdePrincipal]!,
-                  secondary:
-                      modoClaroListaColores[NombreColores.verdeSecundario]!,
-                  surface: modoClaroListaColores[NombreColores.superficie]!,
-                ),
+            textTheme: TextTheme(
+              titleLarge: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 28,
+                color: colores[NombreColores.textoPrincipal],
               ),
-
-              //colores de la aplicación en modo oscuro.
-              darkTheme: ThemeData(
-                scaffoldBackgroundColor:
-                    modoOscuroListaColores[NombreColores.fondo],
-
-                textTheme: TextTheme(
-                  titleLarge: TextStyle(
-                    color: modoOscuroListaColores[NombreColores.textoPrincipal],
-                  ),
-                  labelLarge: TextStyle(
-                    fontSize: 15,
-                    color: modoOscuroListaColores[NombreColores.superficie],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                outlinedButtonTheme: OutlinedButtonThemeData(
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      width: 1.5,
-                      color: modoOscuroListaColores[NombreColores.bordes]!,
-                    ),
-                    elevation: 10,
-                    minimumSize: Size.square(10),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    iconColor:
-                    modoOscuroListaColores[NombreColores.textoSecundario]!,
-                  ),
-                ),
-
-                colorScheme: ColorScheme.dark(
-                  primary:
-                      modoOscuroListaColores[NombreColores.verdePrincipal]!,
-                  secondary:
-                      modoOscuroListaColores[NombreColores.verdeSecundario]!,
-                  surface: modoOscuroListaColores[NombreColores.superficie]!,
-                ),
+              titleMedium: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 18,
+                color: colores[NombreColores.textoPrincipal],
               ),
+              bodyMedium: GoogleFonts.poppins(
+                fontWeight: FontWeight.normal,
+                fontSize: 14,
+                color: colores[NombreColores.textoSecundario],
+              ),
+              labelLarge: GoogleFonts.poppins(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+                color: colores[NombreColores.superficie],
+              ),
+            ),
 
-              //seleccionamos el tema guardado.
-              themeMode: temaOscuro ? ThemeMode.dark : ThemeMode.light,
+            outlinedButtonTheme: OutlinedButtonThemeData(
+              style: OutlinedButton.styleFrom(
+                side: BorderSide(
+                  width: 1.5,
+                  color: colores[NombreColores.bordes]!,
+                ),
+                elevation: 10,
+                minimumSize: Size.square(10),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                iconColor: colores[NombreColores.textoSecundario]!,
+              ),
+            ),
 
-              //ahora vamos a aplicar el tamaño de la letra a TODOS los textos
-              builder: (context, child) {
-                return MediaQuery(
-                  data: MediaQuery.of(
-                    context,
-                  ).copyWith(textScaler: TextScaler.linear(tamanoLetra / 14)),
-                  child: child!, //aquí indicamos que child no es null, poniendo el !
-                );
-              },
+            colorScheme: ColorScheme.light(
+              primary: colores[NombreColores.verdePrincipal]!,
+              secondary: colores[NombreColores.verdeSecundario]!,
+              surface: colores[NombreColores.superficie]!,
+            ),
+          ),
 
-              home: PanelAdmin(),
-            );
-          },
+          home: SplashScreen(preferenciasService: widget._preferenciasService),
         );
       },
     );

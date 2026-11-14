@@ -18,6 +18,7 @@ class NombreIconos {
   static const realizado = 'Check redondo';
   static const pendiente = 'Pendiente';
   static const rechazado = 'Rechazado';
+  static const ajustes = 'Ajustes';
 }
 
 const Map<String, IconData> listaIconos = {
@@ -36,4 +37,5 @@ const Map<String, IconData> listaIconos = {
   NombreIconos.realizado: Icons.check_circle_outline,
   NombreIconos.pendiente: Icons.error_outline,
   NombreIconos.rechazado: Icons.close,
+  NombreIconos.ajustes: Icons.settings_outlined,
 };
