@@ -503,7 +503,7 @@ class _PanelAdminState extends State<PanelAdmin> {
           } else if (indice == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminPersonal()),
+              MaterialPageRoute(builder: (context) => AdminPersonal(preferenciasService: widget._preferenciasService)),
             );
           } else if (indice == 2) {
             Navigator.push(
@@ -517,7 +517,7 @@ class _PanelAdminState extends State<PanelAdmin> {
           } else if (indice == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminServicios()),
+              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService)),
             );
           } else if (indice == 4) {
             Navigator.push(

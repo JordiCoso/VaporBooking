@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/screens/panel_admin.dart';
 
 import '../models/iconos.dart';
 import '../services/preferenciasservice.dart';
 import '../widgets/barra_navegacion_admin.dart';
+import 'admin_cobros.dart';
 import 'admin_detalles_cliente.dart';
+import 'admin_personal.dart';
+import 'admin_servicios.dart';
 
 class AdminClientes extends StatefulWidget {
   final PreferenciasService _preferenciasService;
@@ -515,9 +519,38 @@ class _AdminClientesState extends State<AdminClientes> {
       bottomNavigationBar: BarraNavegacionAdmin(
         indiceSeleccionado: indiceSeleccionado,
         alCambiarPagina: (indice) {
-          setState(() {
-            indiceSeleccionado = indice;
-          });
+          //conectamos la barra inferior con todos las demas pantallas
+          if (indice == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
+            );
+          } else if (indice == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminPersonal(
+                  preferenciasService: widget._preferenciasService,
+                ),
+              ),
+            );
+          } else if (indice == 2) {
+            //estamos en esta pantalla
+          } else if (indice == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService)),
+            );
+          } else if (indice == 4) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminCobros(
+                  preferenciasService: widget._preferenciasService,
+                ),
+              ),
+            );
+          }
         },
       ),
     );

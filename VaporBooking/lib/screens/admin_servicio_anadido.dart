@@ -74,7 +74,7 @@ class AdminServicioAnadido extends StatelessWidget {
                 pulsar: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AdminServicios()),
+                    MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: _preferenciasService)),
                   );
                 },
               ),

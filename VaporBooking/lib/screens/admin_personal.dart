@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/screens/admin_detalles_empleado.dart';
+import 'package:vaporbooking/screens/panel_admin.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 import 'package:vaporbooking/widgets/boton_principal.dart';
 
 import '../models/iconos.dart';
+import '../services/preferenciasservice.dart';
+import 'admin_clientes.dart';
+import 'admin_cobros.dart';
+import 'admin_servicios.dart';
 
 class AdminPersonal extends StatefulWidget {
-  const AdminPersonal({super.key});
+  final PreferenciasService _preferenciasService;
+  const AdminPersonal({super.key, required this._preferenciasService});
 
   @override
   State<AdminPersonal> createState() => _AdminPersonalState();
@@ -503,9 +509,38 @@ class _AdminPersonalState extends State<AdminPersonal> {
       bottomNavigationBar: BarraNavegacionAdmin(
         indiceSeleccionado: indiceSeleccionado,
         alCambiarPagina: (indice) {
-          setState(() {
-            indiceSeleccionado = indice;
-          });
+          //conectamos la barra inferior con todos las demas pantallas
+          if (indice == 0) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
+            );
+          } else if (indice == 1) {
+            //estamos en esta pantalla
+          } else if (indice == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminClientes(
+                  preferenciasService: widget._preferenciasService,
+                ),
+              ),
+            );
+          } else if (indice == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService)),
+            );
+          } else if (indice == 4) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AdminCobros(
+                  preferenciasService: widget._preferenciasService,
+                ),
+              ),
+            );
+          }
         },
       ),
     );

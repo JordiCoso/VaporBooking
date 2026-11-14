@@ -475,30 +475,30 @@ class _AdminCobrosState extends State<AdminCobros> {
               MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
             );
           } else if (indice == 1) {
-            //ya estamos en esta pantalla
-          } else if (indice == 2) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AdminClientes(
+                builder: (context) => AdminPersonal(
                   preferenciasService: widget._preferenciasService,
                 ),
               ),
+            );
+          } else if (indice == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AdminClientes(preferenciasService: widget._preferenciasService)),
             );
           } else if (indice == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminServicios()),
-            );
-          } else if (indice == 4) {
-            Navigator.push(
-              context,
               MaterialPageRoute(
-                builder: (context) => AdminCobros(
+                builder: (context) => AdminServicios(
                   preferenciasService: widget._preferenciasService,
                 ),
               ),
             );
+          } else if (indice == 4) {
+            //estamos en esta pantalla
           }
         },
       ),
