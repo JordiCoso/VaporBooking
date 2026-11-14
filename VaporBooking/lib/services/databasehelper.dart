@@ -65,10 +65,21 @@ class Databasehelper {
   static const columnaUsuariosEmail = 'email';
   static const columnaUsuariosNombre = 'nombre';
   static const columnaUsuariosApellidos = 'apellidos';
+  static const columnaUsuariosTelefono = 'telefono';
   static const columnaUsuariosContrasena = 'contrasena';
   static const columnaUsuariosFechacreacion = 'fecha_creacion';
   static const columnaUsuariosRol = 'rol';
   static const columnaUsuariosPuntos = 'puntos';
+
+  static const tablaEmpleados = 'empleados';
+
+  static const columnaEmpleadosId = 'id';
+  static const columnaEmpleadosNombre = 'nombre';
+  static const columnaEmpleadosApellidos = 'apellidos';
+  static const columnaEmpleadosEmail = 'email';
+  static const columnaEmpleadosTelefono = 'telefono';
+  static const columnaEmpleadosEspecialidad = 'especialidad';
+  static const columnaEmpleadosPuesto = 'puesto';
 
   static const tablaServicios = 'servicios';
 
@@ -78,6 +89,18 @@ class Databasehelper {
   static const columnaServiciosPrecio = 'precio';
   static const columnaServiciosDuracion = 'duracion';
   static const columnaServiciosValoracionPuntos = 'valoracionpuntos';
+
+  static const tablaCitas = 'citas';
+
+  static const columnaCitasId = 'id';
+  static const columnaCitasFecha = 'fecha';
+  static const columnaCitasHora = 'hora';
+  static const columnaCitasHora_Fin = 'hora_fin';
+  static const columnaCitasEstado = 'estado';
+  static const columnaCitasObservaciones = 'observaciones';
+
+  static const columnaCitasUsuariosClienteEmailFK = 'email_cliente_fk';
+  static const columnaCitasServiciosIdFK = 'servicio_id_fk';
 
   static const tablaTiquets = 'tiquets';
 
@@ -100,11 +123,23 @@ class Databasehelper {
       'CREATE TABLE $tablaUsuarios ('
       '$columnaUsuariosEmail TEXT NOT NULL PRIMARY KEY, '
       '$columnaUsuariosNombre TEXT NOT NULL, '
-      '$columnaUsuariosApellidos TEXT NOT NULL, '
+      '$columnaUsuariosApellidos TEXT NOT NULL,'
+      '$columnaUsuariosTelefono TEXT NOT NULL, '
       '$columnaUsuariosContrasena TEXT NOT NULL, '
       '$columnaUsuariosFechacreacion TEXT NOT NULL, '
       '$columnaUsuariosRol TEXT NOT NULL,'
       '$columnaUsuariosPuntos INTEGER NOT NULL)',
+    );
+
+    packDeInstrucciones.execute(
+      'CREATE TABLE $tablaEmpleados ('
+      '$columnaEmpleadosId INTEGER PRIMARY KEY AUTOINCREMENT,'
+      '$columnaEmpleadosNombre TEXT NOT NULL,'
+      '$columnaEmpleadosApellidos TEXT NOT NULL,'
+      '$columnaEmpleadosEmail TEXT NOT NULL UNIQUE,'
+      '$columnaEmpleadosTelefono TEXT NOT NULL,'
+      '$columnaEmpleadosEspecialidad TEXT NOT NULL,'
+      '$columnaEmpleadosPuesto TEXT)',
     );
 
     packDeInstrucciones.execute(
@@ -115,6 +150,18 @@ class Databasehelper {
       '$columnaServiciosPrecio INTEGER NOT NULL, '
       '$columnaServiciosDuracion INTEGER NOT NULL, '
       '$columnaServiciosValoracionPuntos INTEGER NOT NULL)',
+    );
+
+    packDeInstrucciones.execute(
+      'CREATE TABLE $tablaCitas ('
+      '$columnaCitasId INTEGER PRIMARY KEY AUTOINCREMENT,'
+      '$columnaCitasFecha TEXT NOT NULL,'
+      '$columnaCitasHora TEXT NOT NULL,'
+      '$columnaCitasHora_Fin TEXT NOT NULL,'
+      '$columnaCitasEstado TEXT NOT NULL,'
+      '$columnaCitasObservaciones TEXT,'
+      'FOREIGN KEY ($columnaCitasUsuariosClienteEmailFK) REFERENCES $tablaUsuarios($columnaUsuariosEmail),'
+      'FOREIGN KEY ($columnaCitasServiciosIdFK) REFERENCES $tablaServicios($columnaServiciosId))',
     );
 
     packDeInstrucciones.execute(
