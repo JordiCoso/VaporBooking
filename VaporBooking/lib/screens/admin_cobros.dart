@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/iconos.dart';
 
+import '../models/colores.dart';
 import '../widgets/barra_navegacion_admin.dart';
 import 'admin_detalles_ticket.dart';
 
@@ -16,6 +17,10 @@ class _AdminCobrosState extends State<AdminCobros> {
 
   @override
   Widget build(BuildContext context) {
+    final bool temaOscuro = false;
+
+    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -89,7 +94,7 @@ class _AdminCobrosState extends State<AdminCobros> {
 
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).colorScheme.surface
+                          color: colores[NombreColores.textoPrincipal]!
                               .withValues(alpha: 0.2),
                           blurRadius: 4,
                           offset: Offset(0, 3),

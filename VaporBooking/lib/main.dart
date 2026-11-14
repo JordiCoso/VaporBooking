@@ -160,7 +160,7 @@ class _MyAppState extends State<MyApp> {
                 );
               },
 
-              home: AdminCobros(),
+              home: PanelAdmin(),
             );
           },
         );

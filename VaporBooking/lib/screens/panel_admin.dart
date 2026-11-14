@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 
+import '../models/colores.dart';
 import '../models/iconos.dart';
+import 'admin_detalles_cita.dart';
 
 class PanelAdmin extends StatefulWidget {
   const PanelAdmin({super.key});
@@ -16,6 +18,9 @@ class _PanelAdminState extends State<PanelAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    final bool temaOscuro = false;
+
+    final colores = temaOscuro ? modoOscuroListaColores : modoClaroListaColores;
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20),
@@ -81,6 +86,15 @@ class _PanelAdminState extends State<PanelAdmin> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
+
+                      boxShadow: [
+                        BoxShadow(
+                          color: colores[NombreColores.textoPrincipal]!
+                              .withValues(alpha: 0.2),
+                          blurRadius: 4,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
                     ),
 
                     child: Column(
@@ -161,20 +175,56 @@ class _PanelAdminState extends State<PanelAdmin> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                  child: GestureDetector(
+                    //para pulsar a cualquier lado de la tarjeta del cliente
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminDetallesCita(
+                            servicio: 'Masaje',
+                            estado: 'Pendiente',
+                            nombre: 'Kade',
+                            apellidos: 'Voronin',
+                            fecha: '07/11/2026',
+                            hora: '09:30',
+                            duracion: '60 minutos',
+                            horaFin: '10:30',
+                            precio: '45,00€',
+                            observaciones: 'Evitar aplicar mucha presión en la zona cervical.',
+                          ),
+                        ),
+                      );
+                    },
 
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Masaje',
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Masaje',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+
+                              Text(
+                                '09:30',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -184,29 +234,28 @@ class _PanelAdminState extends State<PanelAdmin> {
                                       ?.color,
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
 
-                            Text(
-                              '09:30',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
+                          SizedBox(height: 22),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Kade Voronin',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
 
-                        SizedBox(height: 22),
-
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Kade Voronin',
+                              Text(
+                                '60 min',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Theme.of(context)
@@ -215,21 +264,10 @@ class _PanelAdminState extends State<PanelAdmin> {
                                       ?.color,
                                 ),
                               ),
-                            ),
-
-                            Text(
-                              '60 min',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -241,21 +279,55 @@ class _PanelAdminState extends State<PanelAdmin> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminDetallesCita(
+                            servicio: 'Estética',
+                            estado: 'Cancelada',
+                            nombre: 'Nico',
+                            apellidos: 'Ortega',
+                            fecha: '07/11/2026',
+                            hora: '12:00',
+                            duracion: '45 minutos',
+                            horaFin: '12:45',
+                            precio: '35,00€',
+                            observaciones: 'Sin observaciones.',
+                          ),
+                        ),
+                      );
+                    },
 
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
 
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Estética',
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Estética',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+
+                              Text(
+                                '12:00',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -265,29 +337,28 @@ class _PanelAdminState extends State<PanelAdmin> {
                                       ?.color,
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
 
-                            Text(
-                              '12:00',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
+                          SizedBox(height: 22),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Nico Ortega',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
 
-                        SizedBox(height: 22),
-
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Nico Ortega',
+                              Text(
+                                '45 min',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Theme.of(context)
@@ -296,21 +367,10 @@ class _PanelAdminState extends State<PanelAdmin> {
                                       ?.color,
                                 ),
                               ),
-                            ),
-
-                            Text(
-                              '45 min',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -322,21 +382,55 @@ class _PanelAdminState extends State<PanelAdmin> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminDetallesCita(
+                            servicio: 'Solárium',
+                            estado: 'Completada',
+                            nombre: 'Nora',
+                            apellidos: 'Serra',
+                            fecha: '06/11/2026',
+                            hora: '18:00',
+                            duracion: '20 minutos',
+                            horaFin: '18:20',
+                            precio: '25,00€',
+                            observaciones: 'Sin observaciones.',
+                          ),
+                        ),
+                      );
+                    },
 
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
 
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Solárium',
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Solárium',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+
+                              Text(
+                                '18:00',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -346,29 +440,28 @@ class _PanelAdminState extends State<PanelAdmin> {
                                       ?.color,
                                 ),
                               ),
-                            ),
+                            ],
+                          ),
 
-                            Text(
-                              '18:00',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
+                          SizedBox(height: 22),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Nora Serra',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
 
-                        SizedBox(height: 22),
-
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Nora Serra',
+                              Text(
+                                '20 min',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Theme.of(context)
@@ -377,21 +470,10 @@ class _PanelAdminState extends State<PanelAdmin> {
                                       ?.color,
                                 ),
                               ),
-                            ),
-
-                            Text(
-                              '20 min',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
