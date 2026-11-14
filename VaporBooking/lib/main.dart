@@ -58,25 +58,39 @@ class _MyAppState extends State<MyApp> {
           valueListenable: widget._preferenciasService.tamanoLetra,
 
           builder: (context, tamanoLetra, child) {
+            final Map<String, Color> colores = temaOscuro
+                ? modoOscuroListaColores
+                : modoClaroListaColores;
+
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               title: 'VaporBooking',
 
-              //colores de la aplicación en modo claro.
+              // Colores de la aplicación en modo claro.
               theme: ThemeData(
                 scaffoldBackgroundColor:
-                    modoClaroListaColores[NombreColores.fondo],
+                    colores[NombreColores.fondo],
 
                 textTheme: TextTheme(
                   titleLarge: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
-                    fontSize: 30,
-                    color: modoClaroListaColores[NombreColores.textoPrincipal],
+                    fontSize: 28,
+                    color: colores[NombreColores.textoPrincipal],
+                  ),
+                  titleMedium: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                    color: colores[NombreColores.textoPrincipal],
+                  ),
+                  bodyMedium: GoogleFonts.poppins(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: colores[NombreColores.textoSecundario],
                   ),
                   labelLarge: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
-                    fontSize: 17,
-                    color: modoClaroListaColores[NombreColores.superficie],
+                    fontSize: 16,
+                    color: colores[NombreColores.superficie],
                   ),
                 ),
 
@@ -84,7 +98,7 @@ class _MyAppState extends State<MyApp> {
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(
                       width: 1.5,
-                      color: modoClaroListaColores[NombreColores.bordes]!,
+                      color: colores[NombreColores.bordes]!,
                     ),
                     elevation: 10,
                     minimumSize: Size.square(10),
@@ -93,62 +107,18 @@ class _MyAppState extends State<MyApp> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     iconColor:
-                        modoClaroListaColores[NombreColores.textoSecundario]!,
+                        colores[NombreColores.textoSecundario]!,
                   ),
                 ),
 
                 colorScheme: ColorScheme.light(
-                  primary: modoClaroListaColores[NombreColores.verdePrincipal]!,
+                  primary: colores[NombreColores.verdePrincipal]!,
                   secondary:
-                      modoClaroListaColores[NombreColores.verdeSecundario]!,
-                  surface: modoClaroListaColores[NombreColores.superficie]!,
+                      colores[NombreColores.verdeSecundario]!,
+                  surface: colores[NombreColores.superficie]!,
                 ),
               ),
-
-              //colores de la aplicación en modo oscuro.
-              darkTheme: ThemeData(
-                scaffoldBackgroundColor:
-                    modoOscuroListaColores[NombreColores.fondo],
-
-                textTheme: TextTheme(
-                  titleLarge: TextStyle(
-                    color: modoOscuroListaColores[NombreColores.textoPrincipal],
-                  ),
-                  labelLarge: TextStyle(
-                    fontSize: 15,
-                    color: modoOscuroListaColores[NombreColores.superficie],
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                outlinedButtonTheme: OutlinedButtonThemeData(
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(
-                      width: 1.5,
-                      color: modoOscuroListaColores[NombreColores.bordes]!,
-                    ),
-                    elevation: 10,
-                    minimumSize: Size.square(10),
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    iconColor:
-                    modoOscuroListaColores[NombreColores.textoSecundario]!,
-                  ),
-                ),
-
-                colorScheme: ColorScheme.dark(
-                  primary:
-                      modoOscuroListaColores[NombreColores.verdePrincipal]!,
-                  secondary:
-                      modoOscuroListaColores[NombreColores.verdeSecundario]!,
-                  surface: modoOscuroListaColores[NombreColores.superficie]!,
-                ),
-              ),
-
-              //seleccionamos el tema guardado.
-              themeMode: temaOscuro ? ThemeMode.dark : ThemeMode.light,
+              //
 
               //ahora vamos a aplicar el tamaño de la letra a TODOS los textos
               builder: (context, child) {
@@ -160,7 +130,9 @@ class _MyAppState extends State<MyApp> {
                 );
               },
 
-              home: AdminCobros(),
+              home: SplashScreen(
+                preferenciasService: widget._preferenciasService,
+              ),
             );
           },
         );
