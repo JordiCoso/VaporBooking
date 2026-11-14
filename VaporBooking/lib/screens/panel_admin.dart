@@ -100,7 +100,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                               ),
                             ),
                             Icon(
-                              opcionesIconos[ListaIconos.cartera],
+                              listaIconos[NombreIconos.cartera],
                               color: Theme.of(context).colorScheme.secondary,
                             ),
                           ],

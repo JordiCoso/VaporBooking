@@ -127,7 +127,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                                 ),
 
                                 child: Icon(
-                                  opcionesIconos[ListaIconos.iconoMasaje],
+                                  listaIconos[NombreIconos.iconoMasaje],
                                   color: Theme.of(context).colorScheme.primary,
                                   size: 20,
                                 ),
@@ -174,7 +174,7 @@ class _AdminServiciosState extends State<AdminServicios> {
 
                               IconButton(
                                 icon: Icon(
-                                  opcionesIconos[ListaIconos
+                                  listaIconos[NombreIconos
                                       .flechaPequenaDerecha],
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
@@ -191,7 +191,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                                             precio: '45,00€',
                                             puntos: '20',
                                             icono:
-                                                opcionesIconos[ListaIconos
+                                                listaIconos[NombreIconos
                                                     .iconoMasaje]!,
                                           ),
                                     ),
@@ -210,7 +210,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                           child: Row(
                             children: [
                               Icon(
-                                opcionesIconos[ListaIconos.reloj],
+                                listaIconos[NombreIconos.reloj],
                                 size: 15,
                                 color: Theme.of(context)
                                     .textTheme
@@ -287,7 +287,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                                 ),
 
                                 child: Icon(
-                                  opcionesIconos[ListaIconos.iconoEstetica],
+                                  listaIconos[NombreIconos.iconoEstetica],
                                   color: Theme.of(context).colorScheme.primary,
                                   size: 20,
                                 ),
@@ -334,7 +334,7 @@ class _AdminServiciosState extends State<AdminServicios> {
 
                               IconButton(
                                 icon: Icon(
-                                  opcionesIconos[ListaIconos
+                                  listaIconos[NombreIconos
                                       .flechaPequenaDerecha],
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
@@ -351,7 +351,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                                             precio: '35,00€',
                                             puntos: '15',
                                             icono:
-                                                opcionesIconos[ListaIconos
+                                                listaIconos[NombreIconos
                                                     .iconoEstetica]!,
                                           ),
                                     ),
@@ -370,7 +370,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                           child: Row(
                             children: [
                               Icon(
-                                opcionesIconos[ListaIconos.reloj],
+                                listaIconos[NombreIconos.reloj],
                                 size: 15,
                                 color: Theme.of(context)
                                     .textTheme
@@ -447,7 +447,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                                 ),
 
                                 child: Icon(
-                                  opcionesIconos[ListaIconos.iconoSolarium],
+                                  listaIconos[NombreIconos.iconoSolarium],
                                   color: Theme.of(context).colorScheme.primary,
                                   size: 20,
                                 ),
@@ -494,7 +494,7 @@ class _AdminServiciosState extends State<AdminServicios> {
 
                               IconButton(
                                 icon: Icon(
-                                  opcionesIconos[ListaIconos
+                                  listaIconos[NombreIconos
                                       .flechaPequenaDerecha],
                                   color: Theme.of(context).colorScheme.primary,
                                 ),
@@ -511,7 +511,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                                             precio: '25,00€',
                                             puntos: '10',
                                             icono:
-                                                opcionesIconos[ListaIconos
+                                                listaIconos[NombreIconos
                                                     .iconoSolarium]!,
                                           ),
                                     ),
@@ -530,7 +530,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                           child: Row(
                             children: [
                               Icon(
-                                opcionesIconos[ListaIconos.reloj],
+                                listaIconos[NombreIconos.reloj],
                                 size: 15,
                                 color: Theme.of(context)
                                     .textTheme

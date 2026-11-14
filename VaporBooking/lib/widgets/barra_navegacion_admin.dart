@@ -22,19 +22,19 @@ class BarraNavegacionAdmin extends StatelessWidget {
 
       items: [
         //pantalla principal
-        BottomNavigationBarItem(icon: Icon(opcionesIconos[ListaIconos.inicio]), label: 'Inicio'),
+        BottomNavigationBarItem(icon: Icon(listaIconos[NombreIconos.inicio]), label: 'Inicio'),
 
         //empleados
-        BottomNavigationBarItem(icon: Icon(opcionesIconos[ListaIconos.personal]), label: 'Personal'),
+        BottomNavigationBarItem(icon: Icon(listaIconos[NombreIconos.personal]), label: 'Personal'),
 
         //clientes
-        BottomNavigationBarItem(icon: Icon(opcionesIconos[ListaIconos.clientes]), label: 'Clientes'),
+        BottomNavigationBarItem(icon: Icon(listaIconos[NombreIconos.clientes]), label: 'Clientes'),
 
         //servicios
-        BottomNavigationBarItem(icon: Icon(opcionesIconos[ListaIconos.servicios]), label: 'Servicios'),
+        BottomNavigationBarItem(icon: Icon(listaIconos[NombreIconos.servicios]), label: 'Servicios'),
 
         //cobros
-        BottomNavigationBarItem(icon: Icon(opcionesIconos[ListaIconos.cobros]), label: 'Cobros'),
+        BottomNavigationBarItem(icon: Icon(listaIconos[NombreIconos.cobros]), label: 'Cobros'),
       ],
     );
   }
