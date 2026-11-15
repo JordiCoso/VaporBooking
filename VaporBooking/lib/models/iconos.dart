@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NombreIconos {
-  NombreIconos._nollamar();
+  const NombreIconos._nollamar();
 
   static const inicio = 'Inicio';
   static const personal = 'Personal';

@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaporbooking/models/colores.dart';
-import 'package:vaporbooking/screens/admin_clientes.dart';
-import 'package:vaporbooking/screens/admin_cobros.dart';
-import 'package:vaporbooking/screens/admin_personal.dart';
-import 'package:vaporbooking/screens/admin_servicio_anadido.dart';
-import 'package:vaporbooking/screens/admin_servicios.dart';
-import 'package:vaporbooking/screens/panel_admin.dart';
+import 'package:vaporbooking/screens/pantalla_principal.dart';
 import 'package:vaporbooking/screens/splash_screen.dart';
 
 import '/services/databasehelper.dart';
-import 'screens/login_page.dart';
+import 'models/usuario.dart';
 import 'services/preferenciasservice.dart';
 
 Future<void> main() async {
@@ -19,13 +14,13 @@ Future<void> main() async {
   final PreferenciasService preferenciasService =
       await PreferenciasService.crear();
 
-  //final Databasehelper databasehelper = await Databasehelper.crear();
+  final Databasehelper databasehelper = await Databasehelper.crear();
 
   //iniciamos la aplicación con el servicio de preferencias.
   runApp(
     MyApp(
       preferenciasService: preferenciasService,
-      //  databasehelper: databasehelper,
+      databasehelper: databasehelper,
     ),
   );
 }
@@ -34,12 +29,12 @@ class MyApp extends StatefulWidget {
   //servicio que utilizamos para recuperar las preferencias.
   final PreferenciasService _preferenciasService;
 
-  //final Databasehelper _databasehelper;
+  final Databasehelper _databasehelper;
 
   const MyApp({
     super.key,
     required this._preferenciasService,
-    // required this._databasehelper,
+    required this._databasehelper,
   });
 
   @override
@@ -57,7 +52,7 @@ class _MyAppState extends State<MyApp> {
         final Map<String, Color> colores = obtenerEsquemaColoresActual(
           widget._preferenciasService.obtenerTemaOscuro(),
         );
-        
+
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'VaporBooking',
@@ -104,6 +99,8 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
 
+            checkboxTheme: CheckboxThemeData(),
+
             colorScheme: ColorScheme.light(
               primary: colores[NombreColores.verdePrincipal]!,
               secondary: colores[NombreColores.verdeSecundario]!,
@@ -111,7 +108,11 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
 
-          home: PanelAdmin(preferenciasService: widget._preferenciasService),
+          home: PantallaPrincipal(
+            preferenciasService: widget._preferenciasService,
+            databasehelper: widget._databasehelper,
+            usuario: Usuario(nombre: 'aa', numeroHabitos: 2),
+          ),
         );
       },
     );
