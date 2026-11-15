@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 
 import '../models/iconos.dart';
@@ -13,7 +14,13 @@ import 'admin_personal.dart';
 
 class AdminServicios extends StatefulWidget {
   final PreferenciasService _preferenciasService;
-  const AdminServicios({super.key, required this._preferenciasService});
+  final Databasehelper _databasehelper;
+
+  const AdminServicios({
+    super.key,
+    required this._preferenciasService,
+    required this._databasehelper,
+  });
 
   @override
   State<AdminServicios> createState() => _AdminServiciosState();
@@ -603,7 +610,12 @@ class _AdminServiciosState extends State<AdminServicios> {
           if (indice == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(
+                builder: (context) => PanelAdmin(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 1) {
             Navigator.push(
@@ -611,13 +623,19 @@ class _AdminServiciosState extends State<AdminServicios> {
               MaterialPageRoute(
                 builder: (context) => AdminPersonal(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );
           } else if (indice == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminClientes(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(
+                builder: (context) => AdminClientes(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 3) {
             //estamos en esta pantalla
@@ -627,6 +645,7 @@ class _AdminServiciosState extends State<AdminServicios> {
               MaterialPageRoute(
                 builder: (context) => AdminCobros(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );

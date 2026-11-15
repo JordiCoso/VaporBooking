@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/screens/admin_empleado_anadido.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
+import 'package:vaporbooking/services/preferenciasservice.dart';
 
 import '../widgets/boton_principal.dart';
 import '../widgets/campo_texto_app.dart';
@@ -9,6 +12,10 @@ class AdminFormularioEmpleado extends StatefulWidget {
   final String? correo;
   final String? telefono;
   final String? especialidad;
+  final int? id;
+
+  final Databasehelper _databasehelper;
+  final PreferenciasService _preferenciasService;
 
   const AdminFormularioEmpleado({
     super.key,
@@ -17,6 +24,9 @@ class AdminFormularioEmpleado extends StatefulWidget {
     this.correo,
     this.telefono,
     this.especialidad,
+    this.id,
+    required this._databasehelper,
+    required this._preferenciasService,
   });
 
   @override
@@ -32,6 +42,7 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
   final TextEditingController controllerEspecialidad = TextEditingController();
 
   bool editando = false;
+  String mensajeError = '';
 
   @override
   void initState() {
@@ -184,8 +195,77 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
             //boton para guardar cambios
             BotonPrincipal(
               texto: editando ? 'Guardar cambios' : 'Guardar empleado',
-              pulsar: () {
-                //TODO guardar los datos en el sqflite
+              pulsar: () async {
+                //comprobacion de datos
+                if (controllerNombre.text.trim().isEmpty ||
+                    controllerApellidos.text.trim().isEmpty ||
+                    controllerCorreo.text.trim().isEmpty ||
+                    controllerTelefono.text.trim().isEmpty ||
+                    controllerEspecialidad.text.trim().isEmpty) {
+                  setState(() {
+                    mensajeError = 'Debes rellenar todos los campos';
+                  });
+                  return;
+                }
+
+                if (!controllerCorreo.text.trim().contains('@')) {
+                  setState(() {
+                    mensajeError = 'El correo no es válido';
+                  });
+                  return;
+                }
+
+                //comprobacion de q el correo no este repetido
+                if (!editando) {
+                  final bool emailExiste = await widget._databasehelper
+                      .existeEmailEmpleado(controllerCorreo.text.trim());
+
+                  if (emailExiste) {
+                    setState(() {
+                      mensajeError = 'Ya existe un empleado con este correo';
+                    });
+                    return;
+                  }
+                }
+
+                if (editando) {
+                  //actualizamos el empleado en SQLite
+                  if (widget.id != null) {
+                    await widget._databasehelper.actualizarEmpleado(
+                      widget.id!,
+                      controllerNombre.text.trim(),
+                      controllerApellidos.text.trim(),
+                      controllerCorreo.text.trim(),
+                      controllerTelefono.text.trim(),
+                      controllerEspecialidad.text.trim(),
+                    );
+
+                    if (!mounted) return;
+
+                    Navigator.pop(context, true);
+                  }
+                } else {
+                  //guardamos el empleado en sqflite
+                  await widget._databasehelper.insertarEmpleado(
+                    controllerNombre.text.trim(),
+                    controllerApellidos.text.trim(),
+                    controllerCorreo.text.trim(),
+                    controllerTelefono.text.trim(),
+                    controllerEspecialidad.text.trim(),
+                  );
+
+                  if (!mounted) return;
+
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminEmpleadoAnadido(
+                        preferenciasService: widget._preferenciasService,
+                        databasehelper: widget._databasehelper,
+                      ),
+                    ),
+                  );
+                }
               },
             ),
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/iconos.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 
 import '../models/colores.dart';
 import '../services/preferenciasservice.dart';
@@ -12,8 +13,9 @@ import 'admin_servicios.dart';
 
 class AdminCobros extends StatefulWidget {
   final PreferenciasService _preferenciasService;
+  final Databasehelper _databasehelper;
 
-  const AdminCobros({super.key, required this._preferenciasService});
+  const AdminCobros({super.key, required this._preferenciasService, required this._databasehelper});
 
   @override
   State<AdminCobros> createState() => _AdminCobrosState();
@@ -472,7 +474,7 @@ class _AdminCobrosState extends State<AdminCobros> {
           if (indice == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService, databasehelper: widget._databasehelper,)),
             );
           } else if (indice == 1) {
             Navigator.push(
@@ -480,13 +482,14 @@ class _AdminCobrosState extends State<AdminCobros> {
               MaterialPageRoute(
                 builder: (context) => AdminPersonal(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );
           } else if (indice == 2) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminClientes(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(builder: (context) => AdminClientes(preferenciasService: widget._preferenciasService, databasehelper: widget._databasehelper,)),
             );
           } else if (indice == 3) {
             Navigator.push(
@@ -494,6 +497,7 @@ class _AdminCobrosState extends State<AdminCobros> {
               MaterialPageRoute(
                 builder: (context) => AdminServicios(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );

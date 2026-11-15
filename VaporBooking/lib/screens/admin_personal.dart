@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/screens/admin_detalles_empleado.dart';
+import 'package:vaporbooking/screens/admin_formulario_empleado.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 import 'package:vaporbooking/widgets/boton_principal.dart';
+import 'package:vaporbooking/widgets/tarjeta_empleado.dart';
 
 import '../models/iconos.dart';
 import '../services/preferenciasservice.dart';
@@ -12,7 +15,13 @@ import 'admin_servicios.dart';
 
 class AdminPersonal extends StatefulWidget {
   final PreferenciasService _preferenciasService;
-  const AdminPersonal({super.key, required this._preferenciasService});
+  final Databasehelper _databasehelper;
+
+  const AdminPersonal({
+    super.key,
+    required this._preferenciasService,
+    required this._databasehelper,
+  });
 
   @override
   State<AdminPersonal> createState() => _AdminPersonalState();
@@ -21,6 +30,24 @@ class AdminPersonal extends StatefulWidget {
 class _AdminPersonalState extends State<AdminPersonal> {
   //personal es la segunda pestaña seleccionada
   int indiceSeleccionado = 1;
+
+  //lista de los empleados guardados en sqflite
+  List<Map<String, Object?>> empleados = [];
+
+  //cargamos los empleados de la bbdd
+  Future<void> cargarEmpleados() async {
+    final resultado = await widget._databasehelper.obtenerEmpleado();
+
+    setState(() {
+      empleados = resultado;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarEmpleados();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,419 +112,98 @@ class _AdminPersonalState extends State<AdminPersonal> {
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            //el circulito de las iniciales
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'MC',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Marfil Cortés',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesEmpleado(
-                                      nombre: 'Marfil',
-                                      apellidos: 'Cortés',
-                                      iniciales: 'MC',
-                                      puesto: 'Masajista',
-                                      telefono: '695 38 71 02',
-                                      correo: 'mcortes@vaporbooking.com',
-                                      especialidad: 'Masajista',
-                                    ),
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 15),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Masajista',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaEmpleado(
+              nombre: 'Marfil',
+              apellidos: 'Cortés',
+              iniciales: 'MC',
+              puesto: 'Masajista',
+              telefono: '695 38 71 02',
+              correo: 'mcortes@vaporbooking.com',
+              especialidad: 'Masajista',
+              databasehelper: widget._databasehelper,
+              preferenciasService: widget._preferenciasService,
             ),
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'SM',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Sebastián Moore',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesEmpleado(
-                                      nombre: 'Sebastián',
-                                      apellidos: 'Moore',
-                                      iniciales: 'SM',
-                                      puesto: 'Responsable de estética',
-                                      telefono: '634 01 02 79',
-                                      correo: 'smoore@vaporbooking.com',
-                                      especialidad: 'Estética',
-                                    ),
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 15),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Responsable de estética',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaEmpleado(
+              nombre: 'Sebastián',
+              apellidos: 'Moore',
+              iniciales: 'SM',
+              puesto: 'Responsable de estética',
+              telefono: '634 01 02 79',
+              correo: 'smoore@vaporbooking.com',
+              especialidad: 'Estética',
+              databasehelper: widget._databasehelper,
+              preferenciasService: widget._preferenciasService,
             ),
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'HV',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Hudson Vega',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesEmpleado(
-                                      nombre: 'Hudson',
-                                      apellidos: 'Vega',
-                                      iniciales: 'HV',
-                                      puesto: 'Responsable del solárium',
-                                      telefono: '602 47 65 38',
-                                      correo: 'hvega@vaporbooking.com',
-                                      especialidad: 'Solárium',
-                                    ),
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 15),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Responsable del solárium',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaEmpleado(
+              nombre: 'Hudson',
+              apellidos: 'Vega',
+              iniciales: 'HV',
+              puesto: 'Responsable del solárium',
+              telefono: '602 47 65 38',
+              correo: 'hvega@vaporbooking.com',
+              especialidad: 'Solárium',
+              databasehelper: widget._databasehelper,
+              preferenciasService: widget._preferenciasService,
             ),
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'LJ',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Leah Jones',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesEmpleado(
-                                      nombre: 'Leah',
-                                      apellidos: 'Jones',
-                                      iniciales: 'LJ',
-                                      puesto: 'Recepcionista',
-                                      telefono: '689 54 37 50',
-                                      correo: 'ljones@vaporbooking.com',
-                                      especialidad: 'Recepcionista',
-                                    ),
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.secondary,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 15),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Recepcionista',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaEmpleado(
+              nombre: 'Leah',
+              apellidos: 'Jones',
+              iniciales: 'LJ',
+              puesto: 'Recepcionista',
+              telefono: '689 54 37 50',
+              correo: 'ljones@vaporbooking.com',
+              especialidad: 'Recepcionista',
+              databasehelper: widget._databasehelper,
+              preferenciasService: widget._preferenciasService,
             ),
+
+            //tarjetas para los empleados guardados en sqflite
+            for (int i = 0; i < empleados.length; i++)
+              Column(
+                children: [
+                  SizedBox(height: 15),
+
+                  TarjetaEmpleado(
+                    id: empleados[i]['id'] as int,
+                    nombre: empleados[i]['nombre'].toString(),
+                    apellidos: empleados[i]['apellidos'].toString(),
+                    iniciales:
+                        '${empleados[i]['nombre'].toString()[0]}${empleados[i]['apellidos'].toString()[0]}',
+                    puesto: empleados[i]['especialidad'].toString(),
+                    telefono: empleados[i]['telefono'].toString(),
+                    correo: empleados[i]['email'].toString(),
+                    especialidad: empleados[i]['especialidad'].toString(),
+                    databasehelper: widget._databasehelper,
+                    preferenciasService: widget._preferenciasService,
+                  ),
+                ],
+              ),
 
             SizedBox(height: 20),
 
             BotonPrincipal(
               texto: '+ Añadir empleado',
-              pulsar: () {
-                //TODO hacer el formulario de añadir empleado
+              pulsar: () async {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdminFormularioEmpleado(
+                      databasehelper: widget._databasehelper,
+                      preferenciasService: widget._preferenciasService,
+                    ),
+                  ),
+                );
+
+                cargarEmpleados();
               },
             ),
 
@@ -513,7 +219,12 @@ class _AdminPersonalState extends State<AdminPersonal> {
           if (indice == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(
+                builder: (context) => PanelAdmin(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 1) {
             //estamos en esta pantalla
@@ -523,13 +234,19 @@ class _AdminPersonalState extends State<AdminPersonal> {
               MaterialPageRoute(
                 builder: (context) => AdminClientes(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );
           } else if (indice == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(
+                builder: (context) => AdminServicios(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 4) {
             Navigator.push(
@@ -537,6 +254,7 @@ class _AdminPersonalState extends State<AdminPersonal> {
               MaterialPageRoute(
                 builder: (context) => AdminCobros(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );

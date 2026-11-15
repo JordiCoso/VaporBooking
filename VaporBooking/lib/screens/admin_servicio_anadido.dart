@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 
 import '../models/colores.dart';
@@ -8,7 +9,8 @@ import 'admin_servicios.dart';
 
 class AdminServicioAnadido extends StatelessWidget {
   final PreferenciasService _preferenciasService;
-  const AdminServicioAnadido({super.key, required this._preferenciasService});
+  final Databasehelper _databasehelper;
+  const AdminServicioAnadido({super.key, required this._preferenciasService, required this._databasehelper});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class AdminServicioAnadido extends StatelessWidget {
                 pulsar: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: _preferenciasService)),
+                    MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: _preferenciasService, databasehelper: _databasehelper,)),
                   );
                 },
               ),

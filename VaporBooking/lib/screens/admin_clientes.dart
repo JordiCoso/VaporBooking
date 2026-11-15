@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 
 import '../models/iconos.dart';
 import '../services/preferenciasservice.dart';
@@ -11,7 +12,13 @@ import 'admin_servicios.dart';
 
 class AdminClientes extends StatefulWidget {
   final PreferenciasService _preferenciasService;
-  const AdminClientes({super.key, required this._preferenciasService});
+  final Databasehelper _databasehelper;
+
+  const AdminClientes({
+    super.key,
+    required this._preferenciasService,
+    required this._databasehelper,
+  });
 
   @override
   State<AdminClientes> createState() => _AdminClientesState();
@@ -144,8 +151,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               onPressed: () {
@@ -153,7 +159,8 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
-                                      preferenciasService: widget._preferenciasService,
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       iniciales: 'KV',
                                       nombre: 'Kade',
                                       apellidos: 'Voronin',
@@ -251,8 +258,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               onPressed: () {
@@ -260,7 +266,8 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
-                                      preferenciasService: widget._preferenciasService,
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       iniciales: 'NO',
                                       nombre: 'Nico',
                                       apellidos: 'Ortega',
@@ -358,8 +365,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               onPressed: () {
@@ -367,7 +373,8 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
-                                      preferenciasService: widget._preferenciasService,
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       iniciales: 'NS',
                                       nombre: 'Nora',
                                       apellidos: 'Serra',
@@ -465,8 +472,7 @@ class _AdminClientesState extends State<AdminClientes> {
 
                             IconButton(
                               icon: Icon(
-                                listaIconos[NombreIconos
-                                    .flechaPequenaDerecha],
+                                listaIconos[NombreIconos.flechaPequenaDerecha],
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               onPressed: () {
@@ -474,7 +480,8 @@ class _AdminClientesState extends State<AdminClientes> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => AdminDetallesCliente(
-                                      preferenciasService: widget._preferenciasService,
+                                      preferenciasService:
+                                          widget._preferenciasService,
                                       iniciales: 'LM',
                                       nombre: 'Laia',
                                       apellidos: 'Martín',
@@ -523,7 +530,12 @@ class _AdminClientesState extends State<AdminClientes> {
           if (indice == 0) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PanelAdmin(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(
+                builder: (context) => PanelAdmin(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 1) {
             Navigator.push(
@@ -531,6 +543,7 @@ class _AdminClientesState extends State<AdminClientes> {
               MaterialPageRoute(
                 builder: (context) => AdminPersonal(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );
@@ -539,7 +552,12 @@ class _AdminClientesState extends State<AdminClientes> {
           } else if (indice == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(
+                builder: (context) => AdminServicios(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 4) {
             Navigator.push(
@@ -547,6 +565,7 @@ class _AdminClientesState extends State<AdminClientes> {
               MaterialPageRoute(
                 builder: (context) => AdminCobros(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );

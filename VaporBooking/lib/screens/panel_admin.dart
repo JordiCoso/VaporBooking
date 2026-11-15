@@ -3,6 +3,7 @@ import 'package:vaporbooking/screens/admin_clientes.dart';
 import 'package:vaporbooking/screens/admin_cobros.dart';
 import 'package:vaporbooking/screens/admin_personal.dart';
 import 'package:vaporbooking/screens/admin_servicios.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
 
@@ -12,8 +13,9 @@ import 'admin_detalles_cita.dart';
 
 class PanelAdmin extends StatefulWidget {
   final PreferenciasService _preferenciasService;
+  final Databasehelper _databasehelper;
 
-  const PanelAdmin({super.key, required this._preferenciasService});
+  const PanelAdmin({super.key, required this._preferenciasService, required this._databasehelper});
 
   @override
   State<PanelAdmin> createState() => _PanelAdminState();
@@ -503,7 +505,7 @@ class _PanelAdminState extends State<PanelAdmin> {
           } else if (indice == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminPersonal(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(builder: (context) => AdminPersonal(preferenciasService: widget._preferenciasService, databasehelper: widget._databasehelper,)),
             );
           } else if (indice == 2) {
             Navigator.push(
@@ -511,13 +513,15 @@ class _PanelAdminState extends State<PanelAdmin> {
               MaterialPageRoute(
                 builder: (context) => AdminClientes(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );
           } else if (indice == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService)),
+              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService,
+                databasehelper: widget._databasehelper,)),
             );
           } else if (indice == 4) {
             Navigator.push(
@@ -525,6 +529,7 @@ class _PanelAdminState extends State<PanelAdmin> {
               MaterialPageRoute(
                 builder: (context) => AdminCobros(
                   preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
                 ),
               ),
             );

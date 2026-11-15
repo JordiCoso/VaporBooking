@@ -231,11 +231,22 @@ class Databasehelper {
     return resultado;
   }
 
-  //comprobamos si existe el correo o no
+  //comprobamos si existe el correo o no de usuario
   Future<bool> existeEmail(String email) async {
     final resultado = await _baseDeDatos.query(
       tablaUsuarios,
       where: '$columnaUsuariosEmail = ?',
+      whereArgs: [email],
+    );
+
+    return resultado.isNotEmpty;
+  }
+
+  //comprobamos si existe el correo o no de empleado
+  Future<bool> existeEmailEmpleado(String email) async {
+    final resultado = await _baseDeDatos.query(
+      tablaEmpleados,
+      where: '$columnaEmpleadosEmail = ?',
       whereArgs: [email],
     );
 
@@ -328,5 +339,55 @@ class Databasehelper {
     }
 
     return servicios;
+  }
+
+  Future<int> insertarEmpleado(
+    String nombre,
+    String apellidos,
+    String email,
+    String telefono,
+    String especialidad,
+  ) async {
+    final int resultado = await _baseDeDatos.insert(tablaEmpleados, {
+      columnaEmpleadosNombre: nombre,
+      columnaEmpleadosApellidos: apellidos,
+      columnaEmpleadosEmail: email,
+      columnaEmpleadosTelefono: telefono,
+      columnaEmpleadosEspecialidad: especialidad,
+    });
+
+    return resultado;
+  }
+
+  //obtenemos los empleados para mostrarlos en el admin
+  Future<List<Map<String, Object?>>> obtenerEmpleado() async {
+    final resultado = await _baseDeDatos.query(tablaEmpleados);
+
+    return resultado;
+  }
+
+  //actualizamos los datos de un empleado
+  Future<int> actualizarEmpleado(
+    int id,
+    String nombre,
+    String apellidos,
+    String email,
+    String telefono,
+    String especialidad,
+  ) async {
+    final resultado = await _baseDeDatos.update(
+      tablaEmpleados,
+      {
+        columnaEmpleadosNombre: nombre,
+        columnaEmpleadosApellidos: apellidos,
+        columnaEmpleadosEmail: email,
+        columnaEmpleadosTelefono: telefono,
+        columnaEmpleadosEspecialidad: especialidad,
+      },
+      where: '$columnaEmpleadosId = ?',
+      whereArgs: [id],
+    );
+
+    return resultado;
   }
 }

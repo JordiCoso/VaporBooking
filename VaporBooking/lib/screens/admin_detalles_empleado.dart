@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/screens/admin_formulario_empleado.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
+import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/boton_principal.dart';
 
 class AdminDetallesEmpleado extends StatelessWidget {
@@ -11,6 +13,10 @@ class AdminDetallesEmpleado extends StatelessWidget {
   final String telefono;
   final String correo;
   final String especialidad;
+  final int? id;
+
+  final Databasehelper _databasehelper;
+  final PreferenciasService _preferenciasService;
 
   const AdminDetallesEmpleado({
     super.key,
@@ -21,15 +27,16 @@ class AdminDetallesEmpleado extends StatelessWidget {
     required this.telefono,
     required this.correo,
     required this.especialidad,
+    this.id,
+    required this._databasehelper,
+    required this._preferenciasService,
   });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme
-            .of(context)
-            .scaffoldBackgroundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
 
       body: SingleChildScrollView(
@@ -52,11 +59,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: Theme
-                          .of(context)
-                          .textTheme
-                          .titleLarge
-                          ?.color,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
                 ),
@@ -72,11 +75,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.color,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                 ),
               ),
             ),
@@ -89,11 +88,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                 'Personal del spa',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Theme
-                      .of(context)
-                      .textTheme
-                      .titleLarge
-                      ?.color,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                 ),
               ),
             ),
@@ -107,10 +102,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                     padding: EdgeInsets.all(20),
 
                     decoration: BoxDecoration(
-                      color: Theme
-                          .of(context)
-                          .colorScheme
-                          .surface,
+                      color: Theme.of(context).colorScheme.surface,
                       borderRadius: BorderRadius.circular(12),
                     ),
 
@@ -122,10 +114,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                               height: 45,
                               width: 45,
                               decoration: BoxDecoration(
-                                color: Theme
-                                    .of(context)
-                                    .colorScheme
-                                    .secondary,
+                                color: Theme.of(context).colorScheme.secondary,
                                 borderRadius: BorderRadius.circular(50),
                               ),
 
@@ -134,8 +123,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                                   iniciales,
                                   style: TextStyle(
                                     fontSize: 14,
-                                    color: Theme
-                                        .of(context)
+                                    color: Theme.of(context)
                                         .textTheme
                                         .titleLarge
                                         ?.color,
@@ -152,8 +140,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.bold,
-                                  color: Theme
-                                      .of(context)
+                                  color: Theme.of(context)
                                       .textTheme
                                       .titleLarge
                                       ?.color,
@@ -171,8 +158,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             puesto,
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -190,8 +176,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             'Teléfono',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -207,8 +192,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             telefono,
                             style: TextStyle(
                               fontSize: 15,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -224,8 +208,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             'Correo electrónico',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -241,8 +224,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             correo,
                             style: TextStyle(
                               fontSize: 15,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -258,8 +240,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             'Especialdiad',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -275,8 +256,7 @@ class AdminDetallesEmpleado extends StatelessWidget {
                             especialidad,
                             style: TextStyle(
                               fontSize: 15,
-                              color: Theme
-                                  .of(context)
+                              color: Theme.of(context)
                                   .textTheme
                                   .titleLarge
                                   ?.color,
@@ -296,17 +276,28 @@ class AdminDetallesEmpleado extends StatelessWidget {
 
             BotonPrincipal(
               texto: 'Editar empleado',
-              pulsar: () {
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) =>
-                        AdminFormularioEmpleado(nombre: nombre,
-                          apellidos: apellidos,
-                          correo: correo,
-                          especialidad: especialidad,
-                        ),
-                ),
+              pulsar: () async {
+                //abrimos el formulario y esperamos el resultado
+                final resultado = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AdminFormularioEmpleado(
+                      id: id,
+                      nombre: nombre,
+                      apellidos: apellidos,
+                      telefono: telefono,
+                      correo: correo,
+                      especialidad: especialidad,
+                      databasehelper: _databasehelper,
+                      preferenciasService: _preferenciasService,
+                    ),
+                  ),
                 );
 
+                //si se han guardado los cambios, volvemos a personal
+                if (resultado == true) {
+                  Navigator.pop(context, true);
+                }
               },
             ),
           ],
