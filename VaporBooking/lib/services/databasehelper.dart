@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+import '../models/servicio.dart';
+
 class Databasehelper {
   /// La instancia unica de databasehelper
   static Databasehelper? _databasehelper;
@@ -29,12 +31,12 @@ class Databasehelper {
   }
 
   /// NO llamar, solo usa para hacer el singleton.
-  late final Database? _comprobacionInstanciaBD;
+  Database? _comprobacionInstanciaBD;
 
   /// NO llamar, solo se usa en el constructor [crear].
   Future<Database> get _getInstanciaBD async {
     if (_comprobacionInstanciaBD != null) {
-      return _comprobacionInstanciaBD;
+      return _comprobacionInstanciaBD!;
     }
 
     _comprobacionInstanciaBD = await _generarBase();
@@ -117,7 +119,7 @@ class Databasehelper {
   static const columnaTiquetsserviciosServiciosIdFK = 'servicio_id_fk';
 
   Future<void> creacionBaseDatos(Database db, int version) async {
-    final Batch packDeInstrucciones = _baseDeDatos.batch();
+    final Batch packDeInstrucciones = db.batch();
 
     packDeInstrucciones.execute(
       'CREATE TABLE $tablaUsuarios ('
@@ -160,6 +162,8 @@ class Databasehelper {
       '$columnaCitasHora_Fin TEXT NOT NULL,'
       '$columnaCitasEstado TEXT NOT NULL,'
       '$columnaCitasObservaciones TEXT,'
+      '$columnaCitasUsuariosClienteEmailFK TEXT NOT NULL,'
+      '$columnaCitasServiciosIdFK INTEGER NOT NULL,'
       'FOREIGN KEY ($columnaCitasUsuariosClienteEmailFK) REFERENCES $tablaUsuarios($columnaUsuariosEmail),'
       'FOREIGN KEY ($columnaCitasServiciosIdFK) REFERENCES $tablaServicios($columnaServiciosId))',
     );
@@ -185,13 +189,22 @@ class Databasehelper {
     );
 
     //creamos el admin de prueba
-    packDeInstrucciones.insert(tablaUsuarios, {
+    /* packDeInstrucciones.insert(tablaUsuarios, {
       columnaUsuariosNombre: 'Administrador',
       columnaUsuariosApellidos: 'Prueba',
       columnaUsuariosEmail: 'admin@gmail.com',
       columnaUsuariosContrasena: 'admin123',
       columnaUsuariosFechacreacion: DateTime.now().toString(),
       columnaUsuariosRol: 'admin',
+    })*/
+
+    packDeInstrucciones.insert(tablaServicios, {
+      columnaServiciosId: 1,
+      columnaServiciosNombre: 'estetica',
+      columnaServiciosDescripcion: 'holaaaaaaaaaaaaaaaaa',
+      columnaServiciosPrecio: 24,
+      columnaServiciosDuracion: 55,
+      columnaServiciosValoracionPuntos: 21,
     });
 
     await packDeInstrucciones.commit();
@@ -284,5 +297,36 @@ class Databasehelper {
     }
 
     return null;
+  }
+
+  Future<List<Servicio>> cargarServicios() async {
+    final List<Servicio> servicios = [];
+    final List<Map<String, Object?>> queryServicios = await _baseDeDatos.query(
+      tablaServicios,
+    );
+
+    for (Map<String, Object?> servicio in queryServicios) {
+      final int id = servicio[columnaServiciosId] as int;
+      final String nombre = servicio[columnaServiciosNombre] as String;
+      final String descripcion =
+          servicio[columnaServiciosDescripcion] as String;
+      final int precio = servicio[columnaServiciosPrecio] as int;
+      final int duracion = servicio[columnaServiciosDuracion] as int;
+      final int valoracionPuntos =
+          servicio[columnaServiciosValoracionPuntos] as int;
+
+      servicios.add(
+        Servicio(
+          id: id,
+          nombre: nombre,
+          descripcion: descripcion,
+          precio: precio,
+          duracion: duracion,
+          valoracionPuntos: valoracionPuntos,
+        ),
+      );
+    }
+
+    return servicios;
   }
 }
