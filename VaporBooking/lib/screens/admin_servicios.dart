@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/models/servicio.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
 import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
@@ -6,6 +7,7 @@ import 'package:vaporbooking/services/preferenciasservice.dart';
 import '../models/iconos.dart';
 import '../widgets/barra_navegacion_admin.dart';
 import '../widgets/boton_principal.dart';
+import '../widgets/tarjeta_servicio_admin.dart';
 import 'admin_clientes.dart';
 import 'admin_cobros.dart';
 import 'admin_detalles_servicio.dart';
@@ -28,6 +30,23 @@ class AdminServicios extends StatefulWidget {
 
 class _AdminServiciosState extends State<AdminServicios> {
   int indiceSeleccionado = 3;
+  List<Servicio> servicios = [];
+
+  Future<void> cargarServicios() async {
+    final resultado = await widget._databasehelper.cargarServicios();
+
+    if (!mounted) return;
+
+    setState(() {
+      servicios = resultado;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarServicios();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -596,20 +615,38 @@ class _AdminServiciosState extends State<AdminServicios> {
               ],
             ),
 
+            for (int i = 0; i < servicios.length; i++)
+              Column(
+                children: [
+                  SizedBox(height: 15),
+
+                  TarjetaServicioAdmin(
+                    servicio: servicios[i],
+                    preferenciasService: widget._preferenciasService,
+                    databasehelper: widget._databasehelper,
+                  ),
+                ],
+              ),
+
             SizedBox(height: 25),
 
             BotonPrincipal(
               texto: '+ Añadir servicio',
-              pulsar: () {
-                Navigator.push(
+
+              pulsar: () async {
+                final resultado = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AdminFormularioServicio(
-                      preferenciasService: widget._preferenciasService,
                       databasehelper: widget._databasehelper,
+                      preferenciasService: widget._preferenciasService,
                     ),
                   ),
                 );
+
+                if (resultado == true) {
+                  cargarServicios();
+                }
               },
             ),
 
