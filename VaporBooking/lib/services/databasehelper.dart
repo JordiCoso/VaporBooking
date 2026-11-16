@@ -343,6 +343,22 @@ class Databasehelper {
     return servicios;
   }
 
+  Future<void> insertarServicio(
+    String nombre,
+    String descripcion,
+    int precio,
+    int duracion,
+    int puntos,
+  ) async {
+    await _baseDeDatos.insert(tablaServicios, {
+      columnaServiciosNombre: nombre,
+      columnaServiciosDescripcion: descripcion,
+      columnaServiciosPrecio: precio,
+      columnaServiciosDuracion: duracion,
+      columnaServiciosValoracionPuntos: puntos,
+    });
+  }
+
   Future<int> insertarEmpleado(
     String nombre,
     String apellidos,

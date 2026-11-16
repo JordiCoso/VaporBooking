@@ -206,6 +206,10 @@ class _AdminServiciosState extends State<AdminServicios> {
                                             icono:
                                                 listaIconos[NombreIconos
                                                     .iconoMasaje]!,
+                                            preferenciasService:
+                                                widget._preferenciasService,
+                                            databasehelper:
+                                                widget._databasehelper,
                                           ),
                                     ),
                                   );
@@ -366,6 +370,10 @@ class _AdminServiciosState extends State<AdminServicios> {
                                             icono:
                                                 listaIconos[NombreIconos
                                                     .iconoEstetica]!,
+                                            preferenciasService:
+                                                widget._preferenciasService,
+                                            databasehelper:
+                                                widget._databasehelper,
                                           ),
                                     ),
                                   );
@@ -526,6 +534,10 @@ class _AdminServiciosState extends State<AdminServicios> {
                                             icono:
                                                 listaIconos[NombreIconos
                                                     .iconoSolarium]!,
+                                            preferenciasService:
+                                                widget._preferenciasService,
+                                            databasehelper:
+                                                widget._databasehelper,
                                           ),
                                     ),
                                   );
@@ -592,7 +604,10 @@ class _AdminServiciosState extends State<AdminServicios> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AdminFormularioServicio(),
+                    builder: (context) => AdminFormularioServicio(
+                      preferenciasService: widget._preferenciasService,
+                      databasehelper: widget._databasehelper,
+                    ),
                   ),
                 );
               },

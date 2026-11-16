@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
+import 'package:vaporbooking/services/preferenciasservice.dart';
 
+import '../models/colores.dart';
 import '../widgets/boton_principal.dart';
 import '../widgets/campo_texto_app.dart';
 
@@ -9,6 +12,8 @@ class AdminFormularioServicio extends StatefulWidget {
   final String? duracion;
   final String? precio;
   final String? puntos;
+  final Databasehelper _databasehelper;
+  final PreferenciasService _preferenciasService;
 
   const AdminFormularioServicio({
     super.key,
@@ -17,6 +22,8 @@ class AdminFormularioServicio extends StatefulWidget {
     this.duracion,
     this.precio,
     this.puntos,
+    required this._databasehelper,
+    required this._preferenciasService,
   });
 
   @override
@@ -31,6 +38,55 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
   final TextEditingController controllerPuntos = TextEditingController();
 
   bool editando = false;
+
+  String mensajeError = '';
+
+  Future<void> guardarServicio() async {
+    String nombre = controllerNombre.text.trim();
+    String descripcion = controllerDescripcion.text.trim();
+    String duracionTexto = controllerDuracion.text.trim();
+    String precioTexto = controllerPrecio.text.trim();
+    String puntosTexto = controllerPuntos.text.trim();
+
+    if (nombre.isEmpty ||
+        descripcion.isEmpty ||
+        duracionTexto.isEmpty ||
+        precioTexto.isEmpty ||
+        puntosTexto.isEmpty) {
+      setState(() {
+        mensajeError = 'Todos los campos son obligatorios';
+      });
+      return;
+    }
+
+    int? duracion = int.tryParse(duracionTexto);
+    int? precio = int.tryParse(precioTexto);
+    int? puntos = int.tryParse(puntosTexto);
+
+    if (duracion == null ||
+        precio == null ||
+        puntos == null ||
+        duracion <= 0 ||
+        precio < 0 ||
+        puntos < 0) {
+      setState(() {
+        mensajeError = 'Introduce números válidos en duración, precio y puntos';
+      });
+      return;
+    }
+
+    await widget._databasehelper.insertarServicio(
+      nombre,
+      descripcion,
+      precio,
+      duracion,
+      puntos,
+    );
+
+    if (!mounted) return;
+
+    Navigator.pop(context, true);
+  }
 
   @override
   void initState() {
@@ -60,6 +116,9 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = obtenerEsquemaColoresActual(
+      widget._preferenciasService.obtenerTemaOscuro(),
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -166,10 +225,23 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
 
             SizedBox(height: 25),
 
+            if (mensajeError.isNotEmpty)
+              Text(
+                mensajeError,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: colores[NombreColores.estadoError],
+                ),
+              ),
+
+            SizedBox(height: 10),
+
             BotonPrincipal(
               texto: editando ? 'Guardar cambios' : 'Guardar servicio',
               pulsar: () {
-                //TODO guardar los datos en sqflite
+                if (!editando) {
+                  guardarServicio();
+                }
               },
             ),
 

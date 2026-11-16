@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/screens/admin_formulario_servicio.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
+import 'package:vaporbooking/services/preferenciasservice.dart';
 
 import '../widgets/boton_principal.dart';
 
@@ -12,6 +14,9 @@ class AdminDetallesServicio extends StatelessWidget {
   final String puntos;
   final IconData icono;
 
+  final PreferenciasService _preferenciasService;
+  final Databasehelper _databasehelper;
+
   const AdminDetallesServicio({
     super.key,
     required this.nombre,
@@ -21,6 +26,8 @@ class AdminDetallesServicio extends StatelessWidget {
     required this.precio,
     required this.puntos,
     required this.icono,
+    required this._preferenciasService,
+    required this._databasehelper,
   });
 
   @override
@@ -327,6 +334,8 @@ class AdminDetallesServicio extends StatelessWidget {
                       duracion: duracion,
                       precio: precio,
                       puntos: puntos,
+                      preferenciasService: _preferenciasService,
+                      databasehelper: _databasehelper,
                     ),
                   ),
                 );
