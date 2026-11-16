@@ -14,6 +14,7 @@ class TarjetaEmpleado extends StatelessWidget {
   final String correo;
   final String especialidad;
   final int? id;
+  final VoidCallback? alActualizar;
 
   final Databasehelper _databasehelper;
   final PreferenciasService _preferenciasService;
@@ -28,6 +29,7 @@ class TarjetaEmpleado extends StatelessWidget {
     required this.correo,
     required this.especialidad,
     this.id,
+    this.alActualizar,
     required this._databasehelper,
     required this._preferenciasService,
   });
@@ -85,8 +87,8 @@ class TarjetaEmpleado extends StatelessWidget {
                     ),
 
                     IconButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        final resultado = await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => AdminDetallesEmpleado(
@@ -103,7 +105,14 @@ class TarjetaEmpleado extends StatelessWidget {
                             ),
                           ),
                         );
+
+                        if (resultado == true) {
+                          if (alActualizar != null) {
+                            alActualizar!();
+                          }
+                        }
                       },
+
                       icon: Icon(
                         listaIconos[NombreIconos.flechaPequenaDerecha],
                         color: Theme.of(context).colorScheme.secondary,

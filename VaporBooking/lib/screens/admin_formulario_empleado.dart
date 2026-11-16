@@ -3,6 +3,7 @@ import 'package:vaporbooking/screens/admin_empleado_anadido.dart';
 import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 
+import '../models/colores.dart';
 import '../widgets/boton_principal.dart';
 import '../widgets/campo_texto_app.dart';
 
@@ -75,6 +76,9 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = obtenerEsquemaColoresActual(
+      widget._preferenciasService.obtenerTemaOscuro(),
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -192,10 +196,25 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
 
             SizedBox(height: 25),
 
+            if (mensajeError.isNotEmpty)
+              Text(
+                mensajeError,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: colores[NombreColores.estadoError],
+                ),
+              ),
+
+            if (mensajeError.isNotEmpty) SizedBox(height: 15),
+
             //boton para guardar cambios
             BotonPrincipal(
               texto: editando ? 'Guardar cambios' : 'Guardar empleado',
               pulsar: () async {
+                //limpiamos el mensaje de error si se corrigen los datos
+                setState(() {
+                  mensajeError = '';
+                });
                 //comprobacion de datos
                 if (controllerNombre.text.trim().isEmpty ||
                     controllerApellidos.text.trim().isEmpty ||
@@ -215,8 +234,9 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
                   return;
                 }
 
-                //comprobacion de q el correo no este repetido
-                if (!editando) {
+                //comprobamos que el correo no pertenezca a otro empleado
+                if (!editando ||
+                    controllerCorreo.text.trim() != widget.correo) {
                   final bool emailExiste = await widget._databasehelper
                       .existeEmailEmpleado(controllerCorreo.text.trim());
 

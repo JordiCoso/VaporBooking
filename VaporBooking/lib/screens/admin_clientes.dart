@@ -5,6 +5,7 @@ import 'package:vaporbooking/services/databasehelper.dart';
 import '../models/iconos.dart';
 import '../services/preferenciasservice.dart';
 import '../widgets/barra_navegacion_admin.dart';
+import '../widgets/tarjeta_cliente.dart';
 import 'admin_cobros.dart';
 import 'admin_detalles_cliente.dart';
 import 'admin_personal.dart';
@@ -26,6 +27,28 @@ class AdminClientes extends StatefulWidget {
 
 class _AdminClientesState extends State<AdminClientes> {
   int indiceSeleccionado = 2;
+  List<Map<String, Object?>> clientes = [];
+
+  //cargamos los clientes registrados en SQLite
+  Future<void> cargarClientes() async {
+    final resultado = await widget._databasehelper.obtenerUsuarios();
+
+    setState(() {
+      clientes = [];
+
+      for (int i = 0; i < resultado.length; i++) {
+        if (resultado[i]['rol'] == 'usuario') {
+          clientes.add(resultado[i]);
+        }
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarClientes();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,432 +114,76 @@ class _AdminClientesState extends State<AdminClientes> {
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            //las iniciales
-                            Container(
-                              height: 35,
-                              width: 35,
-
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-
-                              child: Center(
-                                child: Text(
-                                  'KV',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Kade Voronin',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              icon: Icon(
-                                listaIconos[NombreIconos.flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesCliente(
-                                      preferenciasService:
-                                          widget._preferenciasService,
-                                      iniciales: 'KV',
-                                      nombre: 'Kade',
-                                      apellidos: 'Voronin',
-                                      correo: 'kade@gmail.com',
-                                      telefono: '632 61 42 08',
-                                      puntos: '75',
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 10),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'kade@gmail.com',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaCliente(
+              nombre: 'Kade',
+              apellidos: 'Voronin',
+              iniciales: 'KV',
+              correo: 'kade@gmail.com',
+              telefono: '632 61 42 08',
+              puntos: '75',
+              preferenciasService: widget._preferenciasService,
+              databasehelper: widget._databasehelper,
             ),
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 35,
-                              width: 35,
-
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-
-                              child: Center(
-                                child: Text(
-                                  'NO',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Nico Ortega',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              icon: Icon(
-                                listaIconos[NombreIconos.flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesCliente(
-                                      preferenciasService:
-                                          widget._preferenciasService,
-                                      iniciales: 'NO',
-                                      nombre: 'Nico',
-                                      apellidos: 'Ortega',
-                                      correo: 'nico@gmail.com',
-                                      telefono: '623 45 78 91',
-                                      puntos: '80',
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 10),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'nico@gmail.com',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaCliente(
+              nombre: 'Nico',
+              apellidos: 'Ortega',
+              iniciales: 'NO',
+              correo: 'nico@gmail.com',
+              telefono: '623 45 78 91',
+              puntos: '80',
+              preferenciasService: widget._preferenciasService,
+              databasehelper: widget._databasehelper,
             ),
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 35,
-                              width: 35,
-
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-
-                              child: Center(
-                                child: Text(
-                                  'NS',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Nora Serra',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              icon: Icon(
-                                listaIconos[NombreIconos.flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesCliente(
-                                      preferenciasService:
-                                          widget._preferenciasService,
-                                      iniciales: 'NS',
-                                      nombre: 'Nora',
-                                      apellidos: 'Serra',
-                                      correo: 'nora@gmail.com',
-                                      telefono: '611 28 53 40',
-                                      puntos: '45',
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 10),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'nora@gmail.com',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaCliente(
+              nombre: 'Nora',
+              apellidos: 'Serra',
+              iniciales: 'NS',
+              correo: 'nora@gmail.com',
+              telefono: '611 28 53 40',
+              puntos: '45',
+              preferenciasService: widget._preferenciasService,
+              databasehelper: widget._databasehelper,
             ),
 
             SizedBox(height: 15),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              height: 35,
-                              width: 35,
-
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.secondary,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-
-                              child: Center(
-                                child: Text(
-                                  'LM',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge
-                                        ?.color,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(width: 15),
-
-                            Expanded(
-                              child: Text(
-                                'Laia Martín',
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge
-                                      ?.color,
-                                ),
-                              ),
-                            ),
-
-                            IconButton(
-                              icon: Icon(
-                                listaIconos[NombreIconos.flechaPequenaDerecha],
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => AdminDetallesCliente(
-                                      preferenciasService:
-                                          widget._preferenciasService,
-                                      iniciales: 'LM',
-                                      nombre: 'Laia',
-                                      apellidos: 'Martín',
-                                      correo: 'laia@gmail.com',
-                                      telefono: '644 72 19 36',
-                                      puntos: '90',
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 10),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'laia@gmail.com',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.color,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+            TarjetaCliente(
+              nombre: 'Laia',
+              apellidos: 'Martín',
+              iniciales: 'LM',
+              correo: 'laia@gmail.com',
+              telefono: '644 72 19 36',
+              puntos: '90',
+              preferenciasService: widget._preferenciasService,
+              databasehelper: widget._databasehelper,
             ),
+
+            //para mostrar los clientes de sqflite
+            for (int i = 0; i < clientes.length; i++)
+              Column(
+                children: [
+                  SizedBox(height: 15),
+
+                  TarjetaCliente(
+                    nombre: clientes[i]['nombre'].toString(),
+                    apellidos: clientes[i]['apellidos'].toString(),
+                    iniciales:
+                        '${clientes[i]['nombre'].toString()[0]}${clientes[i]['apellidos'].toString()[0]}',
+                    correo: clientes[i]['email'].toString(),
+                    telefono: clientes[i]['telefono'].toString(),
+                    puntos: clientes[i]['puntos'].toString(),
+                    clienteReal: true,
+                    preferenciasService: widget._preferenciasService,
+                    databasehelper: widget._databasehelper,
+                  ),
+                ],
+              ),
 
             SizedBox(height: 20),
           ],

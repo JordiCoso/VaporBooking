@@ -184,6 +184,7 @@ class _AdminPersonalState extends State<AdminPersonal> {
                     especialidad: empleados[i]['especialidad'].toString(),
                     databasehelper: widget._databasehelper,
                     preferenciasService: widget._preferenciasService,
+                    alActualizar: cargarEmpleados,
                   ),
                 ],
               ),

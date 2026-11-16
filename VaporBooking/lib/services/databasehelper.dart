@@ -226,6 +226,8 @@ class Databasehelper {
       columnaUsuariosContrasena: contrasena,
       columnaUsuariosFechacreacion: fechaCreacion,
       columnaUsuariosRol: rol,
+      columnaUsuariosTelefono: '',
+      columnaUsuariosPuntos: 0,
     });
 
     return resultado;
@@ -389,5 +391,52 @@ class Databasehelper {
     );
 
     return resultado;
+  }
+
+  //obtenemos las citas de un cliente mediante su correo
+  Future<List<Map<String, Object?>>> obtenerCitasCliente(String email) async {
+    final resultado = await _baseDeDatos.query(
+      tablaCitas,
+      where: '$columnaCitasUsuariosClienteEmailFK = ?',
+      whereArgs: [email],
+    );
+
+    return resultado;
+  }
+
+  //insertamos una nueva cita en la base de datos
+  Future<void> insertarCita(
+    String fecha,
+    String hora,
+    String horaFin,
+    String estado,
+    String observaciones,
+    String emailCliente,
+    int idServicio,
+  ) async {
+    await _baseDeDatos.insert(tablaCitas, {
+      columnaCitasFecha: fecha,
+      columnaCitasHora: hora,
+      columnaCitasHora_Fin: horaFin,
+      columnaCitasEstado: estado,
+      columnaCitasObservaciones: observaciones,
+      columnaCitasUsuariosClienteEmailFK: emailCliente,
+      columnaCitasServiciosIdFK: idServicio,
+    });
+  }
+
+  //obtenemos un servicio mediante su id
+  Future<Map<String, Object?>?> obtenerServicioPorId(int id) async {
+    final resultado = await _baseDeDatos.query(
+      tablaServicios,
+      where: '$columnaServiciosId = ?',
+      whereArgs: [id],
+    );
+
+    if (resultado.isNotEmpty) {
+      return resultado[0];
+    }
+
+    return null;
   }
 }

@@ -274,32 +274,33 @@ class AdminDetallesEmpleado extends StatelessWidget {
 
             SizedBox(height: 40),
 
-            BotonPrincipal(
-              texto: 'Editar empleado',
-              pulsar: () async {
-                //abrimos el formulario y esperamos el resultado
-                final resultado = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AdminFormularioEmpleado(
-                      id: id,
-                      nombre: nombre,
-                      apellidos: apellidos,
-                      telefono: telefono,
-                      correo: correo,
-                      especialidad: especialidad,
-                      databasehelper: _databasehelper,
-                      preferenciasService: _preferenciasService,
+            if (id != null) //esto es para que podamos editar los empleados q vengan de sqflite y no los de ejemplo
+              BotonPrincipal(
+                texto: 'Editar empleado',
+                pulsar: () async {
+                  //abrimos el formulario y esperamos el resultado
+                  final resultado = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdminFormularioEmpleado(
+                        id: id,
+                        nombre: nombre,
+                        apellidos: apellidos,
+                        telefono: telefono,
+                        correo: correo,
+                        especialidad: especialidad,
+                        databasehelper: _databasehelper,
+                        preferenciasService: _preferenciasService,
+                      ),
                     ),
-                  ),
-                );
+                  );
 
-                //si se han guardado los cambios, volvemos a personal
-                if (resultado == true) {
-                  Navigator.pop(context, true);
-                }
-              },
-            ),
+                  //si se han guardado los cambios, volvemos a personal
+                  if (resultado == true) {
+                    Navigator.pop(context, true);
+                  }
+                },
+              ),
           ],
         ),
       ),
