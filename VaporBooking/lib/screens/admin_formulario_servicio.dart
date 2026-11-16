@@ -14,6 +14,7 @@ class AdminFormularioServicio extends StatefulWidget {
   final String? puntos;
   final Databasehelper _databasehelper;
   final PreferenciasService _preferenciasService;
+  final int? idServicio;
 
   const AdminFormularioServicio({
     super.key,
@@ -24,6 +25,7 @@ class AdminFormularioServicio extends StatefulWidget {
     this.puntos,
     required this._databasehelper,
     required this._preferenciasService,
+    this.idServicio,
   });
 
   @override
@@ -59,29 +61,42 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
       return;
     }
 
-    int? duracion = int.tryParse(duracionTexto);
-    int? precio = int.tryParse(precioTexto);
-    int? puntos = int.tryParse(puntosTexto);
+    int duracion = int.parse(duracionTexto);
+    int precio = int.parse(precioTexto);
+    int puntos = int.parse(puntosTexto);
 
-    if (duracion == null ||
-        precio == null ||
-        puntos == null ||
-        duracion <= 0 ||
-        precio < 0 ||
-        puntos < 0) {
+    if (duracion <= 0 || precio < 0 || puntos < 0) {
       setState(() {
-        mensajeError = 'Introduce números válidos en duración, precio y puntos';
+        mensajeError = 'Introduce valores numéricos válidos';
       });
       return;
     }
 
-    await widget._databasehelper.insertarServicio(
-      nombre,
-      descripcion,
-      precio,
-      duracion,
-      puntos,
-    );
+    if (editando && widget.idServicio == null) {
+      setState(() {
+        mensajeError = 'Este servicio no está guardado en la base de datos';
+      });
+      return;
+    }
+
+    if (editando) {
+      await widget._databasehelper.actualizarServicio(
+        widget.idServicio!,
+        nombre,
+        descripcion,
+        precio,
+        duracion,
+        puntos,
+      );
+    } else {
+      await widget._databasehelper.insertarServicio(
+        nombre,
+        descripcion,
+        precio,
+        duracion,
+        puntos,
+      );
+    }
 
     if (!mounted) return;
 
@@ -239,9 +254,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
             BotonPrincipal(
               texto: editando ? 'Guardar cambios' : 'Guardar servicio',
               pulsar: () {
-                if (!editando) {
-                  guardarServicio();
-                }
+                guardarServicio();
               },
             ),
 

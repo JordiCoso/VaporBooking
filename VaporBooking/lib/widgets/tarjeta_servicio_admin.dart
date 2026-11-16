@@ -10,12 +10,14 @@ class TarjetaServicioAdmin extends StatelessWidget {
   final Servicio servicio;
   final PreferenciasService _preferenciasService;
   final Databasehelper _databasehelper;
+  final VoidCallback alActualizar;
 
   const TarjetaServicioAdmin({
     super.key,
     required this.servicio,
     required this._preferenciasService,
     required this._databasehelper,
+    required this.alActualizar,
   });
 
   @override
@@ -104,8 +106,8 @@ class TarjetaServicioAdmin extends StatelessWidget {
                           listaIconos[NombreIconos.flechaPequenaDerecha],
                           color: Theme.of(context).colorScheme.primary,
                         ),
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async {
+                          final resultado = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => AdminDetallesServicio(
@@ -118,9 +120,14 @@ class TarjetaServicioAdmin extends StatelessWidget {
                                 icono: iconoServicio,
                                 preferenciasService: _preferenciasService,
                                 databasehelper: _databasehelper,
+                                idServicio: servicio.id,
                               ),
                             ),
                           );
+
+                          if (resultado == true) {
+                            alActualizar();
+                          }
                         },
                       ),
                     ],

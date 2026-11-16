@@ -201,7 +201,8 @@ class Databasehelper {
     packDeInstrucciones.insert(tablaServicios, {
       columnaServiciosId: 1,
       columnaServiciosNombre: 'estetica',
-      columnaServiciosDescripcion: 'Masaje corporal para aliviar tensiones y favorecer la relajación.',
+      columnaServiciosDescripcion:
+          'Masaje corporal para aliviar tensiones y favorecer la relajación.',
       columnaServiciosPrecio: 24,
       columnaServiciosDuracion: 55,
       columnaServiciosValoracionPuntos: 21,
@@ -357,6 +358,29 @@ class Databasehelper {
       columnaServiciosDuracion: duracion,
       columnaServiciosValoracionPuntos: puntos,
     });
+  }
+
+  //actualizamos los datos de un servicio existente
+  Future<void> actualizarServicio(
+    int id,
+    String nombre,
+    String descripcion,
+    int precio,
+    int duracion,
+    int puntos,
+  ) async {
+    await _baseDeDatos.update(
+      tablaServicios,
+      {
+        columnaServiciosNombre: nombre,
+        columnaServiciosDescripcion: descripcion,
+        columnaServiciosPrecio: precio,
+        columnaServiciosDuracion: duracion,
+        columnaServiciosValoracionPuntos: puntos,
+      },
+      where: '$columnaServiciosId = ?',
+      whereArgs: [id],
+    );
   }
 
   Future<int> insertarEmpleado(

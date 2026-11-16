@@ -624,6 +624,7 @@ class _AdminServiciosState extends State<AdminServicios> {
                     servicio: servicios[i],
                     preferenciasService: widget._preferenciasService,
                     databasehelper: widget._databasehelper,
+                    alActualizar: cargarServicios,
                   ),
                 ],
               ),

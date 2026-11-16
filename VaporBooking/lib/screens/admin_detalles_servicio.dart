@@ -13,6 +13,7 @@ class AdminDetallesServicio extends StatelessWidget {
   final String precio;
   final String puntos;
   final IconData icono;
+  final int? idServicio;
 
   final PreferenciasService _preferenciasService;
   final Databasehelper _databasehelper;
@@ -28,6 +29,7 @@ class AdminDetallesServicio extends StatelessWidget {
     required this.icono,
     required this._preferenciasService,
     required this._databasehelper,
+    this.idServicio,
   });
 
   @override
@@ -324,8 +326,9 @@ class AdminDetallesServicio extends StatelessWidget {
 
             BotonPrincipal(
               texto: 'Editar servicio',
-              pulsar: () {
-                Navigator.push(
+
+              pulsar: () async {
+                final resultado = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AdminFormularioServicio(
@@ -336,9 +339,14 @@ class AdminDetallesServicio extends StatelessWidget {
                       puntos: puntos,
                       preferenciasService: _preferenciasService,
                       databasehelper: _databasehelper,
+                      idServicio: idServicio,
                     ),
                   ),
                 );
+
+                if (resultado == true) {
+                  Navigator.pop(context, true);
+                }
               },
             ),
 
