@@ -201,7 +201,7 @@ class Databasehelper {
     packDeInstrucciones.insert(tablaServicios, {
       columnaServiciosId: 1,
       columnaServiciosNombre: 'estetica',
-      columnaServiciosDescripcion: 'holaaaaaaaaaaaaaaaaa',
+      columnaServiciosDescripcion: 'Masaje corporal para aliviar tensiones y favorecer la relajación.',
       columnaServiciosPrecio: 24,
       columnaServiciosDuracion: 55,
       columnaServiciosValoracionPuntos: 21,
