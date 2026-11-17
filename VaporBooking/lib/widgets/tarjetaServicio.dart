@@ -34,7 +34,7 @@ class Tarjetaservicio extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: colores[NombreColores.superficie],
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(

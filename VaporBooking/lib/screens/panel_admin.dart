@@ -607,7 +607,6 @@ class _PanelAdminState extends State<PanelAdmin> {
               ],
             ),
 
-            if (citas.isNotEmpty) Text('Citas encontradas: ${citas.length}'),
             Column(
               children: [
                 SizedBox(height: 25),

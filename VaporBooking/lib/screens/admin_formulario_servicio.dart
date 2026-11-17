@@ -202,6 +202,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
                         CampoTextoApp(
                           etiqueta: 'Nombre del servicio',
                           controller: controllerNombre,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -209,6 +210,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
                         CampoTextoApp(
                           etiqueta: 'Descripción',
                           controller: controllerDescripcion,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -216,6 +218,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
                         CampoTextoApp(
                           etiqueta: 'Duración',
                           controller: controllerDuracion,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -223,6 +226,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
                         CampoTextoApp(
                           etiqueta: 'Precio en euros',
                           controller: controllerPrecio,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -230,6 +234,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
                         CampoTextoApp(
                           etiqueta: 'Puntos por el servicio',
                           controller: controllerPuntos,
+                          preferenciasService: widget._preferenciasService,
                         ),
                       ],
                     ),

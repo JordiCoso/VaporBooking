@@ -69,9 +69,9 @@ class Databasehelper {
   static const columnaUsuariosApellidos = 'apellidos';
   static const columnaUsuariosTelefono = 'telefono';
   static const columnaUsuariosContrasena = 'contrasena';
-  static const columnaUsuariosFechacreacion = 'fecha_creacion';
   static const columnaUsuariosRol = 'rol';
   static const columnaUsuariosPuntos = 'puntos';
+  static const columnaUsuariosRecompensas = 'recompensas';
 
   static const tablaEmpleados = 'empleados';
 
@@ -101,6 +101,7 @@ class Databasehelper {
   static const columnaCitasHora_Fin = 'hora_fin';
   static const columnaCitasEstado = 'estado';
   static const columnaCitasObservaciones = 'observaciones';
+  static const columnaCitasRecompensa = 'recompensa';
 
   static const columnaCitasUsuariosClienteEmailFK = 'email_cliente_fk';
   static const columnaCitasServiciosIdFK = 'servicio_id_fk';
@@ -111,6 +112,7 @@ class Databasehelper {
   static const columnaTiquetsFecha = 'fecha';
   static const columnaTiquetsTotalPrecio = 'totalprecio';
   static const columnaTiquetsEstado = 'estado';
+  static const columnaTiquetsReservaId = 'reserva_id';
   static const columnaTiquetsUsuariosEmailFK = 'email_cliente_fk';
 
   static const tablaTiquetsservicios = 'tiquets_servicios';
@@ -129,9 +131,9 @@ class Databasehelper {
       '$columnaUsuariosApellidos TEXT NOT NULL,'
       '$columnaUsuariosTelefono TEXT NOT NULL, '
       '$columnaUsuariosContrasena TEXT NOT NULL, '
-      '$columnaUsuariosFechacreacion TEXT NOT NULL, '
       '$columnaUsuariosRol TEXT NOT NULL,'
-      '$columnaUsuariosPuntos INTEGER NOT NULL)',
+      '$columnaUsuariosPuntos INTEGER NOT NULL,'
+      '$columnaUsuariosRecompensas INTEGER NOT NULL DEFAULT 0)',
     );
 
     packDeInstrucciones.execute(
@@ -164,6 +166,7 @@ class Databasehelper {
       '$columnaCitasHora_Fin TEXT NOT NULL,'
       '$columnaCitasEstado TEXT NOT NULL,'
       '$columnaCitasObservaciones TEXT,'
+      '$columnaCitasRecompensa INTEGER NOT NULL DEFAULT 0,'
       '$columnaCitasUsuariosClienteEmailFK TEXT NOT NULL,'
       '$columnaCitasServiciosIdFK INTEGER NOT NULL,'
       'FOREIGN KEY ($columnaCitasUsuariosClienteEmailFK) REFERENCES $tablaUsuarios($columnaUsuariosEmail),'
@@ -176,7 +179,8 @@ class Databasehelper {
       '$columnaTiquetsFecha TEXT NOT NULL, '
       '$columnaTiquetsTotalPrecio INTEGER NOT NULL, '
       '$columnaTiquetsEstado TEXT NOT NULL, '
-      '$columnaTiquetsUsuariosEmailFK TEXT NOT NULL, '
+      '$columnaTiquetsUsuariosEmailFK TEXT NOT NULL,'
+      '$columnaTiquetsReservaId INTEGER NOT NULL,'
       'FOREIGN KEY ($columnaTiquetsUsuariosEmailFK) REFERENCES $tablaUsuarios($columnaUsuariosEmail))',
     );
 
@@ -191,14 +195,15 @@ class Databasehelper {
     );
 
     //creamos el admin de prueba
-    /* packDeInstrucciones.insert(tablaUsuarios, {
-      columnaUsuariosNombre: 'Administrador',
+    packDeInstrucciones.insert(tablaUsuarios, {
+      columnaUsuariosNombre: 'admin',
       columnaUsuariosApellidos: 'Prueba',
       columnaUsuariosEmail: 'admin@gmail.com',
+      columnaUsuariosTelefono: '612 34 56 78',
       columnaUsuariosContrasena: 'admin123',
-      columnaUsuariosFechacreacion: DateTime.now().toString(),
       columnaUsuariosRol: 'admin',
-    })*/
+      columnaUsuariosPuntos: 0,
+    });
 
     packDeInstrucciones.insert(tablaServicios, {
       columnaServiciosId: 1,
@@ -240,7 +245,6 @@ class Databasehelper {
     String apellidos,
     String telefono,
     String contrasena,
-    String fechaCreacion,
     String rol,
   ) async {
     final int resultado = await _baseDeDatos.insert(tablaUsuarios, {
@@ -249,9 +253,9 @@ class Databasehelper {
       columnaUsuariosApellidos: apellidos,
       columnaUsuariosTelefono: telefono,
       columnaUsuariosContrasena: contrasena,
-      columnaUsuariosFechacreacion: fechaCreacion,
       columnaUsuariosRol: rol,
       columnaUsuariosPuntos: 0,
+      columnaUsuariosRecompensas: 0,
     });
 
     return resultado;
@@ -487,6 +491,7 @@ class Databasehelper {
     String emailCliente,
     int idServicio,
     int idReserva,
+    int recompensa,
   ) async {
     await _baseDeDatos.insert(tablaCitas, {
       columnaCitasFecha: fecha,
@@ -497,6 +502,7 @@ class Databasehelper {
       columnaCitasUsuariosClienteEmailFK: emailCliente,
       columnaCitasServiciosIdFK: idServicio,
       columnaCitasReservaId: idReserva,
+      columnaCitasRecompensa: recompensa,
     });
   }
 
@@ -527,6 +533,114 @@ class Databasehelper {
     );
   }
 
+  //completamos la cita y sumamos los puntos al cliente
+  Future<void> completarCita(int idCita) async {
+    final resultado = await _baseDeDatos.query(
+      tablaCitas,
+      where: '$columnaCitasId = ?',
+      whereArgs: [idCita],
+    );
+
+    if (resultado.isNotEmpty) {
+      final cita = resultado[0];
+
+      final String estado = cita[columnaCitasEstado] as String;
+
+      if (estado == 'Pendiente') {
+        final int recompensa = cita[columnaCitasRecompensa] as int;
+
+        //si la cita es gratuita, no sumamos puntos
+        if (recompensa == 1) {
+          await actualizarEstadoCita(idCita, 'Completada');
+          return;
+        }
+
+        final String email = cita[columnaCitasUsuariosClienteEmailFK] as String;
+
+        final int idServicio = cita[columnaCitasServiciosIdFK] as int;
+
+        final servicio = await obtenerServicioPorId(idServicio);
+        final usuario = await obtenerUsuarioPorEmail(email);
+
+        if (servicio != null && usuario != null) {
+          final int puntosServicio =
+              servicio[columnaServiciosValoracionPuntos] as int;
+
+          final int puntosActuales = usuario[columnaUsuariosPuntos] as int;
+
+          await _baseDeDatos.update(
+            tablaUsuarios,
+            {columnaUsuariosPuntos: puntosActuales + puntosServicio},
+            where: '$columnaUsuariosEmail = ?',
+            whereArgs: [email],
+          );
+
+          await actualizarEstadoCita(idCita, 'Completada');
+        }
+      }
+    }
+  }
+
+  //canjeamos 100 puntos y guardamos una recompensa
+  Future<bool> canjearPuntos(String email) async {
+    final usuario = await obtenerUsuarioPorEmail(email);
+
+    if (usuario != null) {
+      final int puntosActuales = usuario[columnaUsuariosPuntos] as int;
+
+      final int recompensasActuales =
+          usuario[columnaUsuariosRecompensas] as int;
+
+      if (puntosActuales >= 100) {
+        final int resultado = await _baseDeDatos.update(
+          tablaUsuarios,
+          {
+            columnaUsuariosPuntos: puntosActuales - 100,
+            columnaUsuariosRecompensas: recompensasActuales + 1,
+          },
+          where: '$columnaUsuariosEmail = ? AND $columnaUsuariosPuntos >= ?',
+          whereArgs: [email, 100],
+        );
+
+        return resultado > 0;
+      }
+    }
+
+    return false;
+  }
+
+  //obtenemos las recompensas disponibles del cliente
+  Future<int> obtenerRecompensas(String email) async {
+    final usuario = await obtenerUsuarioPorEmail(email);
+
+    if (usuario != null) {
+      return usuario[columnaUsuariosRecompensas] as int;
+    }
+
+    return 0;
+  }
+
+  Future<bool> utilizarRecompensa(String email) async {
+    final usuario = await obtenerUsuarioPorEmail(email);
+
+    if (usuario != null) {
+      final int recompensas = usuario[columnaUsuariosRecompensas] as int;
+
+      if (recompensas > 0) {
+        await _baseDeDatos.update(
+          tablaUsuarios,
+          {columnaUsuariosRecompensas: recompensas - 1},
+          where: '$columnaUsuariosEmail = ?',
+          whereArgs: [email],
+        );
+
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   //obtenemos un servicio mediante su id
   Future<Map<String, Object?>?> obtenerServicioPorId(int id) async {
     final resultado = await _baseDeDatos.query(
@@ -543,11 +657,47 @@ class Databasehelper {
   }
 
   Future<void> cancelarReserva(int idReserva) async {
+    final citas = await _baseDeDatos.query(
+      tablaCitas,
+      where: '$columnaCitasReservaId = ? AND $columnaCitasEstado != ?',
+      whereArgs: [idReserva, 'Cancelada'],
+    );
+
+    for (int i = 0; i < citas.length; i++) {
+      final int recompensa = citas[i][columnaCitasRecompensa] as int;
+
+      if (recompensa == 1) {
+        final String email =
+            citas[i][columnaCitasUsuariosClienteEmailFK] as String;
+
+        final usuario = await obtenerUsuarioPorEmail(email);
+
+        if (usuario != null) {
+          final int recompensas = usuario[columnaUsuariosRecompensas] as int;
+
+          await _baseDeDatos.update(
+            tablaUsuarios,
+            {columnaUsuariosRecompensas: recompensas + 1},
+            where: '$columnaUsuariosEmail = ?',
+            whereArgs: [email],
+          );
+        }
+      }
+    }
+
     await _baseDeDatos.update(
       tablaCitas,
       {columnaCitasEstado: 'Cancelada'},
       where: '$columnaCitasReservaId = ?',
       whereArgs: [idReserva],
+    );
+
+    //cancelamos el tiquet asociado a la reserva
+    await _baseDeDatos.update(
+      tablaTiquets,
+      {columnaTiquetsEstado: 'cancelado'},
+      where: '$columnaTiquetsReservaId = ? AND $columnaTiquetsEstado = ?',
+      whereArgs: [idReserva, 'pendiente'],
     );
   }
 
@@ -576,12 +726,14 @@ class Databasehelper {
     int totalPrecio,
     String estado,
     String emailCliente,
+    int idReserva,
   ) async {
     final int resultado = await _baseDeDatos.insert(tablaTiquets, {
       columnaTiquetsFecha: fecha,
       columnaTiquetsTotalPrecio: totalPrecio,
       columnaTiquetsEstado: estado,
       columnaTiquetsUsuariosEmailFK: emailCliente,
+      columnaTiquetsReservaId: idReserva,
     });
 
     return resultado;

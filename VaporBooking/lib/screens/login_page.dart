@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/colores.dart';
+import 'package:vaporbooking/screens/panel_admin.dart';
 import 'package:vaporbooking/screens/pantalla_principal.dart';
 
 import '/screens/registro_page.dart';
@@ -84,23 +85,33 @@ class _LoginPageState extends State<LoginPage> {
       telefono: datosUsuario[Databasehelper.columnaUsuariosTelefono] as String,
       contrasena:
           datosUsuario[Databasehelper.columnaUsuariosContrasena] as String,
-      fechaCreacion:
-          datosUsuario[Databasehelper.columnaUsuariosFechacreacion] as String,
       rol: datosUsuario[Databasehelper.columnaUsuariosRol] as String,
       puntos: datosUsuario[Databasehelper.columnaUsuariosPuntos] as int,
     );
 
-    //si los datos coinciden, abrimos ya la pantalla principal
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PantallaPrincipal(
-          preferenciasService: widget._preferenciasService,
-          databasehelper: widget._databasehelper,
-          usuario: usuario,
+    //comprobamos si el user es administrador o cliente
+    if (usuario.rol == 'admin') {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PanelAdmin(
+            preferenciasService: widget._preferenciasService,
+            databasehelper: widget._databasehelper,
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PantallaPrincipal(
+            preferenciasService: widget._preferenciasService,
+            databasehelper: widget._databasehelper,
+            usuario: usuario,
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -110,12 +121,22 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text('Iniciar sesión')),
+      backgroundColor: colores[NombreColores.fondo],
+
+      appBar: AppBar(
+        backgroundColor: colores[NombreColores.fondo],
+        foregroundColor: colores[NombreColores.textoPrincipal],
+        title: Text('Iniciar sesión'),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(24),
         child: Column(
           children: [
-            CampoTextoApp(etiqueta: 'Usuario', controller: usuarioController),
+            CampoTextoApp(
+              etiqueta: 'Usuario',
+              controller: usuarioController,
+              preferenciasService: widget._preferenciasService,
+            ),
 
             const SizedBox(height: 16),
 
@@ -123,12 +144,16 @@ class _LoginPageState extends State<LoginPage> {
               etiqueta: 'Contraseña',
               controller: contrasenaController,
               ocultarTexto: true,
+              preferenciasService: widget._preferenciasService,
             ),
             const SizedBox(height: 24),
 
             //mostramos mensaje error por si hay alguno
             if (mensajeError.isNotEmpty)
-              Text(mensajeError, style: TextStyle(color: colores[NombreColores.estadoError])),
+              Text(
+                mensajeError,
+                style: TextStyle(color: colores[NombreColores.estadoError]),
+              ),
 
             const SizedBox(height: 24),
 
@@ -142,12 +167,17 @@ class _LoginPageState extends State<LoginPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        RegistroPage(databasehelper: widget._databasehelper, preferenciasService: widget._preferenciasService,),
+                    builder: (context) => RegistroPage(
+                      databasehelper: widget._databasehelper,
+                      preferenciasService: widget._preferenciasService,
+                    ),
                   ),
                 );
               },
-              child: Text('Regístrate si no tienes cuenta'),
+              child: Text(
+                'Regístrate si no tienes cuenta',
+                style: TextStyle(color: colores[NombreColores.verdePrincipal]),
+              ),
             ),
           ],
         ),

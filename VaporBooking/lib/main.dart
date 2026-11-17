@@ -62,6 +62,7 @@ class _MyAppState extends State<MyApp> {
           title: 'VaporBooking',
 
           theme: ThemeData(
+            brightness: temaOscuro ? Brightness.dark : Brightness.light,
             scaffoldBackgroundColor: colores[NombreColores.fondo],
 
             textTheme: TextTheme(
@@ -105,23 +106,23 @@ class _MyAppState extends State<MyApp> {
 
             checkboxTheme: CheckboxThemeData(),
 
-            colorScheme: ColorScheme.light(
+            colorScheme: ColorScheme(
+              brightness: temaOscuro ? Brightness.dark : Brightness.light,
               primary: colores[NombreColores.verdePrincipal]!,
+              onPrimary: colores[NombreColores.fondo]!,
               secondary: colores[NombreColores.verdeSecundario]!,
+              onSecondary: colores[NombreColores.textoPrincipal]!,
+              error: colores[NombreColores.estadoError]!,
+              onError: colores[NombreColores.textoPrincipal]!,
               surface: colores[NombreColores.superficie]!,
+              onSurface: colores[NombreColores.textoPrincipal]!,
             ),
           ),
 
-          /*home: PantallaPrincipal(
-            preferenciasService: widget._preferenciasService,
-            databasehelper: widget._databasehelper,
-            usuario: Usuario(nombre: 'aa', numeroHabitos: 2),
-          ),*/
-          home: LoginPage(
+          home: SplashScreen(
             preferenciasService: widget._preferenciasService,
             databasehelper: widget._databasehelper,
           ),
-
         );
       },
     );

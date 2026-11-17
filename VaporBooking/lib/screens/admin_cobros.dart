@@ -94,7 +94,7 @@ class _AdminCobrosState extends State<AdminCobros> {
       int precio =
           listaTiquets[i][Databasehelper.columnaTiquetsTotalPrecio] as int;
 
-      if (fecha == fechaHoy && estado == 'realizado') {
+      if (estado == 'realizado') {
         totalIngresos = totalIngresos + precio;
       }
     }
@@ -254,7 +254,7 @@ class _AdminCobrosState extends State<AdminCobros> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Facturación de hoy',
+                            'Facturación total',
                             style: TextStyle(
                               fontSize: 13,
                               color: Theme.of(context)
@@ -276,7 +276,7 @@ class _AdminCobrosState extends State<AdminCobros> {
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                'Últimos tres cobros',
+                'Últimos cobros',
                 style: TextStyle(
                   fontSize: 19,
                   fontWeight: FontWeight.bold,
@@ -284,98 +284,6 @@ class _AdminCobrosState extends State<AdminCobros> {
                 ),
               ),
             ),
-
-            for (int i = 0; i < ultimosCobros.length; i++)
-              Padding(
-                padding: EdgeInsets.only(top: 12),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${ultimosCobros[i]['nombreCompleto']}',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
-                              ),
-                            ),
-                            SizedBox(height: 12),
-                            Text(
-                              'Tiquet ${ultimosCobros[i][Databasehelper.columnaTiquetsId]}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge
-                                    ?.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        '${ultimosCobros[i][Databasehelper.columnaTiquetsTotalPrecio]}€',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-
-                      IconButton(
-                        icon: Icon(
-                          listaIconos[NombreIconos.flechaPequenaDerecha],
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),
-                        onPressed: () async {
-                          final resultado = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AdminDetallesTicket(
-                                preferenciasService:
-                                    widget._preferenciasService,
-                                databasehelper: widget._databasehelper,
-                                idTicket:
-                                    ultimosCobros[i][Databasehelper
-                                            .columnaTiquetsId]
-                                        as int,
-                                numeroTicket:
-                                    'TK - ${ultimosCobros[i][Databasehelper.columnaTiquetsId]}',
-                                fecha:
-                                    '${ultimosCobros[i][Databasehelper.columnaTiquetsFecha]}',
-                                nombre: '${ultimosCobros[i]['nombreCompleto']}',
-                                apellidos: '',
-                                servicio: '',
-                                duracion: '',
-                                precio:
-                                    '${ultimosCobros[i][Databasehelper.columnaTiquetsTotalPrecio]}€',
-                                estado:
-                                    '${ultimosCobros[i][Databasehelper.columnaTiquetsEstado]}',
-                              ),
-                            ),
-                          );
-
-                          if (resultado == true) {
-                            cargarTiquets();
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
 
             if (ultimosCobros.isEmpty) SizedBox(height: 12),
 
@@ -662,6 +570,98 @@ class _AdminCobrosState extends State<AdminCobros> {
                 ),
               ],
             ),
+
+            for (int i = 0; i < ultimosCobros.length; i++)
+              Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${ultimosCobros[i]['nombreCompleto']}',
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                            SizedBox(height: 12),
+                            Text(
+                              'Tiquet ${ultimosCobros[i][Databasehelper.columnaTiquetsId]}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge
+                                    ?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        '${ultimosCobros[i][Databasehelper.columnaTiquetsTotalPrecio]}€',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+
+                      IconButton(
+                        icon: Icon(
+                          listaIconos[NombreIconos.flechaPequenaDerecha],
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onPressed: () async {
+                          final resultado = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AdminDetallesTicket(
+                                preferenciasService:
+                                    widget._preferenciasService,
+                                databasehelper: widget._databasehelper,
+                                idTicket:
+                                    ultimosCobros[i][Databasehelper
+                                            .columnaTiquetsId]
+                                        as int,
+                                numeroTicket:
+                                    'TK - ${ultimosCobros[i][Databasehelper.columnaTiquetsId]}',
+                                fecha:
+                                    '${ultimosCobros[i][Databasehelper.columnaTiquetsFecha]}',
+                                nombre: '${ultimosCobros[i]['nombreCompleto']}',
+                                apellidos: '',
+                                servicio: '',
+                                duracion: '',
+                                precio:
+                                    '${ultimosCobros[i][Databasehelper.columnaTiquetsTotalPrecio]}€',
+                                estado:
+                                    '${ultimosCobros[i][Databasehelper.columnaTiquetsEstado]}',
+                              ),
+                            ),
+                          );
+
+                          if (resultado == true) {
+                            cargarTiquets();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
             SizedBox(height: 20),
 

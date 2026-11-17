@@ -386,7 +386,7 @@ class AdminDetallesCita extends StatelessWidget {
                                 ),
 
                                 child: Text(
-                                  observaciones,
+                                  observaciones.trim().isEmpty ? 'Sin observaciones.' : observaciones,
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Theme.of(context)
@@ -417,12 +417,9 @@ class AdminDetallesCita extends StatelessWidget {
           children: [
             if (estado == 'Pendiente' && idCita != null)
               BotonPrincipal(
-                texto: 'Marcar como completada',
+                texto: 'Cita completada',
                 pulsar: () async {
-                  await _databasehelper.actualizarEstadoCita(
-                    idCita!,
-                    'Completada',
-                  );
+                  await _databasehelper.completarCita(idCita!);
 
                   if (!context.mounted) return;
 
@@ -430,7 +427,7 @@ class AdminDetallesCita extends StatelessWidget {
                 },
               ),
 
-            SizedBox(height: 10),
+            SizedBox(height: 30),
 
             BotonPrincipal(
               texto: 'Volver a inicio',

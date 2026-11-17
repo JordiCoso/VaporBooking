@@ -65,7 +65,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - images/logo_VaporBooking_SinFondo.png
-   - images/estetica.jpg
+   - images/estética.jpg
    - images/masaje.jpg
    - images/solarium.jpg
 

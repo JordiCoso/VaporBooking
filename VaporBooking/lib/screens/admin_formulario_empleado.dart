@@ -156,6 +156,7 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
                         CampoTextoApp(
                           etiqueta: 'Nombre',
                           controller: controllerNombre,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -163,6 +164,7 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
                         CampoTextoApp(
                           etiqueta: 'Apellidos',
                           controller: controllerApellidos,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -170,6 +172,7 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
                         CampoTextoApp(
                           etiqueta: 'Correo electrónico',
                           controller: controllerCorreo,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -177,6 +180,7 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
                         CampoTextoApp(
                           etiqueta: 'Teléfono',
                           controller: controllerTelefono,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),
@@ -184,6 +188,7 @@ class _AdminFormularioEmpleado extends State<AdminFormularioEmpleado> {
                         CampoTextoApp(
                           etiqueta: 'Especialidad',
                           controller: controllerEspecialidad,
+                          preferenciasService: widget._preferenciasService,
                         ),
 
                         SizedBox(height: 15),

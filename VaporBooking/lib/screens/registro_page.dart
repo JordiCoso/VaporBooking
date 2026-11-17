@@ -126,7 +126,6 @@ class _RegistroPageState extends State<RegistroPage> {
       apellidoController.text.trim(),
       telefonoController.text.trim(),
       contrasenaController.text.trim(),
-      fechaCreacion,
       rol,
     );
 
@@ -152,19 +151,35 @@ class _RegistroPageState extends State<RegistroPage> {
         padding: EdgeInsets.all(24),
         child: Column(
           children: [
-            CampoTextoApp(etiqueta: 'Nombre', controller: nombreController),
+            CampoTextoApp(
+              etiqueta: 'Nombre',
+              controller: nombreController,
+              preferenciasService: widget._preferenciasService,
+            ),
 
             const SizedBox(height: 16),
 
-            CampoTextoApp(etiqueta: 'Apellido', controller: apellidoController),
+            CampoTextoApp(
+              etiqueta: 'Apellido',
+              controller: apellidoController,
+              preferenciasService: widget._preferenciasService,
+            ),
 
             const SizedBox(height: 16),
 
-            CampoTextoApp(etiqueta: 'Email', controller: emailController),
+            CampoTextoApp(
+              etiqueta: 'Email',
+              controller: emailController,
+              preferenciasService: widget._preferenciasService,
+            ),
 
             const SizedBox(height: 16),
 
-            CampoTextoApp(etiqueta: 'Teléfono', controller: telefonoController),
+            CampoTextoApp(
+              etiqueta: 'Teléfono',
+              controller: telefonoController,
+              preferenciasService: widget._preferenciasService,
+            ),
 
             const SizedBox(height: 16),
 
@@ -172,6 +187,7 @@ class _RegistroPageState extends State<RegistroPage> {
               etiqueta: 'Contraseña',
               controller: contrasenaController,
               ocultarTexto: true,
+              preferenciasService: widget._preferenciasService,
             ),
 
             const SizedBox(height: 24),

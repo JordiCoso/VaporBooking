@@ -4,9 +4,14 @@ import 'package:vaporbooking/screens/reserva_cites.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/tarjetaServicio.dart';
 
+import '../models/iconos.dart';
 import '../models/servicio.dart';
 import '../models/usuario.dart';
 import '../services/databasehelper.dart';
+import '../widgets/boton_esquina.dart';
+import '../widgets/boton_principal.dart';
+import 'gestio_punts.dart';
+import 'mis_reservas.dart';
 
 class PantallaPrincipal extends StatefulWidget {
   final PreferenciasService _preferenciasService;
@@ -57,6 +62,19 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
     return Scaffold(
       body: Column(
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              BotonEsquina(
+                texto: 'Perfil',
+                icono: listaIconos[NombreIconos.perfil]!,
+                pulsar: () {
+                  mostrarOpcionesPerfil();
+                },
+              ),
+            ],
+          ),
+
           Text(
             'Nuestros servicios',
             style: Theme.of(context).textTheme.titleLarge,
@@ -68,22 +86,34 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
                     itemCount: listaServicios.length,
                     itemBuilder: (context, index) {
-                      return Tarjetaservicio(
-                        colores: colores,
-                        titulo: listaServicios[index].nombre,
-                        precio: listaServicios[index].precio,
-                        descripcion: listaServicios[index].descripcion,
-                        tiempoMinutos: listaServicios[index].duracion,
-                        puntos: listaServicios[index].valoracionPuntos,
-                        valorCheckBox: listaCheckBox[index],
-                        seleccionarServicio: (bool? value) =>
-                            _seleccionarServicio(value, index),
-                        verDetalles: () => _verDetalles(index),
-                        reservar: () => _reservar(index),
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Tarjetaservicio(
+                          colores: colores,
+                          titulo: listaServicios[index].nombre,
+                          precio: listaServicios[index].precio,
+                          descripcion: listaServicios[index].descripcion,
+                          tiempoMinutos: listaServicios[index].duracion,
+                          puntos: listaServicios[index].valoracionPuntos,
+                          valorCheckBox: listaCheckBox[index],
+                          seleccionarServicio: (bool? value) =>
+                              _seleccionarServicio(value, index),
+                          verDetalles: () => _verDetalles(index),
+                          reservar: () => _reservar(index),
+                        ),
                       );
                     },
+                  ),
+
+                  SizedBox(height: 20),
+
+                  //continuamos con los servicios seleccionados
+                  BotonPrincipal(
+                    texto: 'Continuar con la reserva',
+                    pulsar: _continuarReserva,
                   ),
                 ],
               ),
@@ -91,6 +121,97 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           ),
         ],
       ),
+    );
+  }
+
+  void mostrarOpcionesPerfil() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            '¿Qué quieres hacer?',
+            style: Theme.of(context).textTheme.titleMedium,
+            textAlign: TextAlign.center,
+          ),
+          content: Text(
+            'Puedes ver tus reservas o ver los puntos que dispones.',
+            style: Theme.of(context).textTheme.bodyMedium,
+            textAlign: TextAlign.center,
+          ),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+
+                      Navigator.push(
+                        this.context,
+                        MaterialPageRoute(
+                          builder: (context) => MisReservas(
+                            preferenciasService: widget._preferenciasService,
+                            databasehelper: widget._databasehelper,
+                            usuario: widget._usuario,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      side: BorderSide(
+                        width: 1.5,
+                        color: colores[NombreColores.verdePrincipal]!,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: Text(
+                      'Ver reservas',
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: colores[NombreColores.verdePrincipal],
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+
+                      Navigator.push(
+                        this.context,
+                        MaterialPageRoute(
+                          builder: (context) => GestioPunts(
+                            preferenciasService: widget._preferenciasService,
+                            usuario: widget._usuario,
+                            databasehelper: widget._databasehelper,
+                          ),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: colores[NombreColores.verdePrincipal],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: Text(
+                      'Ver puntos',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -109,16 +230,9 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   void _verDetalles(int index) {}
 
   void _reservar(int index) {
-    List<Servicio> serviciosReserva = [];
+    //reservamos solamente el servicio de esta tarjeta
+    List<Servicio> serviciosReserva = [listaServicios[index]];
 
-    if (listaSelecionadosServicios.isNotEmpty) {
-      serviciosReserva = listaSelecionadosServicios;
-    } else {
-      //si no hay servicios seleccionados reservamos el de la tarjeta
-      serviciosReserva.add(listaServicios[index]);
-    }
-
-    //abrimos el calendario con los servicios elegidos
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -126,6 +240,26 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
           preferenciasService: widget._preferenciasService,
           databasehelper: widget._databasehelper,
           serviciosSeleccionados: serviciosReserva,
+          emailCliente: widget._usuario.email,
+        ),
+      ),
+    );
+  }
+
+  void _continuarReserva() {
+    //comprobamos que haya servicios seleccionados
+    if (listaSelecionadosServicios.isEmpty) {
+      return;
+    }
+
+    //abrimos el calendario con los servicios seleccionados
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReservaCites(
+          preferenciasService: widget._preferenciasService,
+          databasehelper: widget._databasehelper,
+          serviciosSeleccionados: listaSelecionadosServicios,
           emailCliente: widget._usuario.email,
         ),
       ),

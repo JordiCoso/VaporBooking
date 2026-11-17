@@ -34,11 +34,35 @@ class _ConfirmarReservaState extends State<ConfirmarReserva> {
   bool guardando = false;
   String mensaje = '';
 
+  int recompensasDisponibles = 0;
+  int servicioGratis = -1;
+
+  @override
+  void initState() {
+    super.initState();
+    cargarRecompensas();
+  }
+
+  //consultamos las recompensas disponibles del cliente
+  Future<void> cargarRecompensas() async {
+    final int recompensas = await widget._databasehelper.obtenerRecompensas(
+      widget.emailCliente,
+    );
+
+    if (!mounted) return;
+
+    setState(() {
+      recompensasDisponibles = recompensas;
+    });
+  }
+
   int calcularPrecioTotal() {
     int total = 0;
 
     for (int i = 0; i < widget.serviciosSeleccionados.length; i++) {
-      total = total + widget.serviciosSeleccionados[i].precio;
+      if (i != servicioGratis) {
+        total = total + widget.serviciosSeleccionados[i].precio;
+      }
     }
 
     return total;
@@ -148,6 +172,23 @@ class _ConfirmarReservaState extends State<ConfirmarReserva> {
       return;
     }
 
+    if (servicioGratis != -1) {
+      final bool utilizada = await widget._databasehelper.utilizarRecompensa(
+        widget.emailCliente,
+      );
+
+      if (!mounted) return;
+
+      if (!utilizada) {
+        setState(() {
+          guardando = false;
+          mensaje = 'Ya no tienes recompensas disponibles.';
+          servicioGratis = -1;
+        });
+        return;
+      }
+    }
+
     int idReserva = await widget._databasehelper.obtenerSiguienteIdReserva();
 
     List<String> partes = widget.horaSeleccionada.split(':');
@@ -183,9 +224,28 @@ class _ConfirmarReservaState extends State<ConfirmarReserva> {
         widget.emailCliente,
         servicio.id,
         idReserva,
+        servicioGratis == i ? 1 : 0,
       );
 
       inicio = fin;
+    }
+
+    //creamos el tiquet de la reserva
+    final int idTiquet = await widget._databasehelper.insertarTiquet(
+      obtenerFecha(),
+      calcularPrecioTotal(),
+      'pendiente',
+      widget.emailCliente,
+      idReserva,
+    );
+
+    //guardamos los servicios del tiquet
+    for (int i = 0; i < widget.serviciosSeleccionados.length; i++) {
+      await widget._databasehelper.insertarTiquetServicio(
+        idTiquet,
+        widget.serviciosSeleccionados[i].id,
+        1,
+      );
     }
 
     if (!mounted) return;
@@ -265,9 +325,70 @@ class _ConfirmarReservaState extends State<ConfirmarReserva> {
                               widget.serviciosSeleccionados[i].nombre,
                             ),
                           ),
-                          Text('${widget.serviciosSeleccionados[i].precio}€'),
+                          Text(
+                            servicioGratis == i
+                                ? 'Gratis'
+                                : '${widget.serviciosSeleccionados[i].precio}€',
+                          ),
                         ],
                       ),
+                    ),
+
+                  if (recompensasDisponibles > 0)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 15),
+
+                        Text(
+                          'Tienes $recompensasDisponibles recompensas disponibles',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+
+                        SizedBox(height: 10),
+
+                        Text(
+                          'Selecciona el servicio al que quieres aplicar tu recompensa.',
+                        ),
+
+                        SizedBox(height: 10),
+
+                        for (
+                          int i = 0;
+                          i < widget.serviciosSeleccionados.length;
+                          i++
+                        )
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 10),
+
+                            child: OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (servicioGratis == i) {
+                                    servicioGratis = -1;
+                                  } else {
+                                    servicioGratis = i;
+                                  }
+                                });
+                              },
+
+                              style: OutlinedButton.styleFrom(
+                                backgroundColor: servicioGratis == i
+                                    ? colores[NombreColores.verdePrincipal]
+                                    : Theme.of(context).colorScheme.surface,
+                              ),
+
+                              child: Text(
+                                widget.serviciosSeleccionados[i].nombre,
+                                style: TextStyle(
+                                  color: servicioGratis == i
+                                      ? colores[NombreColores.superficie]
+                                      : colores[NombreColores.textoPrincipal],
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
 
                   Divider(),
@@ -341,17 +462,21 @@ class _ConfirmarReservaState extends State<ConfirmarReserva> {
               child: BotonPrincipal(
                 texto: guardando ? 'Guardando...' : 'Confirmar reserva',
                 pulsar: confirmarReserva,
+                ancho: 350,
               ),
             ),
 
             SizedBox(height: 15),
 
             Center(
-              child: OutlinedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Modificar reserva'),
+              child: SizedBox(
+                width: 350,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Modificar reserva'),
+                ),
               ),
             ),
           ],

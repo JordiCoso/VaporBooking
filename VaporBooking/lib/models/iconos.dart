@@ -20,6 +20,10 @@ class NombreIconos {
   static const pendiente = 'Pendiente';
   static const rechazado = 'Rechazado';
   static const ajustes = 'Ajustes';
+  static const perfil = 'Perfil';
+  static const sinReservas = 'Sin reservas';
+  static const calendario = 'Calendario';
+  static const puntos = 'Puntos';
 }
 
 const Map<String, IconData> listaIconos = {
@@ -40,4 +44,8 @@ const Map<String, IconData> listaIconos = {
   NombreIconos.pendiente: Icons.error_outline,
   NombreIconos.rechazado: Icons.close,
   NombreIconos.ajustes: Icons.settings_outlined,
+  NombreIconos.perfil: Icons.account_circle_outlined,
+  NombreIconos.sinReservas: Icons.event_busy_outlined,
+  NombreIconos.calendario: Icons.calendar_today_outlined,
+  NombreIconos.puntos: Icons.card_giftcard,
 };
