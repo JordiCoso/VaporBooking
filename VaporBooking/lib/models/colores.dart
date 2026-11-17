@@ -29,7 +29,7 @@ const Map<String, Color> _modoClaroListaColores = {
   NombreColores.estadoExito: Color(0xFF4F8A68), // Exito
   NombreColores.estadoAviso: Color(0xFFD99A45), // Aviso
   NombreColores.estadoError: Color(0xFFC9655B), // Error
-  NombreColores.estadoSeleccion: Color(0xFFD4B5D8), // Seleccion
+  NombreColores.estadoSeleccion: Color(0xFF47634D), // Seleccion
 };
 
 const Map<String, Color> _modoOscuroListaColores = {
@@ -44,7 +44,7 @@ const Map<String, Color> _modoOscuroListaColores = {
   NombreColores.estadoExito: Color(0xFF70B58C), // Exito
   NombreColores.estadoAviso: Color(0xFFE4AD61), // Aviso
   NombreColores.estadoError: Color(0xFFE07E75), // Error
-  NombreColores.estadoSeleccion: Color(0xFFD8B76A), // Seleccion
+  NombreColores.estadoSeleccion: Color(0xFFA4C9AD), // Seleccion
 };
 
 Map<String, Color> obtenerEsquemaColoresActual(bool temaOscuro) {
