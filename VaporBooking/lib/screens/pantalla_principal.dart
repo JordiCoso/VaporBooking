@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/colores.dart';
+import 'package:vaporbooking/screens/reserva_cites.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/tarjetaServicio.dart';
 
@@ -60,31 +61,32 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
             'Nuestros servicios',
             style: Theme.of(context).textTheme.titleLarge,
           ),
-          SingleChildScrollView(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: listaServicios.length,
-                  itemBuilder: (context, index) {
-                    return Tarjetaservicio(
-                      colores: colores,
-                      titulo: listaServicios[index].nombre,
-                      precio: listaServicios[index].precio,
-                      descripcion: listaServicios[index].descripcion,
-                      tiempoMinutos: listaServicios[index].duracion,
-                      puntos: listaServicios[index].valoracionPuntos,
-                      valorCheckBox: listaCheckBox[index],
-                      seleccionarServicio: (bool? value) =>
-                          _seleccionarServicio,
-                      verDetalles: () => _verDetalles,
-                      reservar: () => _reservar(index),
-                    );
-                  },
-                ),
-                Text('HOLA ${listaServicios.length}'),
-              ],
+          Expanded(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: listaServicios.length,
+                    itemBuilder: (context, index) {
+                      return Tarjetaservicio(
+                        colores: colores,
+                        titulo: listaServicios[index].nombre,
+                        precio: listaServicios[index].precio,
+                        descripcion: listaServicios[index].descripcion,
+                        tiempoMinutos: listaServicios[index].duracion,
+                        puntos: listaServicios[index].valoracionPuntos,
+                        valorCheckBox: listaCheckBox[index],
+                        seleccionarServicio: (bool? value) =>
+                            _seleccionarServicio(value, index),
+                        verDetalles: () => _verDetalles(index),
+                        reservar: () => _reservar(index),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -93,16 +95,40 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
   }
 
   void _seleccionarServicio(bool? valor, int index) {
-    listaCheckBox[index] = !listaCheckBox[index];
+    setState(() {
+      listaCheckBox[index] = !listaCheckBox[index];
 
-    if (listaCheckBox[index]) {
-      listaSelecionadosServicios.add(listaServicios[index]);
-    } else {
-      listaSelecionadosServicios.remove(listaServicios[index]);
-    }
+      if (listaCheckBox[index]) {
+        listaSelecionadosServicios.add(listaServicios[index]);
+      } else {
+        listaSelecionadosServicios.remove(listaServicios[index]);
+      }
+    });
   }
 
   void _verDetalles(int index) {}
 
-  void _reservar(int index) {}
+  void _reservar(int index) {
+    List<Servicio> serviciosReserva = [];
+
+    if (listaSelecionadosServicios.isNotEmpty) {
+      serviciosReserva = listaSelecionadosServicios;
+    } else {
+      //si no hay servicios seleccionados reservamos el de la tarjeta
+      serviciosReserva.add(listaServicios[index]);
+    }
+
+    //abrimos el calendario con los servicios elegidos
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReservaCites(
+          preferenciasService: widget._preferenciasService,
+          databasehelper: widget._databasehelper,
+          serviciosSeleccionados: serviciosReserva,
+          emailCliente: widget._usuario.email,
+        ),
+      ),
+    );
+  }
 }

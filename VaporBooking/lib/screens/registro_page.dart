@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/services/preferenciasservice.dart';
 
+import '../models/colores.dart';
 import '/services/databasehelper.dart';
 import '/widgets/boton_principal.dart';
 
@@ -9,8 +11,13 @@ import '/widgets/campo_texto_app.dart';
 
 class RegistroPage extends StatefulWidget {
   final Databasehelper _databasehelper;
+  final PreferenciasService _preferenciasService;
 
-  const RegistroPage({super.key, required this._databasehelper});
+  const RegistroPage({
+    super.key,
+    required this._databasehelper,
+    required this._preferenciasService,
+  });
 
   @override
   State<RegistroPage> createState() => _RegistroPageState();
@@ -22,6 +29,7 @@ class _RegistroPageState extends State<RegistroPage> {
   final TextEditingController apellidoController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contrasenaController = TextEditingController();
+  final TextEditingController telefonoController = TextEditingController();
 
   String mensajeError = '';
 
@@ -32,6 +40,7 @@ class _RegistroPageState extends State<RegistroPage> {
     apellidoController.dispose();
     emailController.dispose();
     contrasenaController.dispose();
+    telefonoController.dispose();
 
     super.dispose();
   }
@@ -69,6 +78,14 @@ class _RegistroPageState extends State<RegistroPage> {
       return;
     }
 
+    //comprobamos que el telefono no este vacio
+    if (telefonoController.text.trim().isEmpty) {
+      setState(() {
+        mensajeError = 'El teléfono no puede estar vacío';
+      });
+      return;
+    }
+
     if (contrasenaController.text.trim().isEmpty) {
       setState(() {
         mensajeError = 'La contraseña no puede estar vacía';
@@ -80,6 +97,8 @@ class _RegistroPageState extends State<RegistroPage> {
     final bool emailExiste = await widget._databasehelper.existeEmail(
       emailController.text.trim(),
     );
+
+    if (!mounted) return;
 
     if (emailExiste) {
       setState(() {
@@ -94,7 +113,8 @@ class _RegistroPageState extends State<RegistroPage> {
     });
 
     //obtenemos la fecha de creacion al registrar el usuario
-    final String fechaCreacion = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    final String fechaCreacion = DateFormat('dd-MM-yyyy')
+        .format(DateTime.now());
 
     //todos los nuevos usuarios tendran el rol de usuario. así no pueden escoger su rol
     final String rol = 'usuario';
@@ -104,10 +124,18 @@ class _RegistroPageState extends State<RegistroPage> {
       emailController.text.trim(),
       nombreController.text.trim(),
       apellidoController.text.trim(),
+      telefonoController.text.trim(),
       contrasenaController.text.trim(),
       fechaCreacion,
       rol,
     );
+
+    //comprobamos que el correo se haya guardado correctamente
+    bool usuarioGuardado = await widget._databasehelper.existeEmail(
+      emailController.text.trim(),
+    );
+
+    print('Usuario guardado: $usuarioGuardado');
 
     if (!mounted) return;
     Navigator.pop(context);
@@ -115,6 +143,9 @@ class _RegistroPageState extends State<RegistroPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = obtenerEsquemaColoresActual(
+      widget._preferenciasService.obtenerTemaOscuro(),
+    );
     return Scaffold(
       appBar: AppBar(title: Text('Registro')),
       body: SingleChildScrollView(
@@ -133,6 +164,10 @@ class _RegistroPageState extends State<RegistroPage> {
 
             const SizedBox(height: 16),
 
+            CampoTextoApp(etiqueta: 'Teléfono', controller: telefonoController),
+
+            const SizedBox(height: 16),
+
             CampoTextoApp(
               etiqueta: 'Contraseña',
               controller: contrasenaController,
@@ -143,7 +178,10 @@ class _RegistroPageState extends State<RegistroPage> {
 
             //comprobamos si el mensaje de error tiene texto, si lo tiene muestra el mensaje de error.
             if (mensajeError.isNotEmpty)
-              Text(mensajeError, style: TextStyle(color: Colors.red)),
+              Text(
+                mensajeError,
+                style: TextStyle(color: colores[NombreColores.estadoError]),
+              ),
 
             const SizedBox(height: 24),
 

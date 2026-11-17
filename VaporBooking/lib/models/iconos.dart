@@ -9,7 +9,8 @@ class NombreIconos {
   static const servicios = 'Servicios';
   static const cobros = 'Cobros';
   static const cartera = 'Cartera';
-  static const flechaPequenaDerecha = 'Flecha';
+  static const flechaPequenaDerecha = 'Flecha derecha';
+  static const flechaPequenaIzquierda = 'Flecha izquierda';
   static const iconoMasaje = 'Icono masaje';
   static const iconoEstetica = 'Icono estética';
   static const iconoSolarium = 'Icono solárium';
@@ -29,6 +30,7 @@ const Map<String, IconData> listaIconos = {
   NombreIconos.cobros: Icons.credit_card_outlined,
   NombreIconos.cartera: Icons.account_balance_wallet_outlined,
   NombreIconos.flechaPequenaDerecha: Icons.chevron_right,
+  NombreIconos.flechaPequenaIzquierda: Icons.chevron_left,
   NombreIconos.iconoMasaje: Icons.airline_seat_flat,
   NombreIconos.iconoEstetica: Icons.face_outlined,
   NombreIconos.iconoSolarium: Icons.light_mode_outlined,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/widgets/boton_principal.dart';
 
 import '../models/colores.dart';
@@ -6,6 +7,7 @@ import '../services/preferenciasservice.dart';
 
 class AdminDetallesCita extends StatelessWidget {
   final PreferenciasService _preferenciasService;
+  final Databasehelper _databasehelper;
   final String servicio;
   final String estado;
   final String nombre;
@@ -16,10 +18,12 @@ class AdminDetallesCita extends StatelessWidget {
   final String horaFin;
   final String precio;
   final String observaciones;
+  final int? idCita;
 
   const AdminDetallesCita({
     super.key,
     required this._preferenciasService,
+    required this._databasehelper,
     required this.servicio,
     required this.estado,
     required this.nombre,
@@ -30,6 +34,7 @@ class AdminDetallesCita extends StatelessWidget {
     required this.horaFin,
     required this.precio,
     required this.observaciones,
+    this.idCita,
   });
 
   @override
@@ -407,11 +412,33 @@ class AdminDetallesCita extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(20),
 
-        child: BotonPrincipal(
-          texto: 'Volver a inicio',
-          pulsar: () {
-            Navigator.pop(context);
-          },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (estado == 'Pendiente' && idCita != null)
+              BotonPrincipal(
+                texto: 'Marcar como completada',
+                pulsar: () async {
+                  await _databasehelper.actualizarEstadoCita(
+                    idCita!,
+                    'Completada',
+                  );
+
+                  if (!context.mounted) return;
+
+                  Navigator.pop(context, true);
+                },
+              ),
+
+            SizedBox(height: 10),
+
+            BotonPrincipal(
+              texto: 'Volver a inicio',
+              pulsar: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
     );

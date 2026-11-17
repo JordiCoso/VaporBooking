@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:vaporbooking/models/colores.dart';
+import 'package:vaporbooking/screens/login_page.dart';
 import 'package:vaporbooking/screens/panel_admin.dart';
 import 'package:vaporbooking/screens/pantalla_principal.dart';
 import 'package:vaporbooking/screens/registro_page.dart';
+import 'package:vaporbooking/screens/reserva_cites.dart';
 import 'package:vaporbooking/screens/splash_screen.dart';
 
 import '/services/databasehelper.dart';
@@ -115,7 +117,7 @@ class _MyAppState extends State<MyApp> {
             databasehelper: widget._databasehelper,
             usuario: Usuario(nombre: 'aa', numeroHabitos: 2),
           ),*/
-          home: PanelAdmin(
+          home: LoginPage(
             preferenciasService: widget._preferenciasService,
             databasehelper: widget._databasehelper,
           ),

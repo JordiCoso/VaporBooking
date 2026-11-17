@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/colores.dart';
 import 'package:vaporbooking/models/iconos.dart';
+import 'package:vaporbooking/services/databasehelper.dart';
 
 import '../services/preferenciasservice.dart';
 import '../widgets/boton_principal.dart';
 
-class AdminDetallesTicket extends StatelessWidget {
+class AdminDetallesTicket extends StatefulWidget {
   final PreferenciasService _preferenciasService;
+  final Databasehelper _databasehelper;
   final String numeroTicket;
   final String fecha;
   final String nombre;
@@ -15,10 +17,12 @@ class AdminDetallesTicket extends StatelessWidget {
   final String duracion;
   final String precio;
   final String estado;
+  final int? idTicket;
 
   const AdminDetallesTicket({
     super.key,
     required this._preferenciasService,
+    required this._databasehelper,
     required this.numeroTicket,
     required this.fecha,
     required this.nombre,
@@ -27,12 +31,66 @@ class AdminDetallesTicket extends StatelessWidget {
     required this.duracion,
     required this.precio,
     required this.estado,
+    this.idTicket,
   });
+
+  @override
+  State<AdminDetallesTicket> createState() => _AdminDetallesTicketState();
+}
+
+class _AdminDetallesTicketState extends State<AdminDetallesTicket> {
+  List<Map<String, Object?>> serviciosTicket = [];
+
+  Future<void> cargarServiciosTicket() async {
+    if (widget.idTicket == null) {
+      return;
+    }
+
+    final resultado = await widget._databasehelper.obtenerServiciosTiquet(
+      widget.idTicket!,
+    );
+
+    List<Map<String, Object?>> listaServicios = [];
+
+    for (int i = 0; i < resultado.length; i++) {
+      int idServicio =
+          resultado[i][Databasehelper.columnaTiquetsserviciosServiciosIdFK]
+              as int;
+
+      final servicio = await widget._databasehelper.obtenerServicioPorId(
+        idServicio,
+      );
+
+      if (servicio != null) {
+        Map<String, Object?> datosServicio = {
+          'nombre': servicio[Databasehelper.columnaServiciosNombre],
+          'precio': servicio[Databasehelper.columnaServiciosPrecio],
+          'duracion': servicio[Databasehelper.columnaServiciosDuracion],
+          'cantidad':
+              resultado[i][Databasehelper.columnaTiquetsserviciosCantidad],
+        };
+
+        listaServicios.add(datosServicio);
+      }
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      serviciosTicket = listaServicios;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarServiciosTicket();
+  }
 
   @override
   Widget build(BuildContext context) {
     final colores = obtenerEsquemaColoresActual(
-      _preferenciasService.obtenerTemaOscuro(),
+      widget._preferenciasService.obtenerTemaOscuro(),
     );
 
     //definivos el color, texto e icono segun el estado del cobro
@@ -40,11 +98,11 @@ class AdminDetallesTicket extends StatelessWidget {
     String textoEstado;
     IconData iconoEstado;
 
-    if (estado == 'realizado') {
+    if (widget.estado == 'realizado') {
       colorEstado = colores[NombreColores.estadoExito]!;
       textoEstado = 'Cobro realizado';
       iconoEstado = listaIconos[NombreIconos.realizado]!;
-    } else if (estado == 'pendiente') {
+    } else if (widget.estado == 'pendiente') {
       colorEstado = colores[NombreColores.estadoAviso]!;
       textoEstado = 'Pendiente de cobro';
       iconoEstado = listaIconos[NombreIconos.pendiente]!;
@@ -55,7 +113,7 @@ class AdminDetallesTicket extends StatelessWidget {
     }
 
     //color del texto e icono de pendiente pq es el unico diferente respecto a los otros dos
-    final colorTextoEstado = estado == 'pendiente'
+    final colorTextoEstado = widget.estado == 'pendiente'
         ? colores[NombreColores.textoPrincipal]
         : colores[NombreColores.superficie];
 
@@ -156,7 +214,7 @@ class AdminDetallesTicket extends StatelessWidget {
                             ),
 
                             Text(
-                              numeroTicket,
+                              widget.numeroTicket,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -181,7 +239,7 @@ class AdminDetallesTicket extends StatelessWidget {
                             ),
 
                             Text(
-                              fecha,
+                              widget.fecha,
                               style: TextStyle(
                                 fontSize: 13,
                                 color: colores[NombreColores.textoSecundario],
@@ -205,7 +263,7 @@ class AdminDetallesTicket extends StatelessWidget {
                             ),
 
                             Text(
-                              '$nombre $apellidos',
+                              '${widget.nombre} ${widget.apellidos}',
                               style: TextStyle(
                                 fontSize: 13,
                                 color: colores[NombreColores.textoSecundario],
@@ -220,42 +278,96 @@ class AdminDetallesTicket extends StatelessWidget {
 
                         SizedBox(height: 10),
 
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                servicio,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: colores[NombreColores.textoPrincipal],
+                        if (widget.idTicket == null)
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      widget.servicio,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            colores[NombreColores
+                                                .textoPrincipal],
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.precio,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color:
+                                          colores[NombreColores.textoPrincipal],
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 20),
+
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  widget.duracion,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color:
+                                        colores[NombreColores.textoSecundario],
+                                  ),
                                 ),
                               ),
-                            ),
-
-                            Text(
-                              precio,
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: colores[NombreColores.textoPrincipal],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 20),
-
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            duracion,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: colores[NombreColores.textoSecundario],
-                            ),
+                            ],
                           ),
-                        ),
 
-                        SizedBox(height: 10),
+                        if (widget.idTicket != null)
+                          for (int i = 0; i < serviciosTicket.length; i++)
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        '${serviciosTicket[i]['nombre']}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color:
+                                              colores[NombreColores
+                                                  .textoPrincipal],
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      '${serviciosTicket[i]['precio']}€',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color:
+                                            colores[NombreColores
+                                                .textoPrincipal],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                SizedBox(height: 10),
+
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    '${serviciosTicket[i]['duracion']} minutos - Cantidad: ${serviciosTicket[i]['cantidad']}',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color:
+                                          colores[NombreColores
+                                              .textoSecundario],
+                                    ),
+                                  ),
+                                ),
+
+                                SizedBox(height: 20),
+                              ],
+                            ),
 
                         Divider(color: colores[NombreColores.bordes]),
 
@@ -275,7 +387,7 @@ class AdminDetallesTicket extends StatelessWidget {
                             ),
 
                             Text(
-                              precio,
+                              widget.precio,
                               style: TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
@@ -325,6 +437,43 @@ class AdminDetallesTicket extends StatelessWidget {
             ),
 
             SizedBox(height: 35),
+
+            if (widget.idTicket != null && widget.estado == 'pendiente')
+              Column(
+                children: [
+                  BotonPrincipal(
+                    texto: 'Marcar como cobrado',
+                    pulsar: () async {
+                      await widget._databasehelper.actualizarEstadoTiquet(
+                        widget.idTicket!,
+                        'realizado',
+                      );
+
+                      if (!mounted) return;
+
+                      Navigator.pop(context, true);
+                    },
+                  ),
+
+                  SizedBox(height: 15),
+
+                  BotonPrincipal(
+                    texto: 'Rechazar cobro',
+                    pulsar: () async {
+                      await widget._databasehelper.actualizarEstadoTiquet(
+                        widget.idTicket!,
+                        'rechazado',
+                      );
+
+                      if (!mounted) return;
+
+                      Navigator.pop(context, true);
+                    },
+                  ),
+
+                  SizedBox(height: 20),
+                ],
+              ),
 
             BotonPrincipal(
               texto: 'Volver a facturación',

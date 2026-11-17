@@ -46,7 +46,7 @@ class Databasehelper {
   /// Crea el archivo y la primera vez usa [creacionBaseDatos] para
   /// ejecutar los SQL de creación de tablas.
   Future<Database> _generarBase() async {
-    final ruta = join(await getDatabasesPath(), 'habitos.db');
+    final ruta = join(await getDatabasesPath(), 'vaporbooking.db');
 
     final baseCreada = await openDatabase(
       ruta,
@@ -95,6 +95,7 @@ class Databasehelper {
   static const tablaCitas = 'citas';
 
   static const columnaCitasId = 'id';
+  static const columnaCitasReservaId = 'reserva_id';
   static const columnaCitasFecha = 'fecha';
   static const columnaCitasHora = 'hora';
   static const columnaCitasHora_Fin = 'hora_fin';
@@ -110,7 +111,7 @@ class Databasehelper {
   static const columnaTiquetsFecha = 'fecha';
   static const columnaTiquetsTotalPrecio = 'totalprecio';
   static const columnaTiquetsEstado = 'estado';
-  static const columnaTiquetsUsuariosNombreFK = 'nombre_fk';
+  static const columnaTiquetsUsuariosEmailFK = 'email_cliente_fk';
 
   static const tablaTiquetsservicios = 'tiquets_servicios';
 
@@ -157,6 +158,7 @@ class Databasehelper {
     packDeInstrucciones.execute(
       'CREATE TABLE $tablaCitas ('
       '$columnaCitasId INTEGER PRIMARY KEY AUTOINCREMENT,'
+      '$columnaCitasReservaId INTEGER NOT NULL,'
       '$columnaCitasFecha TEXT NOT NULL,'
       '$columnaCitasHora TEXT NOT NULL,'
       '$columnaCitasHora_Fin TEXT NOT NULL,'
@@ -174,8 +176,8 @@ class Databasehelper {
       '$columnaTiquetsFecha TEXT NOT NULL, '
       '$columnaTiquetsTotalPrecio INTEGER NOT NULL, '
       '$columnaTiquetsEstado TEXT NOT NULL, '
-      '$columnaTiquetsUsuariosNombreFK TEXT NOT NULL, '
-      'FOREIGN KEY ($columnaTiquetsUsuariosNombreFK) REFERENCES $tablaUsuarios($columnaUsuariosNombre))',
+      '$columnaTiquetsUsuariosEmailFK TEXT NOT NULL, '
+      'FOREIGN KEY ($columnaTiquetsUsuariosEmailFK) REFERENCES $tablaUsuarios($columnaUsuariosEmail))',
     );
 
     packDeInstrucciones.execute(
@@ -200,12 +202,32 @@ class Databasehelper {
 
     packDeInstrucciones.insert(tablaServicios, {
       columnaServiciosId: 1,
-      columnaServiciosNombre: 'estetica',
+      columnaServiciosNombre: 'Masaje',
       columnaServiciosDescripcion:
           'Masaje corporal para aliviar tensiones y favorecer la relajación.',
-      columnaServiciosPrecio: 24,
-      columnaServiciosDuracion: 55,
-      columnaServiciosValoracionPuntos: 21,
+      columnaServiciosPrecio: 45,
+      columnaServiciosDuracion: 60,
+      columnaServiciosValoracionPuntos: 20,
+    });
+
+    packDeInstrucciones.insert(tablaServicios, {
+      columnaServiciosId: 2,
+      columnaServiciosNombre: 'Estética',
+      columnaServiciosDescripcion:
+          'Limpieza e hidratación facial para cuidar y revitalizar la piel.',
+      columnaServiciosPrecio: 35,
+      columnaServiciosDuracion: 45,
+      columnaServiciosValoracionPuntos: 15,
+    });
+
+    packDeInstrucciones.insert(tablaServicios, {
+      columnaServiciosId: 3,
+      columnaServiciosNombre: 'Solarium',
+      columnaServiciosDescripcion:
+          'Sesión de solárium para conseguir un bronceado uniforme y natural.',
+      columnaServiciosPrecio: 25,
+      columnaServiciosDuracion: 20,
+      columnaServiciosValoracionPuntos: 10,
     });
 
     await packDeInstrucciones.commit();
@@ -216,6 +238,7 @@ class Databasehelper {
     String email,
     String nombre,
     String apellidos,
+    String telefono,
     String contrasena,
     String fechaCreacion,
     String rol,
@@ -224,10 +247,10 @@ class Databasehelper {
       columnaUsuariosEmail: email,
       columnaUsuariosNombre: nombre,
       columnaUsuariosApellidos: apellidos,
+      columnaUsuariosTelefono: telefono,
       columnaUsuariosContrasena: contrasena,
       columnaUsuariosFechacreacion: fechaCreacion,
       columnaUsuariosRol: rol,
-      columnaUsuariosTelefono: '',
       columnaUsuariosPuntos: 0,
     });
 
@@ -297,13 +320,13 @@ class Databasehelper {
 
   //comrprobamos si el email y la contrtaseña son correctos
   Future<Map<String, Object?>?> iniciarSesion(
-    String email,
+    String nombre,
     String contrasena,
   ) async {
     final resultado = await _baseDeDatos.query(
       tablaUsuarios,
-      where: '$columnaUsuariosEmail = ? AND $columnaUsuariosContrasena = ?',
-      whereArgs: [email, contrasena],
+      where: '$columnaUsuariosNombre = ? AND $columnaUsuariosContrasena = ?',
+      whereArgs: [nombre, contrasena],
     );
 
     for (Map<String, Object?> fila in resultado) {
@@ -444,6 +467,16 @@ class Databasehelper {
     return resultado;
   }
 
+  //obtenemos todas las citas para el admin
+  Future<List<Map<String, Object?>>> obtenerTodasCitas() async {
+    final resultado = await _baseDeDatos.query(
+      tablaCitas,
+      orderBy: '$columnaCitasId DESC',
+    );
+
+    return resultado;
+  }
+
   //insertamos una nueva cita en la base de datos
   Future<void> insertarCita(
     String fecha,
@@ -453,6 +486,7 @@ class Databasehelper {
     String observaciones,
     String emailCliente,
     int idServicio,
+    int idReserva,
   ) async {
     await _baseDeDatos.insert(tablaCitas, {
       columnaCitasFecha: fecha,
@@ -462,7 +496,35 @@ class Databasehelper {
       columnaCitasObservaciones: observaciones,
       columnaCitasUsuariosClienteEmailFK: emailCliente,
       columnaCitasServiciosIdFK: idServicio,
+      columnaCitasReservaId: idReserva,
     });
+  }
+
+  //todos los servicios reservados juntos tendrán el mismo id
+  Future<int> obtenerSiguienteIdReserva() async {
+    final resultado = await _baseDeDatos.query(
+      tablaCitas,
+      orderBy: '$columnaCitasReservaId DESC',
+    );
+
+    //si no existen reservas aun, empezamos por 1
+    if (resultado.isEmpty) {
+      return 1;
+    }
+
+    int ultimoId = resultado[0][columnaCitasReservaId] as int;
+
+    return ultimoId + 1;
+  }
+
+  //actualizamos el estado de una cita
+  Future<void> actualizarEstadoCita(int idCita, String estado) async {
+    await _baseDeDatos.update(
+      tablaCitas,
+      {columnaCitasEstado: estado},
+      where: '$columnaCitasId = ?',
+      whereArgs: [idCita],
+    );
   }
 
   //obtenemos un servicio mediante su id
@@ -471,6 +533,92 @@ class Databasehelper {
       tablaServicios,
       where: '$columnaServiciosId = ?',
       whereArgs: [id],
+    );
+
+    if (resultado.isNotEmpty) {
+      return resultado[0];
+    }
+
+    return null;
+  }
+
+  Future<void> cancelarReserva(int idReserva) async {
+    await _baseDeDatos.update(
+      tablaCitas,
+      {columnaCitasEstado: 'Cancelada'},
+      where: '$columnaCitasReservaId = ?',
+      whereArgs: [idReserva],
+    );
+  }
+
+  Future<List<Map<String, Object?>>> obtenerTiquets() async {
+    final resultado = await _baseDeDatos.query(
+      tablaTiquets,
+      orderBy: '$columnaTiquetsId DESC',
+    );
+
+    return resultado;
+  }
+
+  //para que el admin pueda cambiar el estado del tiquet
+  Future<void> actualizarEstadoTiquet(int idTiquet, String estado) async {
+    await _baseDeDatos.update(
+      tablaTiquets,
+      {columnaTiquetsEstado: estado},
+      where: '$columnaTiquetsId = ?',
+      whereArgs: [idTiquet],
+    );
+  }
+
+  //insertamos un nuevo tiquet y devolvemos su id
+  Future<int> insertarTiquet(
+    String fecha,
+    int totalPrecio,
+    String estado,
+    String emailCliente,
+  ) async {
+    final int resultado = await _baseDeDatos.insert(tablaTiquets, {
+      columnaTiquetsFecha: fecha,
+      columnaTiquetsTotalPrecio: totalPrecio,
+      columnaTiquetsEstado: estado,
+      columnaTiquetsUsuariosEmailFK: emailCliente,
+    });
+
+    return resultado;
+  }
+
+  //relacionamos un tiquet con un servicio
+  Future<void> insertarTiquetServicio(
+    int idTiquet,
+    int idServicio,
+    int cantidad,
+  ) async {
+    await _baseDeDatos.insert(tablaTiquetsservicios, {
+      columnaTiquetsserviciosTiquetsIdFK: idTiquet,
+      columnaTiquetsserviciosServiciosIdFK: idServicio,
+      columnaTiquetsserviciosCantidad: cantidad,
+    });
+  }
+
+  //obtenemos los servicios relacionados con un tiquet
+  Future<List<Map<String, Object?>>> obtenerServiciosTiquet(
+    int idTiquet,
+  ) async {
+    final resultado = await _baseDeDatos.query(
+      tablaTiquetsservicios,
+      where: '$columnaTiquetsserviciosTiquetsIdFK = ?',
+      whereArgs: [idTiquet],
+    );
+
+    return resultado;
+  }
+
+  //obtenemos los datos de un cliente por su email
+  Future<Map<String, Object?>?> obtenerUsuarioPorEmail(String email) async {
+    final resultado = await _baseDeDatos.query(
+      tablaUsuarios,
+      where: '$columnaUsuariosEmail = ?',
+      whereArgs: [email],
     );
 
     if (resultado.isNotEmpty) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vaporbooking/models/colores.dart';
 import 'package:vaporbooking/screens/pantalla_principal.dart';
 
 import '/screens/registro_page.dart';
@@ -74,11 +75,19 @@ class _LoginPageState extends State<LoginPage> {
       mensajeError = '';
     });
 
-    //cogemos el nombre y rol desde sqflite
+    //cogemos los datos del usuario desde sqflite
     Usuario usuario = Usuario(
-      nombre: datosUsuario[Databasehelper.columnaUsuariosEmail] as String,
-      numeroHabitos: 1,
+      email: datosUsuario[Databasehelper.columnaUsuariosEmail] as String,
+      nombre: datosUsuario[Databasehelper.columnaUsuariosNombre] as String,
+      apellidos:
+          datosUsuario[Databasehelper.columnaUsuariosApellidos] as String,
+      telefono: datosUsuario[Databasehelper.columnaUsuariosTelefono] as String,
+      contrasena:
+          datosUsuario[Databasehelper.columnaUsuariosContrasena] as String,
+      fechaCreacion:
+          datosUsuario[Databasehelper.columnaUsuariosFechacreacion] as String,
       rol: datosUsuario[Databasehelper.columnaUsuariosRol] as String,
+      puntos: datosUsuario[Databasehelper.columnaUsuariosPuntos] as int,
     );
 
     //si los datos coinciden, abrimos ya la pantalla principal
@@ -96,6 +105,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = obtenerEsquemaColoresActual(
+      widget._preferenciasService.obtenerTemaOscuro(),
+    );
+
     return Scaffold(
       appBar: AppBar(title: Text('Iniciar sesión')),
       body: SingleChildScrollView(
@@ -115,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
 
             //mostramos mensaje error por si hay alguno
             if (mensajeError.isNotEmpty)
-              Text(mensajeError, style: TextStyle(color: Colors.red)),
+              Text(mensajeError, style: TextStyle(color: colores[NombreColores.estadoError])),
 
             const SizedBox(height: 24),
 
@@ -130,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        RegistroPage(databasehelper: widget._databasehelper),
+                        RegistroPage(databasehelper: widget._databasehelper, preferenciasService: widget._preferenciasService,),
                   ),
                 );
               },

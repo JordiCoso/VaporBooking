@@ -15,7 +15,11 @@ class PanelAdmin extends StatefulWidget {
   final PreferenciasService _preferenciasService;
   final Databasehelper _databasehelper;
 
-  const PanelAdmin({super.key, required this._preferenciasService, required this._databasehelper});
+  const PanelAdmin({
+    super.key,
+    required this._preferenciasService,
+    required this._databasehelper,
+  });
 
   @override
   State<PanelAdmin> createState() => _PanelAdminState();
@@ -24,6 +28,114 @@ class PanelAdmin extends StatefulWidget {
 class _PanelAdminState extends State<PanelAdmin> {
   //guardamos la pantalla seleccionada
   int indiceSeleccionado = 0;
+  int ingresosHoy = 0;
+
+  List<Map<String, Object?>> citas = [];
+
+  Future<void> cargarIngresos() async {
+    final tiquets = await widget._databasehelper.obtenerTiquets();
+
+    int total = 0;
+
+    DateTime hoy = DateTime.now();
+    String fechaHoy = '${hoy.day}/${hoy.month}/${hoy.year}';
+
+    for (int i = 0; i < tiquets.length; i++) {
+      String fecha = tiquets[i][Databasehelper.columnaTiquetsFecha] as String;
+
+      String estado = tiquets[i][Databasehelper.columnaTiquetsEstado] as String;
+
+      int precio = tiquets[i][Databasehelper.columnaTiquetsTotalPrecio] as int;
+
+      if (fecha == fechaHoy && estado == 'realizado') {
+        total = total + precio;
+      }
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      ingresosHoy = total;
+    });
+  }
+
+  Future<void> cargarCitas() async {
+    final resultado = await widget._databasehelper.obtenerTodasCitas();
+
+    List<Map<String, Object?>> listaCitas = [];
+
+    for (int i = 0; i < resultado.length; i++) {
+      String email =
+          resultado[i][Databasehelper.columnaCitasUsuariosClienteEmailFK]
+              as String;
+
+      int idServicio =
+          resultado[i][Databasehelper.columnaCitasServiciosIdFK] as int;
+
+      final usuario = await widget._databasehelper.obtenerUsuarioPorEmail(
+        email,
+      );
+
+      final servicio = await widget._databasehelper.obtenerServicioPorId(
+        idServicio,
+      );
+
+      String nombre = '';
+      String apellidos = '';
+      String nombreServicio = '';
+      int duracion = 0;
+      int precio = 0;
+
+      if (usuario != null) {
+        nombre = usuario[Databasehelper.columnaUsuariosNombre] as String;
+        apellidos = usuario[Databasehelper.columnaUsuariosApellidos] as String;
+      }
+
+      if (servicio != null) {
+        nombreServicio =
+            servicio[Databasehelper.columnaServiciosNombre] as String;
+
+        duracion = servicio[Databasehelper.columnaServiciosDuracion] as int;
+
+        precio = servicio[Databasehelper.columnaServiciosPrecio] as int;
+      }
+
+      Map<String, Object?> cita = {
+        Databasehelper.columnaCitasId:
+            resultado[i][Databasehelper.columnaCitasId],
+        Databasehelper.columnaCitasFecha:
+            resultado[i][Databasehelper.columnaCitasFecha],
+        Databasehelper.columnaCitasHora:
+            resultado[i][Databasehelper.columnaCitasHora],
+        Databasehelper.columnaCitasHora_Fin:
+            resultado[i][Databasehelper.columnaCitasHora_Fin],
+        Databasehelper.columnaCitasEstado:
+            resultado[i][Databasehelper.columnaCitasEstado],
+        Databasehelper.columnaCitasObservaciones:
+            resultado[i][Databasehelper.columnaCitasObservaciones],
+        'nombre': nombre,
+        'apellidos': apellidos,
+        'nombreServicio': nombreServicio,
+        'duracion': duracion,
+        'precio': precio,
+      };
+
+      listaCitas.add(cita);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      citas = listaCitas;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cargarCitas();
+    cargarIngresos();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +246,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '200,00€',
+                            '$ingresosHoy,00€',
                             style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
@@ -192,6 +304,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         MaterialPageRoute(
                           builder: (context) => AdminDetallesCita(
                             preferenciasService: widget._preferenciasService,
+                            databasehelper: widget._databasehelper,
                             servicio: 'Masaje',
                             estado: 'Pendiente',
                             nombre: 'Kade',
@@ -296,6 +409,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         MaterialPageRoute(
                           builder: (context) => AdminDetallesCita(
                             preferenciasService: widget._preferenciasService,
+                            databasehelper: widget._databasehelper,
                             servicio: 'Estética',
                             estado: 'Cancelada',
                             nombre: 'Nico',
@@ -400,6 +514,7 @@ class _PanelAdminState extends State<PanelAdmin> {
                         MaterialPageRoute(
                           builder: (context) => AdminDetallesCita(
                             preferenciasService: widget._preferenciasService,
+                            databasehelper: widget._databasehelper,
                             servicio: 'Solárium',
                             estado: 'Completada',
                             nombre: 'Nora',
@@ -491,6 +606,159 @@ class _PanelAdminState extends State<PanelAdmin> {
                 ),
               ],
             ),
+
+            if (citas.isNotEmpty) Text('Citas encontradas: ${citas.length}'),
+            Column(
+              children: [
+                SizedBox(height: 25),
+
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Citas registradas',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            if (citas.isEmpty)
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'No hay citas registradas',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
+                ),
+              ),
+
+            for (int i = 0; i < citas.length; i++)
+              Column(
+                children: [
+                  SizedBox(height: 12),
+
+                  GestureDetector(
+                    onTap: () async {
+                      final resultado = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdminDetallesCita(
+                            preferenciasService: widget._preferenciasService,
+                            databasehelper: widget._databasehelper,
+                            idCita:
+                                citas[i][Databasehelper.columnaCitasId] as int,
+                            servicio: citas[i]['nombreServicio'] as String,
+                            estado:
+                                citas[i][Databasehelper.columnaCitasEstado]
+                                    as String,
+                            nombre: citas[i]['nombre'] as String,
+                            apellidos: citas[i]['apellidos'] as String,
+                            fecha:
+                                citas[i][Databasehelper.columnaCitasFecha]
+                                    as String,
+                            hora:
+                                citas[i][Databasehelper.columnaCitasHora]
+                                    as String,
+                            horaFin:
+                                citas[i][Databasehelper.columnaCitasHora_Fin]
+                                    as String,
+                            duracion: '${citas[i]['duracion']} minutos',
+                            precio: '${citas[i]['precio']}€',
+                            observaciones:
+                                (citas[i][Databasehelper
+                                            .columnaCitasObservaciones] ??
+                                        '')
+                                    as String,
+                          ),
+                        ),
+                      );
+
+                      if (resultado == true) {
+                        cargarCitas();
+                      }
+                    },
+
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '${citas[i]['nombreServicio']}',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+
+                              Text(
+                                '${citas[i][Databasehelper.columnaCitasHora]}',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          SizedBox(height: 22),
+
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '${citas[i]['nombre']} ${citas[i]['apellidos']}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge
+                                        ?.color,
+                                  ),
+                                ),
+                              ),
+
+                              Text(
+                                '${citas[i]['duracion']} min',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),
@@ -505,7 +773,12 @@ class _PanelAdminState extends State<PanelAdmin> {
           } else if (indice == 1) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminPersonal(preferenciasService: widget._preferenciasService, databasehelper: widget._databasehelper,)),
+              MaterialPageRoute(
+                builder: (context) => AdminPersonal(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 2) {
             Navigator.push(
@@ -520,8 +793,12 @@ class _PanelAdminState extends State<PanelAdmin> {
           } else if (indice == 3) {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AdminServicios(preferenciasService: widget._preferenciasService,
-                databasehelper: widget._databasehelper,)),
+              MaterialPageRoute(
+                builder: (context) => AdminServicios(
+                  preferenciasService: widget._preferenciasService,
+                  databasehelper: widget._databasehelper,
+                ),
+              ),
             );
           } else if (indice == 4) {
             Navigator.push(
