@@ -24,6 +24,7 @@ class NombreIconos {
   static const sinReservas = 'Sin reservas';
   static const calendario = 'Calendario';
   static const puntos = 'Puntos';
+  static const logout = 'Logout';
 }
 
 const Map<String, IconData> listaIconos = {
@@ -48,4 +49,5 @@ const Map<String, IconData> listaIconos = {
   NombreIconos.sinReservas: Icons.event_busy_outlined,
   NombreIconos.calendario: Icons.calendar_today_outlined,
   NombreIconos.puntos: Icons.card_giftcard,
+  NombreIconos.logout: Icons.logout_outlined,
 };

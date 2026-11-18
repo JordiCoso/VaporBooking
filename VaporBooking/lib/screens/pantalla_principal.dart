@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vaporbooking/models/colores.dart';
 import 'package:vaporbooking/screens/reserva_cites.dart';
+import 'package:vaporbooking/screens/splash_screen.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/tarjetaServicio.dart';
 
@@ -68,8 +69,27 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               BotonEsquina(
                 texto: 'Perfil',
                 icono: listaIconos[NombreIconos.perfil]!,
+                espacio: EdgeInsets.fromLTRB(0, 40, 5, 10),
                 pulsar: () {
                   mostrarOpcionesPerfil();
+                },
+              ),
+
+              BotonEsquina(
+                texto: 'Cerrar sesión',
+                icono: listaIconos[NombreIconos.logout]!,
+                espacio: EdgeInsets.fromLTRB(5, 40, 30, 10),
+                pulsar: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SplashScreen(
+                        preferenciasService: widget._preferenciasService,
+                        databasehelper: widget._databasehelper,
+                      ),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ],
@@ -119,6 +139,105 @@ class _PantallaPrincipalState extends State<PantallaPrincipal> {
               ),
             ),
           ),
+
+          SizedBox(height: 15),
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: colores[NombreColores.superficie],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: colores[NombreColores.bordes]!),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        listaIconos[NombreIconos.reloj],
+                        color: colores[NombreColores.verdePrincipal],
+                      ),
+
+                      SizedBox(width: 5),
+
+                      Text(
+                        'Horario',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: colores[NombreColores.textoPrincipal],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 8),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Lunes a viernes',
+                        style: TextStyle(
+                          color: colores[NombreColores.textoSecundario],
+                        ),
+                      ),
+                      Text(
+                        '08:00 - 20:00',
+                        style: TextStyle(
+                          color: colores[NombreColores.textoPrincipal],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 8),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Sábados',
+                        style: TextStyle(
+                          color: colores[NombreColores.textoSecundario],
+                        ),
+                      ),
+                      Text(
+                        '09:00 - 15:00',
+                        style: TextStyle(
+                          color: colores[NombreColores.textoPrincipal],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 8),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Domingos',
+                        style: TextStyle(
+                          color: colores[NombreColores.textoSecundario],
+                        ),
+                      ),
+                      Text(
+                        'Cerrado',
+                        style: TextStyle(
+                          color: colores[NombreColores.estadoError],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          SizedBox(height: 8),
         ],
       ),
     );

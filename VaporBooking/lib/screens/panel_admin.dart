@@ -3,6 +3,7 @@ import 'package:vaporbooking/screens/admin_clientes.dart';
 import 'package:vaporbooking/screens/admin_cobros.dart';
 import 'package:vaporbooking/screens/admin_personal.dart';
 import 'package:vaporbooking/screens/admin_servicios.dart';
+import 'package:vaporbooking/screens/splash_screen.dart';
 import 'package:vaporbooking/services/databasehelper.dart';
 import 'package:vaporbooking/services/preferenciasservice.dart';
 import 'package:vaporbooking/widgets/barra_navegacion_admin.dart';
@@ -165,6 +166,25 @@ class _PanelAdminState extends State<PanelAdmin> {
                       color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
+                ),
+
+                IconButton(
+                  icon: Icon(
+                    listaIconos[NombreIconos.logout],
+                    color: colores[NombreColores.estadoError],
+                  ),
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SplashScreen(
+                          preferenciasService: widget._preferenciasService,
+                          databasehelper: widget._databasehelper,
+                        ),
+                      ),
+                          (route) => false,
+                    );
+                  },
                 ),
               ],
             ),

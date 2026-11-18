@@ -216,7 +216,7 @@ class _AdminFormularioServicio extends State<AdminFormularioServicio> {
                         SizedBox(height: 15),
 
                         CampoTextoApp(
-                          etiqueta: 'Duración',
+                          etiqueta: 'Duración en minutos',
                           controller: controllerDuracion,
                           preferenciasService: widget._preferenciasService,
                         ),

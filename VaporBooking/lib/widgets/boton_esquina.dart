@@ -5,18 +5,20 @@ class BotonEsquina extends StatelessWidget {
   final String texto;
   final VoidCallback pulsar;
   final IconData icono;
+  final EdgeInsets? espacio;
 
   const BotonEsquina({
     super.key,
     required this.texto,
     required this.icono,
     required this.pulsar,
+    this.espacio,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 50, 40, 20),
+      padding: espacio ?? const EdgeInsets.fromLTRB(40, 50, 40, 20),
       child: OutlinedButton(onPressed: pulsar, child: Icon(icono)),
     );
   }
