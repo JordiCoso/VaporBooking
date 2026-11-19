@@ -223,13 +223,13 @@ class _MisReservasState extends State<MisReservas> {
     );
 
     return Scaffold(
+      appBar: AppBar(backgroundColor: colores[NombreColores.fondo]),
       backgroundColor: colores[NombreColores.fondo],
       body: Padding(
-        padding: EdgeInsets.all(25),
+        padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 35),
 
             //mostramos el logo de la aplicacion
             Row(
